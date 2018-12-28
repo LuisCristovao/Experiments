@@ -65,10 +65,10 @@
     <Compile Include="Assets\Prototype\ChasePlayer.cs" />
     <Compile Include="Assets\Prototype\Proto_Player.cs" />
     <Reference Include="UnityEditor.StandardEvents">
-      <HintPath>C:/Users/Samsung/Desktop/NewBegining/UnityLocal/platform/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
+      <HintPath>C:/Users/Samsung/Documents/GitHub/Experiments/Unity/platform/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>C:/Users/Samsung/Desktop/NewBegining/UnityLocal/platform/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>C:/Users/Samsung/Documents/GitHub/Experiments/Unity/platform/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -245,7 +245,7 @@
       <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Unity.Locator.dll</HintPath>
     </Reference>
     <Reference Include="Facebook.Unity.Settings">
-      <HintPath>C:/Users/Samsung/Desktop/NewBegining/UnityLocal/platform/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+      <HintPath>C:/Users/Samsung/Documents/GitHub/Experiments/Unity/platform/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
