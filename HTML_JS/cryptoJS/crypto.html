@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>Crypto</title>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    </head>
+    <body>
+        Text:<input id="text" type="text"><br> Encripted:<p id="en"></p>
+        <br>Decryted:<p id="de"></p>
+    </body>
+    <script>
+    // INIT
+    var text   = document.getElementById("text");
+    var en = document.getElementById("en")
+    var prev_text=text.value;
+
+    // PROCESS
+    
+    
+    function Update(){
+        
+        if(prev_text!=text.value){
+            prev_text=text.value
+            var encrypted = CryptoJS.AES.encrypt(text.value, "myPassword");
+            var decrypted = CryptoJS.AES.decrypt(encrypted, "myPassword");
+            if(text.value!=""){
+                
+                document.getElementById("en").innerHTML = encrypted
+                document.getElementById("de").innerHTML = decrypted.toString(CryptoJS.enc.Utf8);
+            }
+            else{
+                document.getElementById("en").innerHTML = ""
+                document.getElementById("de").innerHTML = ""
+            }
+            //document.getElementById("de").innerHTML = decrypted.toString(CryptoJS.enc.Utf8);
+        }
+        
+        setTimeout(Update,100)
+    }
+    Update()
+    </script>
+</html>
