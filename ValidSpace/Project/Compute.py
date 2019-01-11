@@ -49,10 +49,12 @@ def order(nums,ops):
 
 
 def calculation(num1,num2,op):
+    num1=float(num1)
+    num2=float(num2)
     conditions={"+":lambda num1,num2: num1+num2,
                 "-":lambda num1,num2: num1-num2,
-                "*":lambda num1,num2:num1*num2,
-                "/":lambda num1,num2:num1/num2
+                "*":lambda num1,num2: num1*num2,
+                "/":lambda num1,num2: num1/num2
                 }
     return conditions[op](num1,num2)
         
@@ -82,25 +84,31 @@ def compute(nums,ops):
             
             #if op is of high priority
             if op=="/" or op=="*":
-                total=compute(first_num,second_num,op)
+                total=calculation(first_num,second_num,op)
             
             #if op is not priority
             else:
                 
-                ops_aux=ops.copy()#put array on auxiliary to not change it
-                op_next=ops_aux.pop()
-                #test priority of next op
-                #if next op is not priority
-                if op=="+" or op=="-":
-                    total=compute(first_num,second_num,op)
+                if len(ops)==0:
+                    total=calculation(first_num,second_num,op)
+                else:    
                 
-                #if next op is priority     
-                else:        
-                    num_next=nums.pop()
-                    total=compute(num_next,first_num,op_next)
+                    ops_aux=ops.copy()#put array on auxiliary to not change it
+                    op_next=ops_aux.pop()
+                    #test priority of next op
+                    #if next op is not priority
+                    if op_next=="+" or op_next=="-":
+                        total=calculation(first_num,second_num,op)
                     
-                    #make the remaining operation
-                    total=compute(total,second_num,op)
+                    #if next op is priority     
+                    else:        
+                        num_next=nums.pop()
+                        total=calculation(num_next,first_num,op_next)
+                        
+                        #make the remaining operation
+                        total=calculation(total,second_num,op)
+                        #because already calculated the remaining operation
+                        ops.pop()
                 
         #not the first time    
         else:
@@ -115,25 +123,36 @@ def compute(nums,ops):
                 
                 #if op is of high priority
                 if op=="/" or op=="*":
-                    total=compute(first_num,second_num,op)
+                    total=calculation(first_num,second_num,op)
                 
                 #not high priority op
                 else:
                     
-                    ops_aux=ops.copy()#put array on auxiliary to not change it
-                    op_next=ops_aux.pop()
-                    #test priority of next op
-                    #if next op is not priority
-                    if op=="+" or op=="-":
-                        total=compute(first_num,second_num,op)
+                    if len(ops)==0:
+                        total=calculation(first_num,second_num,op)
+                    else:    
                     
-                    #if next op is priority     
-                    else:        
-                        num_next=nums.pop()
-                        value=compute(num_next,first_num,op_next)
+                        ops_aux=ops.copy()#put array on auxiliary to not change it
+                        op_next=ops_aux.pop()
+                        #test priority of next op
+                        #if next op is not priority
+                        if op_next=="+" or op_next=="-":
+                            total=calculation(first_num,second_num,op)
+                            
                         
-                        #make the remaining operation
-                        total=compute(value,total,op)
+                        #if next op is priority     
+                        else:        
+                            num_next=nums.pop()
+                            value=calculation(num_next,first_num,op_next)
+                            
+                            #make the remaining operation
+                            total=calculation(value,total,op)
+                            
+                            #because already calculated the remaining operation
+                            ops.pop()
+                            
+                            
+    return total
     
     
     
@@ -145,7 +164,7 @@ print(__name__)
 
 #Main______________
 
-nums,ops=parse('1 + 2 * 5 + 3/4')
+nums,ops=parse('1+1*2+1+1/2+1+1-1-5+2')#1+1*2+1+1/2+1+1-1-5+2
 #nums,ops=order(nums,ops)
 print(nums,ops)
 print(compute(nums,ops))
