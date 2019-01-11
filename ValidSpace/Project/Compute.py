@@ -1,9 +1,10 @@
 
 
 
+import DB as db
 
-
-
+#def replaceFunction(equation_string):
+    
 
 def parse(x):
     operators = set('+-*/')
@@ -78,9 +79,9 @@ def compute(nums,ops):
     while len(ops)!=0:
         #first time
         if total==None:
-            op=ops.pop()
-            second_num=nums.pop()
-            first_num=nums.pop()
+            op=ops.pop(0)
+            first_num=nums.pop(0)
+            second_num=nums.pop(0)
             
             #if op is of high priority
             if op=="/" or op=="*":
@@ -94,21 +95,21 @@ def compute(nums,ops):
                 else:    
                 
                     ops_aux=ops.copy()#put array on auxiliary to not change it
-                    op_next=ops_aux.pop()
+                    op_next=ops_aux.pop(0)
                     #test priority of next op
                     #if next op is not priority
                     if op_next=="+" or op_next=="-":
-                        total=calculation(first_num,second_num,op)
+                           total=calculation(first_num,second_num,op)
                     
                     #if next op is priority     
                     else:        
-                        num_next=nums.pop()
+                        num_next=nums.pop(0)
                         total=calculation(num_next,first_num,op_next)
                         
                         #make the remaining operation
                         total=calculation(total,second_num,op)
                         #because already calculated the remaining operation
-                        ops.pop()
+                        ops.pop(0)
                 
         #not the first time    
         else:
@@ -117,9 +118,9 @@ def compute(nums,ops):
                 break
             #ops still not empty
             else:
-                op=ops.pop()
-                first_num=nums.pop()
-                second_num=total
+                op=ops.pop(0)
+                first_num=total
+                second_num=nums.pop(0)
                 
                 #if op is of high priority
                 if op=="/" or op=="*":
@@ -133,7 +134,7 @@ def compute(nums,ops):
                     else:    
                     
                         ops_aux=ops.copy()#put array on auxiliary to not change it
-                        op_next=ops_aux.pop()
+                        op_next=ops_aux.pop(0)
                         #test priority of next op
                         #if next op is not priority
                         if op_next=="+" or op_next=="-":
@@ -142,21 +143,22 @@ def compute(nums,ops):
                         
                         #if next op is priority     
                         else:        
-                            num_next=nums.pop()
+                            num_next=nums.pop(0)
                             value=calculation(num_next,first_num,op_next)
                             
                             #make the remaining operation
                             total=calculation(value,total,op)
                             
                             #because already calculated the remaining operation
-                            ops.pop()
+                            ops.pop(0)
                             
                             
     return total
     
     
-    
-    
+def FinalResult(equation):
+    nums,ops=parse(equation)
+    return compute(nums,ops)
 
 
 print(__name__)
@@ -164,7 +166,4 @@ print(__name__)
 
 #Main______________
 
-nums,ops=parse('1+1*2+1+1/2+1+1-1-5+2')#1+1*2+1+1/2+1+1-1-5+2
-#nums,ops=order(nums,ops)
-print(nums,ops)
-print(compute(nums,ops))
+print(FinalResult('1+1*2+1+1/2+1+1-1-5+2'))#1+1*2+1+1/2+1+1-1-5+2)

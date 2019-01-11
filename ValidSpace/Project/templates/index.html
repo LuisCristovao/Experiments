@@ -4,7 +4,7 @@
         <style>
             h1{
                 font-size: 5em;
-                
+                margin-bottom: 0pt;
             }
             input{
                 font-size: 2em;
@@ -14,12 +14,14 @@
             }
             p{
                 font-size: 2em;
+                margin-top: 0pt;
             }
         </style>
     </head>
     <body>
         <div style="top: 30%;position: relative" align="center">
-            <a href="admin"><h1>Admin Page</h1></a>
+            <h1>Home Page</h1>
+            <a href="admin"><p style="padding-top: 0">Go to Admin Page Here</p></a>
             <div style="margin-top: 10pt;position: relative" align="center">
                 <input type="text" id="compute" placeholder="Insert function">
                 <button onclick="Compute()">Compute</button>

@@ -7,7 +7,7 @@
 import flask as fl
 #import os
 import DB as db
-
+import Compute as cp
 
 
 
@@ -89,9 +89,11 @@ def update():
 def compute():
     
     compute=fl.request.form['compute']
+    compute=compute.replace(" ","+")
     #compute result
-    result="5"
-    return "Result: "+result
+    result=cp.FinalResult(compute)
+    print(result)
+    return "Result: "+str(result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
