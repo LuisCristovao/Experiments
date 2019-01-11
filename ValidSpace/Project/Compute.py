@@ -83,6 +83,15 @@ def compute(nums,ops):
             first_num=nums.pop(0)
             second_num=nums.pop(0)
             
+            
+            #if first number is negative
+            if first_num=="":
+                
+                first_num=op+second_num
+                second_num=nums.pop(0)
+                op=ops.pop(0)
+                    
+            
             #if op is of high priority
             if op=="/" or op=="*":
                 total=calculation(first_num,second_num,op)
@@ -144,10 +153,10 @@ def compute(nums,ops):
                         #if next op is priority     
                         else:        
                             num_next=nums.pop(0)
-                            value=calculation(num_next,first_num,op_next)
+                            value=calculation(second_num,num_next,op_next)
                             
                             #make the remaining operation
-                            total=calculation(value,total,op)
+                            total=calculation(total,value,op)
                             
                             #because already calculated the remaining operation
                             ops.pop(0)
@@ -166,4 +175,4 @@ print(__name__)
 
 #Main______________
 
-print(FinalResult('1+1*2+1+1/2+1+1-1-5+2'))#1+1*2+1+1/2+1+1-1-5+2)
+print(FinalResult('-1+1+2+2/2*4'))#1+1*2+1+1/2+1+1-1-5+2)
