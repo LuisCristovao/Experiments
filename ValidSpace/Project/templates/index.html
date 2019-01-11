@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Compute Functions</title>
+        <style>
+            h1{
+                font-size: 5em;
+                
+            }
+            input{
+                font-size: 2em;
+            }
+            button{
+                font-size: 2em;
+            }
+            p{
+                font-size: 2em;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="top: 30%;position: relative" align="center">
+            <a href="admin"><h1>Admin Page</h1></a>
+            <div style="margin-top: 10pt;position: relative" align="center">
+                <input type="text" id="compute" placeholder="Insert function">
+                <button onclick="Compute()">Compute</button>
+            </div>
+            <p id="result"></p>
+        </div>
+    </body>
+    <script>
+        function Compute(){
+
+            var http = new XMLHttpRequest();
+            var compute=document.getElementById("compute").value
+            var result=document.getElementById("result")
+            var url="/compute"
+            var params = 'compute='+compute
+            http.open('POST', url, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    result.innerHTML=http.responseText
+                }
+
+            }
+            http.send(params);
+            result.innerHTML="Loading..."
+        }
+    
+    </script>
+</html>

@@ -1,0 +1,38 @@
+FullStack Challenge
+
+
+Need to create a DB with of function like f2=f1^2 
+
+The computations are done on the back end
+
+/ADMIN
+user can create edit delete function at will.
+
+/
+user insert function on input field and press enter or calculate to calculate the answer.
+
+______________________________________________
+solution
+
+Need possibly to create a sqlite DB pthon or just a json file???
+
+{f1:f2*2},{f2:4}
+
+first focus on backend meaning no good looking UX
+Then improve UX.
+
+But can use from beginning bootstrap.
+
+Dificulties: 
+	make calculations
+	detect a non valid function, for instance, f1=f2 and f2=f1
+	
+	
+	
+DB
+Table Functions:				or simply a JSON
+	String: Name,
+	String: function	
+	
+	
+	

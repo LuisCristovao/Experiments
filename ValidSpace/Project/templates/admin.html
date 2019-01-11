@@ -1,0 +1,185 @@
+<html>
+
+    <head>
+        <title>
+            Admin Page
+        </title>
+        <style>
+            h1{
+                font-size: 5em;
+                
+            }
+            /*input{
+                font-size: 2em;
+            }*/
+            .bigBtn{
+                font-size: 2.5em;
+            }
+            table{
+                margin-top:20pt;
+				width:391px;
+				font-size:2em;
+            }
+            ul{
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="top: 20%;position: relative" align="center">
+            <a href="/"><h1>Home Page</h1></a>
+            <button class="bigBtn" onclick="CreateNewFunction(this)">Create New Function</button>
+            <div align="center">
+                <table>
+                    {% if functions.length!=0 %}
+                        {% for f in functions %}  
+                          <tr >
+                            <td><ul><li>{{f}}</li></ul></td>
+                            <td><ul>{{functions[f]}}</ul></td> 
+                            <td><ul><button onclick="Edit(this)">Edit</button></ul></td>  
+                          </tr>
+                        {% endfor %}
+                    {% endif %}
+                </table>
+            </div>    
+        </div>
+    </body>
+    <script>
+        /*var show_edit=false;
+        function ShowEdit(row){
+           
+            if(!show_edit){
+                var columns=row.children
+                var child_str=""
+                for(var i=0;i<columns.length;i++){
+                    child_str+=columns[i].outerHTML
+                }
+                row.innerHTML=child_str+'<td><ul><button onclick="Edit(this)">Edit</button></ul></td>'
+                show_edit=true;
+            }
+            
+        }
+        function ExitEdit(row){
+            if(show_edit){
+                row.children[2].outerHTML=""
+                show_edit=false;
+            }
+        }
+        
+        */
+        var editing=false;
+        var backup_row=[]
+        function backupRow(row){
+            for(var i=0;i<(row.children.length-1);i++){
+                    backup_row[i]=row.children[i].innerText.split("\n")[0]
+                    row.children[i].innerHTML='<ul><input type="text" value="'+row.children[i].innerText+'"></ul>'
+                    
+            }
+        }
+        function undoRow(row){
+            for(var i=0;i<(row.children.length-1);i++){
+                if(i==0){
+                    
+                    row.children[i].innerHTML='<ul><li>'+backup_row[i]+'</li></ul>'
+                }
+                else{
+                    row.children[i].innerHTML='<ul>'+backup_row[i]+'</ul>'
+                }
+            }
+            row.children[2].innerHTML='<ul><button onclick="Edit(this)">Edit</button></ul>'
+        }
+        function Edit(btn){
+            if(!editing){
+                
+                var row=btn.parentElement.parentElement.parentElement
+                backupRow(row)
+                row.children[2].innerHTML='<ul><button onclick="SubmitEdit(this)">Submit</button><button onclick="CancelEdit(this)">Cancel</button><button onclick="DeleteEdit(this)">Delete</button></ul>'
+                editing=true
+            }
+        }
+        function SubmitEdit(btn){
+            var row=btn.parentElement.parentElement.parentElement
+            var name=row.children[0].children[0].children[0].value
+            var _function=row.children[1].children[0].children[0].value
+            //send post to update
+            updatePost(backup_row[0],name,_function,'/updatefunction',function(http){console.log(http.responseText)})
+            setTimeout(function(){window.location.href="/admin"},500)
+            
+        }
+        function CancelEdit(btn){
+            var row=btn.parentElement.parentElement.parentElement
+            undoRow(row)
+            editing=false;
+        }
+        function DeleteEdit(btn){
+            var name=backup_row[0]
+            console.log(name)
+            //send post to delete 
+            sendPost(name,"?",'/deletefunction',function(http){console.log(http.responseText)})
+            
+            
+            setTimeout(function(){window.location.href="/admin"},500)
+        }
+        
+        function CreateNewFunction(btn){
+            //var back_html=btn.outerHTML
+            btn.outerHTML='<div><input type="text" placeholder="Insert function Name"><input type="text" placeholder="Insert function"><button onclick="AddFunction(this)">Create</button><button onclick="CancelCreateFunction(this)">Cancel</button></div>'
+        }
+        function AddFunction(btn){
+            var div=btn.parentElement
+            var name= div.children[0].value
+            var _function=div.children[1].value
+            
+            //add new function in DB
+            sendPost(name,_function,'/addfunction',function(http){div.outerHTML='<h2>'+http.responseText+'</h2>'})
+            
+            
+            //div.outerHTML='<h2>Successfully created new function</h2>'
+            setTimeout(function(){window.location.href="/admin"},1500)
+            
+            
+        }
+        function CancelCreateFunction(btn){
+            var div=btn.parentElement
+            div.outerHTML='<button class="bigBtn" onclick="CreateNewFunction(this)">Create New Function</button>'
+        } 
+        
+        function updatePost(name,new_name,new_function,url,response_action){
+            var http = new XMLHttpRequest();
+            
+            
+            var params = 'name='+name+'&newname='+new_name+'&function='+new_function;
+            http.open('POST', url, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    response_action(http)
+                }
+                
+            }
+            http.send(params);
+        }
+        function sendPost(name,_function,url,response_action){
+        
+            var http = new XMLHttpRequest();
+            
+            
+            var params = 'name='+name+'&function='+_function;
+            http.open('POST', url, true);
+
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    response_action(http)
+                }
+                
+            }
+            http.send(params);    
+        }
+    </script>
+</html>    
