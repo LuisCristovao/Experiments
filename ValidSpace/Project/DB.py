@@ -124,7 +124,7 @@ def getFunction(function_name):
         cursor.execute(query)
         result = cursor.fetchall()
         if len(result)!=0:
-            return result
+            return result[0][0]
         else:
             return ''
     except sql.Error as e:
