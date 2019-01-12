@@ -24,6 +24,8 @@ def parse(x):
 
 def reconstructExpression(nums,ops):
     out=""
+    if len(ops)==0:
+        return nums[0]
     for i in range(len(ops)):
         n1=nums[i]
         op=ops[i]
@@ -102,4 +104,4 @@ print(__name__)
 #val=reconstructExpression(nums,ops)
 #print(val)
 #print(functionSubs(val)==(['1', '2', '3', '1', '2', '3', '1', '2', '3'], ['+', '+', '+', '+', '+', '+', '+', '+']))
-#print(CompletParse("f1+f3"))
+#print(CompletParse("f1"))

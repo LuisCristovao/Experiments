@@ -95,7 +95,7 @@ def compute():
         compute=cp.CompletParse(compute)
         result=cp.compute(compute)
     else:
-        result="Input cannot be empty!"
+        return "Input cannot be empty!"
     print(result)
     return "Result: "+compute+"="+str(result)
 
