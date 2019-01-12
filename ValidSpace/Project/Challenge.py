@@ -92,11 +92,12 @@ def compute():
     compute=compute.replace(" ","+")
     if(compute!=""):
         #compute result
+        compute=cp.CompletParse(compute)
         result=cp.compute(compute)
     else:
         result="Input cannot be empty!"
     print(result)
-    return "Result: "+str(result)
+    return "Result: "+compute+"="+str(result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
