@@ -77,16 +77,29 @@ def functionSubs(expression):
 def compute(expression):
     return format(eval(expression))
 
-
+def CompletParse(expression):
+    test=False
+    prev_val=""
+    val=expression
+    while not test:
+        nums,ops=functionSubs(val)
+        val=reconstructExpression(nums,ops)
+        if val==prev_val:
+            test=True
+        else:
+            prev_val=val
+            
+    return val
 
 print(__name__)
 
 
-nums,ops=functionSubs("f1+f3")
-val=reconstructExpression(nums,ops)
-print(val)
-nums,ops=functionSubs(val)
-print(nums,ops)
-val=reconstructExpression(nums,ops)
-print(val)
-
+#nums,ops=functionSubs("f1+f3")
+#val=reconstructExpression(nums,ops)
+#print(val)
+#nums,ops=functionSubs(val)
+#print(nums,ops)
+#val=reconstructExpression(nums,ops)
+#print(val)
+#print(functionSubs(val)==(['1', '2', '3', '1', '2', '3', '1', '2', '3'], ['+', '+', '+', '+', '+', '+', '+', '+']))
+print(CompletParse("f1+f3"))
