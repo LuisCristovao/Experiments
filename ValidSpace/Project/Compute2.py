@@ -9,15 +9,16 @@ def parse(x):
     num_out = []   #this holds the non-operators that are found in the string (left to right)
     buff = []
     for c in x:  #examine 1 character at a time
-        if c in operators:  
-            #found an operator.  Everything we've accumulated in `buff` is 
-            #a single "number". Join it together and put it in `num_out`.
-            num_out.append(''.join(buff))
-            buff = []
-            op_out.append(c)
-        else:
-            #not an operator.  Just accumulate this character in buff.
-            buff.append(c)
+        if c!=' ':
+            if c in operators:  
+                #found an operator.  Everything we've accumulated in `buff` is 
+                #a single "number". Join it together and put it in `num_out`.
+                num_out.append(''.join(buff))
+                buff = []
+                op_out.append(c)
+            else:
+                #not an operator.  Just accumulate this character in buff.
+                buff.append(c)
     num_out.append(''.join(buff))
     return num_out,op_out
 
@@ -104,4 +105,4 @@ print(__name__)
 #val=reconstructExpression(nums,ops)
 #print(val)
 #print(functionSubs(val)==(['1', '2', '3', '1', '2', '3', '1', '2', '3'], ['+', '+', '+', '+', '+', '+', '+', '+']))
-print(CompletParse("f1 + f1"))
+print(CompletParse(" f1 + f2 "))
