@@ -57,7 +57,7 @@ def add():
     name=fl.request.form['name']
     function=fl.request.form['function']
     
-    function=function.replace(" ","+")
+    #function=function.replace(" ","+")
     print(name,function)
     db.InsertNewFunction(name,function)
     
@@ -80,7 +80,7 @@ def update():
     name=fl.request.form['name']
     new_name=fl.request.form['newname']
     function=fl.request.form['function']
-    function=function.replace(" ","+")
+    #function=function.replace(" ","+")
     db.UpdateFunction(name,new_name,function)
     print(name,new_name,function)
     return "Successfully updated function "+name
@@ -89,7 +89,8 @@ def update():
 def compute():
     
     compute=fl.request.form['compute']
-    compute=compute.replace(" ","+")
+    print(compute)
+    #compute=compute.replace(" ","+")
     if(compute!=""):
         #compute result
         compute=cp.CompletParse(compute)

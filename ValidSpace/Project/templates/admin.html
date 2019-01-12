@@ -72,6 +72,11 @@
         }
         
         */
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
+        
         var editing=false;
         var backup_row=[]
         function backupRow(row){
@@ -154,6 +159,7 @@
             
             
             var params = 'name='+name+'&newname='+new_name+'&function='+new_function;
+            params=params.replaceAll("+","%2B")// url encode '+'
             http.open('POST', url, true);
 
             //Send the proper header information along with the request
@@ -173,6 +179,7 @@
             
             
             var params = 'name='+name+'&function='+_function;
+            params=params.replaceAll("+","%2B")// url encode '+'
             http.open('POST', url, true);
 
             //Send the proper header information along with the request

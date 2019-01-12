@@ -30,6 +30,10 @@
         </div>
     </body>
     <script>
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
         function keyCompute(e){
             if(e.keyCode==13){
                 Compute()
@@ -42,8 +46,9 @@
             var result=document.getElementById("result")
             var url="/compute"
             var params = 'compute='+compute
+            params=params.replaceAll("+","%2B")// url encode '+'
             http.open('POST', url, true);
-
+            
             //Send the proper header information along with the request
             http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
