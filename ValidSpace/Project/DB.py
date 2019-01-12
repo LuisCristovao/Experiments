@@ -113,7 +113,25 @@ def Query(query):
         print(e)
     
     return None
-      
+
+
+
+def getFunction(function_name):
+    conn = create_connection('functions.db') # Warning: This file is created in the current directory
+    cursor=conn.cursor()
+    query="select function from functions where name='"+function_name+"';"
+    try:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        if len(result)!=0:
+            return result
+        else:
+            return ''
+    except sql.Error as e:
+        print(e)
+    
+    return None
+          
 
 def getFunctions():
     conn = create_connection('functions.db') # Warning: This file is created in the current directory

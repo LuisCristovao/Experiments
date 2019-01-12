@@ -23,13 +23,18 @@
             <h1>Home Page</h1>
             <a href="admin"><p style="padding-top: 0">Go to Admin Page Here</p></a>
             <div style="margin-top: 10pt;position: relative" align="center">
-                <input type="text" id="compute" placeholder="Insert function">
+                <input type="text" id="compute" placeholder="Insert function" onkeypress="keyCompute(event)">
                 <button onclick="Compute()">Compute</button>
             </div>
             <p id="result"></p>
         </div>
     </body>
     <script>
+        function keyCompute(e){
+            if(e.keyCode==13){
+                Compute()
+            }
+        }
         function Compute(){
 
             var http = new XMLHttpRequest();

@@ -7,7 +7,7 @@
 import flask as fl
 #import os
 import DB as db
-import Compute as cp
+import Compute2 as cp
 
 
 
@@ -90,8 +90,11 @@ def compute():
     
     compute=fl.request.form['compute']
     compute=compute.replace(" ","+")
-    #compute result
-    result=cp.FinalResult(compute)
+    if(compute!=""):
+        #compute result
+        result=cp.compute(compute)
+    else:
+        result="Input cannot be empty!"
     print(result)
     return "Result: "+str(result)
 
