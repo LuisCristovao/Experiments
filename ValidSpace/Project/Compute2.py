@@ -24,15 +24,32 @@ def parse(x):
 
 def reconstructExpression(nums,ops):
     out=""
-    while len(nums)!=0:
-        n1=nums.pop(0)
-        op=ops.pop(0)
-        n2=nums.pop(0)
-        out+=n1+op+n2
+    for i in range(len(ops)):
+        n1=nums[i]
+        op=ops[i]
+        n2=nums[i+1]
+        if i==0:
+            out+=n1+op+n2
+        else:
+            out+=op+n2
         
     return out
         
+def isNumber(string_number):
+    try:
+        float(string_number)
+        return True
+    except:
+        return False
 
+
+def actualFunctions(nums):
+    actual_functions=[]
+    for n in nums:
+        if not isNumber(n):
+            actual_functions.append(n)
+    
+    return actual_functions
 
 def functionSubs(expression):
     nums,ops=parse(expression)
@@ -42,13 +59,18 @@ def functionSubs(expression):
         stack.append(nums[i])
         while len(stack)!=0:
             #print(n)
-            f=db.getFunction(str(stack.pop()))
-            #if f is a function then it can have more operations
-            if f!='' and f!=None:
-                stack.append(f)
-                result=f
-            else:#change nums array
-                nums[i]=result
+            if not isNumber(nums[i]):
+                f=db.getFunction(stack.pop())
+                #if f is a function then it can have more operations
+                if f!='' and f!=None:
+                    stack.append(f)
+                    result=f
+                else:#change nums array
+                    nums[i]=result
+                    
+            else:
+                stack.pop()
+            
     
     return nums,ops
 
@@ -64,7 +86,7 @@ nums,ops=functionSubs("f1+f3")
 val=reconstructExpression(nums,ops)
 print(val)
 nums,ops=functionSubs(val)
-#print(nums,ops)
-#val=reconstructExpression(nums,ops)
-#print(val)
+print(nums,ops)
+val=reconstructExpression(nums,ops)
+print(val)
 
