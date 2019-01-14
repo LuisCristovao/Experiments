@@ -56,7 +56,9 @@
                 if(http.readyState == 4 && http.status == 200) {
                     result.innerHTML=http.responseText
                 }
-
+                if(http.status == 500) {
+                    result.innerHTML="error compute input!"
+                }
             }
             http.send(params);
             result.innerHTML="Loading..."
