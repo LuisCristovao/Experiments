@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>Compute Functions</title>
+        <style>
+            h1{
+                font-size: 5em;
+                margin-bottom: 0pt;
+            }
+            input{
+                font-size: 2em;
+            }
+            button{
+                font-size: 2em;
+            }
+            p{
+                font-size: 2em;
+                margin-top: 0pt;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="top: 30%;position: relative" align="center">
+            <h1>Home Page</h1>
+            <a href="admin"><p style="padding-top: 0">Go to Admin Page Here</p></a>
+            <div style="margin-top: 10pt;position: relative" align="center">
+                <input type="text" id="compute" placeholder="Insert function" onkeypress="keyCompute(event)">
+                <button onclick="Compute()">Compute</button>
+            </div>
+            <p id="result"></p>
+        </div>
+    </body>
+    <script>
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
+        function keyCompute(e){
+            if(e.keyCode==13){
+                Compute()
+            }
+        }
+        function Compute(){
+
+            var http = new XMLHttpRequest();
+            var compute=document.getElementById("compute").value
+            var result=document.getElementById("result")
+            var url="/compute"
+            var params = 'compute='+compute
+            params=params.replaceAll("+","%2B")// url encode '+'
+            http.open('POST', url, true);
+            
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function() {//Call a function when the state changes.
+                if(http.readyState == 4 && http.status == 200) {
+                    result.innerHTML=http.responseText
+                }
+                if(http.status == 500) {
+                    result.innerHTML="error compute input!"
+                }
+            }
+            http.send(params);
+            result.innerHTML="Loading..."
+        }
+    
+    </script>
+</html>
