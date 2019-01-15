@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Luis Cristóvão Webpage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../Css/BasicSite.css">
+</head>
+    
+<body >
+    <div  style="visibility: collapse">
+        <div id="myNav" class="topnav">    
+          <!--<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>-->
+          <div class="content">
+            <a href="../../index.html">Home</a><br>
+            <a href="#">Projects</a><br>
+            <a href="https://github.com/LuisCristovao/">GitHub</a><br>
+            <a href="https://www.youtube.com/channel/UCtv1X7rlXYCD4zNxDJ8EJnQ">Youtube Channel</a><br>
+            
+            			<a href="../Pages/Contact.html">Contact</a><br>
+          </div>
+        </div>
+
+    </div>
+    <div class="jumbotron text-center" style="background-color:cornflowerblue">
+        <h1 style="color:white;cursor:pointer;" onmouseover="UnderLineText(this,true)" onmouseout="UnderLineText(this,false)" onclick="GoToInitialPage()">Luís Cristóvão GitHub Site</h1>
+        <p id="debug" style="color: white;cursor:pointer;" onmouseover="UnderLineText(this,true)" onmouseout="UnderLineText(this,false)" onclick="GoToInitialPage()">See Some of my Projects!</p>
+        <div align="center" id="burguer"  onclick="openNav(this)" style="cursor: pointer;position: absolute">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <br>
+    </div>
+
+    <div id="SiteBody" class="container">
+
+    </div>
+    <div id="footer" class="navbar navbar-fixed-bottom " style=" background-color: cornflowerblue;cursor: pointer;" onmouseover="highLight(this)" onmouseout="normal(this)" onclick="LoadProjects(3)" align="center">
+        <h3 style="text-align: center;color:white">Load More Projects</h3>
+    </div>    
+    <script src="../Js/Projects.js"></script>
+    <script>
+
+        /*var time=0;
+        var dt=0;
+        var startTime=new Date().getTime();
+        function Fps(){
+            dt = Math.round(1E-3 * (new Date().getTime() - startTime));
+            startTime = new Date().getTime();
+            //time += dt%10000;
+            //console.log(dt);
+            $('#debug').html('slowness:'+dt);
+            window.requestAnimationFrame(Fps);
+        }
+        window.requestAnimationFrame(Fps);*/
+    </script>
+</body>
+</html>
