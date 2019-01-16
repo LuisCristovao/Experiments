@@ -38,11 +38,12 @@
 			* To create an url go to urls.py and write the following:
 				
 				'''
-				import django.views as views
-				
+				from .views import hello
+				from django.urls import path
 				urlpatterns = [
-					path("hello/",views.hello),
-					path('admin/', admin.site.urls)
+					path("hello/", hello),
+					path('admin/', admin.site.urls),
+
 				]
 				'''
 			* As you can see in the previous code you need to create a new python file named **views.py** (of course it could be other), inside project folder (the same that as urls.py) 
@@ -56,7 +57,76 @@
 					return HttpResponse("Hello World")
 				'''
 			* Basically it will receives a request from client(browser) and responds with a string in this case.
+			
+			
+			### Receive url parameter:
+				
+				from the prev example, do the following code on these scripts:
+				
+					* **urls.py**:
+					
+						'''
+						from django.contrib import admin
+						from django.urls import path
+						from .views import hello
+						from django.urls import path
+
+						urlpatterns = [
+							path("hello/<str:name>", hello), #notice the hello path now receives any string in a variable named "name"
+							path('admin/', admin.site.urls),
+
+						]
+						'''
+					
+					* **views.py**:
+					
+						'''
+						from django.http import HttpResponse
+
+						def hello(request,name): #gets name variable here
+							return HttpResponse("Hello "+name)
+						'''
+					
+					* Now go to : http://localhost:8000/hello/TTT and the html that will appear is the following:
+					
+						<imgs/hello_name_urls.png>
+						
+						
+						
+					* to send an integer is just the same in urls but like this: **path("hello/<int:number>", hello)**
+					
+					
+					
+# Django Models and apps
+
+	See this url for more info: https://docs.djangoproject.com/en/2.1/topics/db/models/
 	
+	Models in Django are like tables in a DB.
 	
+	But first things first. In Django we dont usually program a web service like in the previous chapter.
+	
+	We have our django project folder and each project is composed by a number of apps that do specific functions on the web server.
+
+	For instance, we want to make a app to manage clients so on the terminal write: **python manage.py startapp clients**	
+	
+	This command will generate a new folder clients in the project as it is possible to see in <imgs/first-app-clients.png>
+	
+	## Models
+	
+		Now on the new app clients/models.py write the following: 
+		
+			'''
+			from django.db import models
+
+			# Create your models here.
+			class Person(models.Model):
+				first_name = models.CharField(max_length=30)
+				last_name = models.CharField(max_length=30)
+				age = models.IntegerField()
+				salary = models.DecimalField(max_digits=5,decimal_places=2)
+				bio=models.TextField()
+			'''
+
+
 
 	
