@@ -120,6 +120,8 @@
 
 			# Create your models here.
 			class Person(models.Model):
+			
+				#buzz word is field types 
 				first_name = models.CharField(max_length=30)
 				last_name = models.CharField(max_length=30)
 				age = models.IntegerField()
@@ -127,6 +129,91 @@
 				bio=models.TextField()
 			'''
 
+		This is like a SQL Table django automatically creates. On the django docs they explain the previous class would have the SQL equivalent:
+		
+			'''
+			CREATE TABLE myapp_person (
+				"id" serial NOT NULL PRIMARY KEY,
+				"first_name" varchar(30) NOT NULL,
+				"last_name" varchar(30) NOT NULL
+				//...
+			);
+			'''
+		Also it adds the notes:
+		
+			'''
+			Some technical notes:
 
+			The name of the table, myapp_person, is automatically derived from some model metadata but can be overridden. See Table names for more details.
+			An id field is added automatically, but this behavior can be overridden. See Automatic primary key fields.
+			The CREATE TABLE SQL in this example is formatted using PostgreSQL syntax, but it’s worth noting Django uses SQL tailored to the database backend specified in your settings file.
+			
+			'''
+		
+		### Migrations
+		
+			If you havent notice there is a folder named migrations in the folder of the app clients.
+			
+			This folder will store all calsses created in models, and is used by django to create the DB (that it seems to be able to work with any DB like sqlite the default but also postgres ...)
+			
+			On project folder settings.py there is a code like this:
+			
+				'''
+				# Database
+				# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+				DATABASES = {
+					'default': {
+						'ENGINE': 'django.db.backends.sqlite3',
+						'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+					}
+				}
+				
+				'''
+			Basically is using sqlite3 as db engine.
+			
+			If you run the server with :**python manage.py runserver** ; it will appear the following text:
+			
+				'''
+				You have 15 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+				Run 'python manage.py migrate' to apply them.
+				'''
+				
+			This appears because we made changes in the model and did not updated in the DB, so lets run :**python manage.py migrate**
+			
+			This command still will not create the table first you need to add the app in the settings.py:
+			
+				'''
+				# Application definition
+
+				INSTALLED_APPS = [
+					'django.contrib.admin',
+					'django.contrib.auth',
+					'django.contrib.contenttypes',
+					'django.contrib.sessions',
+					'django.contrib.messages',
+					'django.contrib.staticfiles',
+					'clients', #added here!
+				]
+				
+				'''
+				
+				
+			After this do the following: **python manage.py makemigrations** ; 
+
+				'''
+				Your models have changes that are not yet reflected in a migration, and so won't be applied.
+				Run 'manage.py makemigrations' to make new migrations, and then re-run 'manage.py migrate' to apply them.
+
+				'''
+			Now apply the DB using: **python manage.py migrate**
+				
+			Now we have table clients working, is possible to see in /project/clients/migrations/0001_initia.py   <imgs/table-clients-created.png>	
+			
+			Run  the server again with: **python manage.py runserver** 
+			
+			
+# Django Admin
 
 	
+				
