@@ -215,5 +215,57 @@
 			
 # Django Admin
 
+	Django provides an admin page, in order to facilitates the management of server backend (like tables/models)
 	
+	To access django admin page on localhost:8000/admin, first you need to create a super user.
+
+	The commando to create the super user is **python manage.py createsuperuser** and give an user name and password like: "admin:admin". It will ask the email that you can press enter to skip
+	
+	So on localhost:8000/admin the server will serve the following page: <imgs/admin-page.png>
+	
+	Now to see the clients model in admin page o to clients app folder in admin.py and write the following code:
+	
+		'''
+		from django.contrib import admin
+		from .models import Person
+
+
+		# Register your models here.
+		admin.site.register(Person)
+		
+		'''
+	
+	It will appear the following:
+	
+		<imgs/insert-persons-table-django-admin.png>
+		
+		
+	(Note: there was a problem with the text field bio that is easy to solve but it is not here documented)
+
+	On models insert this new line in order to admin show person name and last name on the interface:
+		
+		On **models.py** of the app **clients**
+		'''
+		from django.db import models
+
+		# Create your models here.
+		class Person(models.Model):
+			# buzz word is field types
+			first_name = models.CharField(max_length=30)
+			last_name = models.CharField(max_length=30)
+			age = models.IntegerField()
+			salary = models.DecimalField(max_digits=5, decimal_places=2)
+			bio = models.TextField()
+			
+			#Added Here!!
+			def __str__(self):
+				return str(self.first_name + " " + self.last_name)
+		'''
+	
+	<imgs/added-person-admin>
+	
+	Now use the django admin which is very easy...
+	
+	
+# 
 				
