@@ -1,0 +1,62 @@
+# Django Learning EBook_________________________________
+
+
+# Pycharm installation and usage:
+
+	Change font size= Crt+Alt+S  > font > change
+
+	To run python program:
+		1. Go to Project folder > right click > New > Python File
+		2. write print("Hello World")
+		3 go to left down corner on Python Console and press run. If this does not work right click python file > 
+		
+		
+	There is also a terminal console to make pip install and so on....
+	It is very usefull to use this terminal!
+
+
+# Django beginning:
+
+	* To create django project use the following command in the terminal: **django-admin startproject <project Name>**
+	* This will create a folder with project name
+	* The project will have the structure of image: <imgs/Django_Project_Folder_Organization.png>
+	* we will work mustly in **urls** and **settings**
+	* to **RUN** the server run the manage.py on terminal like :**python manage.py runserver** #on the file working directory
+	* the image of the previous command: <imgs/Django_runserver.png>
+	* this will create a 
+	
+	
+# Django first application:
+
+		## Django request response cycle:
+		
+			<imgs/django-request-response-cycle.jpg
+			
+		## Create URL
+		
+			* DJango uses MVC, like all.
+			* To create an url go to urls.py and write the following:
+				
+				'''
+				import django.views as views
+				
+				urlpatterns = [
+					path("hello/",views.hello),
+					path('admin/', admin.site.urls)
+				]
+				'''
+			* As you can see in the previous code you need to create a new python file named **views.py** (of course it could be other), inside project folder (the same that as urls.py) 
+			* In views.py you can create all functions used for each path
+			* for the first view example see this code from views.py:
+				
+				'''
+				from django.http import HttpResponse
+
+				def hello(request):
+					return HttpResponse("Hello World")
+				'''
+			* Basically it will receives a request from client(browser) and responds with a string in this case.
+	
+	
+
+	
