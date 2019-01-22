@@ -3,27 +3,32 @@
 
 # Pycharm installation and usage:
 
-	Change font size= Crt+Alt+S  > font > change
+To work with Django it is better to download **PYCHARM** python editor. You need to download and install python.
 
-	To run python program:
-		1. Go to Project folder > right click > New > Python File
-		2. write print("Hello World")
-		3 go to left down corner on Python Console and press run. If this does not work right click python file > 
-		
-		
-	There is also a terminal console to make pip install and so on....
-	It is very usefull to use this terminal!
+## Tips
+
+Change font size= Crt+Alt+S  > font > change
+
+To run python program:
+1. Go to Project folder > right click > New > Python File
+2. write print("Hello World")
+3 go to left down corner on Python Console and press run. If this does not work right click python file > 
+	
+	
+There is also a terminal console to make pip install and so on....
+It is very usefull to use this terminal!
 
 
 # Django beginning:
 
-	* To create django project use the following command in the terminal: **django-admin startproject <project Name>**
-	* This will create a folder with project name
-	* The project will have the structure of image: <imgs/Django_Project_Folder_Organization.png>
-	* we will work mustly in **urls** and **settings**
-	* to **RUN** the server run the manage.py on terminal like :**python manage.py runserver** #on the file working directory
-	* the image of the previous command: <imgs/Django_runserver.png>
-	* this will create a 
+* first on the console terminal of **Pycharm** run: **pip install django**
+* To create django project use the following command in the terminal: **django-admin startproject <project Name>**
+* This will create a folder with project name
+* The project will have the structure of image: <imgs/Django_Project_Folder_Organization.png>
+* we will work mustly in **urls** and **settings**
+* to **RUN** the server run the manage.py on terminal like :**python manage.py runserver** #on the file working directory
+* the image of the previous command: <imgs/Django_runserver.png>
+
 	
 	
 # Django first application:
@@ -544,4 +549,4 @@ It will work like this:
 
 Now any new Person inserted in the /admin will be updated on this list.
 
-##
+## Create Person
