@@ -442,4 +442,106 @@
 	
 # CRUD - Create Read Update Delete
 
+To make this application correctly, first we need to organize the urls. One thing we can do is divide urls by application **(One project can have multiple applications)**.
+So on clients application create a new file called urls.py, **just like in folder with the same name as the project**
+The new clients/urls.py file can have this code:
+
+	'''
+	from django.urls import path
+
+	urlpatterns = [
+		path("list/", person_list),
+
+
+	]
+	'''
+
+On the file: **clients/views** insert the following code:
+
+	'''
+	from django.shortcuts import render
+	from django.http import HttpResponse
+	# Create your views here.
+	def person_list(request):
+		return render(request,"person.html")
+		#return HttpResponse("Bla bla it worked even though there is an error importing clients????")
+	'''
 	
+Now in the project urls file, include all clients application urls. To do that, see the following code.
+
+Project urls file:
+	'''
+	
+	from clients import urls as clients_urls #added here!
+	from django.contrib import admin
+	from django.urls import path, include
+
+	from .views import hello
+
+	urlpatterns = [
+		#path("hello/<str:name>", hello),
+		path("hello/<str:name>", hello),
+		path('person/',include(clients_urls)), #added here!
+		path('admin/', admin.site.urls),
+		#path("person/<str:name>", person),
+
+	]
+
+	'''
+	
+Now all localhost:8000/person/<X>... will go to clients app urls represented here by an <X>
+So in our case localhost:8000/person/list
+
+##List clients
+
+In this section we will actually do the function **list_persons**
+
+First create new html in template folder ("list_persons.html") with this code:
+
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>List Persons</title>
+	</head>
+	<body>
+	<ul>
+		{% for person in persons %}
+			<li>
+				{{person.first_name}}
+			</li>
+		{% endfor %}
+
+	</ul>
+	</body>
+	</html>
+	'''
+
+Essentially it will receive the actual persons in the DB and write on a list their first name.
+For this to work the views file from clients must have the following code:
+
+	'''
+	from django.shortcuts import render
+	from django.http import HttpResponse
+	from .models import Person
+
+
+	# Create your views here.
+	def person_list(request):
+		persons = Person.objects.all()
+		return render(request, "list_persons.html", {'persons': persons})
+		# return HttpResponse("Bla bla it worked even though there is an error importing clients????")
+
+	'''
+	
+We need to import from **clients/models** the class Person, and then we can obtain all their objects with the code **Person.objects.all()**	and we send it in the template.
+
+It will work like this:
+
+<imgs/list_persons.png>
+
+
+Now any new Person inserted in the /admin will be updated on this list.
+
+##
