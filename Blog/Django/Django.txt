@@ -763,3 +763,56 @@ This will required a special change in the **person_form.html** page
 
 ### person_form.html
 
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Create Person</title>
+	</head>
+	<body>
+		<!--<form action="{% url 'person_new' %}" method="post" enctype="multipart/form-data">-->
+		<form  method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{form}}
+			<button type="submit">Submit</button>
+		</form>
+	</body>
+	</html>
+	'''
+	
+As it is possible to see the form now does not have the action input field, because if it did every time we clicked on submit button
+The form would send a post to create a new Person, and we wouldn't want that. So by removing this field django will interped automatically (using the url) where to send the post.
+As seen previously to update a Person is just saving a form on an existing **id**
+
+
+### list_persons.html
+
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>List Persons</title>
+	</head>
+	<body>
+	<ul>
+		{% for person in persons %}
+			<li>
+				<a href="{% url 'person_update' person.id %}">{{person.first_name}} {{person.last_name}}</a>
+			</li>
+		{% endfor %}
+		<br>
+		<a href="{% url 'person_new' %}">Create new user</a>
+	</ul>
+	</body>
+	</html>	
+	'''
+
+Here what it was chaged of relevant was the <li> tag. Now they have hiperlinks to the update **url** with the id included in it.
+
+
+## Delete Person
+
+
+
