@@ -8,11 +8,11 @@
 <ul>
     {% for person in persons %}
         <li>
-            {{person.first_name}}
+            <a href="{% url 'person_update' person.id %}">{{person.first_name}} {{person.last_name}}</a>
         </li>
     {% endfor %}
-
-    <a href="{% url person_new %}">Create new user</a>
+    <br>
+    <a href="{% url 'person_new' %}">Create new user</a>
 </ul>
 </body>
 </html>

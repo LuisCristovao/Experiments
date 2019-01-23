@@ -660,7 +660,7 @@ Also it will be needed, to create a form.py which is an auxiliary script to help
 			</li>
 		{% endfor %}
 
-		<a href="{% url person_new %}">Create new user</a>
+		<a href="{% url 'person_new' %}">Create new user</a>
 	</ul>
 	</body>
 	</html>
@@ -677,12 +677,89 @@ The **name** input field on path is also used in person_form.html on the form ac
 On the **person_form.html** is relevant to notice the {% csrf_token %} field.
 Usually this is a invisible input to the user, used to secure forms, of for instance repetition attack.
 The **{{form}}** part is just receiving the form corresponding to the model Person.
+Also the form as enctype field, this is the format it will send the post with the data, with this format django understends what he is receiving.
+
 
 The **form.py** is a class that django uses to create the form for a specific model, in outr case the Person.
 
 
-Finnaly 
+Finnaly on **views.py** the new function **person_new** if the form is valid then it redirects the client to the list page;
+Otherwise it renders the **person_form.html** with an empty form.
+
+**### IMPORTANTE: the link with entire project of udemy https://github.com/Gpzim98/gestao_clientes  **
 
 
+## Update Person
 
+As usual to make this functionality the main places to change are the **urls.py** and **views.py**
+In this particular case there will be also changes in some html such as : list_persons.html and in person_form.html
+
+### urls.py
+
+	'''
+	from django.urls import path
+	from .views import person_list,person_new,person_update
+
+	urlpatterns = [
+		path("list/", person_list,name="person_list"),
+		path("new/",person_new,name="person_new"),
+		path("update/<int:id>/", person_update, name="person_update"),
+	]
+
+	'''
+Just added new path **"update"** which also sends the **id** of the person
+
+### views.py
+
+	'''
+	from django.shortcuts import render
+	from django.http import HttpResponse
+	from .models import Person
+	from .forms import PersonForm
+	from django.shortcuts import redirect,get_object_or_404
+
+
+	# Create your views here.
+	def person_list(request):
+		persons = Person.objects.all()
+		return render(request, "list_persons.html", {'persons': persons})
+		# return HttpResponse("Bla bla it worked even though there is an error importing clients????")
+
+
+	def person_new(request):
+		#Sends html form for the Person Model
+		#The None input is sending and empty form
+		form = PersonForm(request.POST,request.FILES, None)
+
+		if form.is_valid():
+			form.save()
+			persons = Person.objects.all()
+			return redirect('person_list')
+
+
+		#sending a filled html form
+		return render(request, "person_form.html", {'form': form})
+
+	def person_update(request,id):
+		person= get_object_or_404(Person, pk=id)
+		form = PersonForm(request.POST or None, request.FILES or None, instance=person)
+
+		if form.is_valid():
+			form.save()
+			return redirect('person_list')
+
+		return render(request, 'person_form.html',{'form':form})
+		#print(id)
+		#return HttpResponse('<h2 style="color:hsl(81, 100%, 50%)">Work in Progress '+str(id)+'</h2>')
+
+	'''
+What is necessary to highlight are the **get_object_or_404** and the new function **person_update**.
+
+The **get_object_or_404** just serves the purpose of retriving the Person object with some **id**, or else serves 404 error page.
+If the form is valid, the the server saves the form and redirects to the list page.
+If it is the first time person_update is called then it renders **person_form.html** with the user passed in the id.
+
+This will required a special change in the **person_form.html** page
+
+### person_form.html
 
