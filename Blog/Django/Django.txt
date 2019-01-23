@@ -814,5 +814,68 @@ Here what it was chaged of relevant was the <li> tag. Now they have hiperlinks t
 
 ## Delete Person
 
+It is basically equal to the previous but I will show the changes in the scripts:
+
+### urls.py
+
+	'''
+	from django.urls import path
+	from .views import person_list, person_new, person_update,person_delete
+
+	urlpatterns = [
+		path("list/", person_list,name="person_list"),
+		path("new/",person_new,name="person_new"),
+		path("update/<int:id>/", person_update, name="person_update"),
+		path("delete/<int:id>/", person_delete, name="person_delete"),
+	]
+
+	'''
+Added new path delete.
 
 
+### views.py
+
+	'''
+	...
+	def person_delete(request, id):
+		person = get_object_or_404(Person, pk=id)
+
+		if request.method=='POST':
+			person.delete()
+			return redirect('person_list')
+
+		return render(request, 'person_delete.html', {'person': person})
+
+	'''
+Added new function **person_delete** that basically retrives the person from db, and check if it is a **post** request (because path in urls works for both post get ...)
+if it is, then the user gave confirmation that it wants to delete user, so we delete the user and make a redirect ot list.
+In case it is a **GET** request then it renders the new html **person_delete.html** which is just for the user to confirm the deletion.
+
+
+### person_delete.html
+
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Delete Person</title>
+	</head>
+	<body>
+		<h2>Sure you want to Delete {{person.first_name}} {{person.last_name}} ?</h2>
+		<!--<form action="{% url 'person_delete' person.id %}" method="post" enctype="multipart/form-data">-->
+		<form  method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<button type="submit">Delete</button>
+		</form>
+
+	</body>
+	</html>
+	'''
+	
+As explained above is just a confirmation form, for the user confirm if it wants to delete or not.
+The only detail here to consider is the comment **<form action="{% url 'person_delete' person.id %}" method="post" enctype="multipart/form-data">**
+With the action field like this it works, but widthout it also works, because it will send a post to the current url path which is the same as the action showed here.
+
+
+#	
