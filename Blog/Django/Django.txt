@@ -550,3 +550,139 @@ It will work like this:
 Now any new Person inserted in the /admin will be updated on this list.
 
 ## Create Person
+
+The goal for this section is to create a person through a http request.
+So it is necessary to add a new path to the urls.py, create a new html page that sends the http request and finally we need to create function in clients/views.py.
+Also it will be needed, to create a form.py which is an auxiliary script to help django work with post requests.
+
+### On the clients app:
+
+**urls.py:**
+
+	'''
+	from django.urls import path
+	from .views import person_list,person_new
+
+	urlpatterns = [
+		path("list/", person_list,name="person_list"),
+		path("new/",person_new,name="person_new"),
+
+	]
+
+	'''
+
+**person_form.html:**
+
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Create Person</title>
+	</head>
+	<body>
+		<form action="{% url 'person_new' %}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{form}}
+			<button type="submit">Submit</button>
+		</form>
+	</body>
+	</html>
+	'''
+
+**form.py:**
+
+	'''
+	"""
+	Content used here can be seen in this page: https://docs.djangoproject.com/en/2.1/topics/forms/modelforms/
+	"""
+
+	from django.forms import ModelForm
+	from .models import Person
+
+
+	# Create the form class.
+	class PersonForm(ModelForm):
+		class Meta:
+			model = Person
+			fields = ['first_name', 'last_name', 'age', 'salary', 'bio', 'photo']
+
+	'''	
+	
+	
+**views.py:**
+
+	'''
+	from django.shortcuts import render
+	from django.http import HttpResponse
+	from .models import Person
+	from .forms import PersonForm
+	from django.shortcuts import redirect
+
+
+	# Create your views here.
+	def person_list(request):
+		persons = Person.objects.all()
+		return render(request, "list_persons.html", {'persons': persons})
+		# return HttpResponse("Bla bla it worked even though there is an error importing clients????")
+
+
+	def person_new(request):
+		#Sends html form for the Person Model
+		#The None input is sending and empty form
+		form = PersonForm(request.POST,request.FILES, None)
+
+		if form.is_valid():
+			form.save()
+			persons = Person.objects.all()
+			return redirect('person_list')
+
+
+		#render the html
+		return render(request, "person_form.html", {'form': form})
+
+	'''
+
+**list_persons.html**
+
+	'''
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>List Persons</title>
+	</head>
+	<body>
+	<ul>
+		{% for person in persons %}
+			<li>
+				{{person.first_name}}
+			</li>
+		{% endfor %}
+
+		<a href="{% url person_new %}">Create new user</a>
+	</ul>
+	</body>
+	</html>
+	'''
+	
+
+
+### Explanation
+
+In the **urls.py** it is possible to notice the name=... input parameter. This input is used by django to for instance simplify redirects.
+For instance in the views.py on the redirect instead of making rednder, bla bla... I just redirect and use the **name input field in the urls.py**
+The **name** input field on path is also used in person_form.html on the form action.
+
+On the **person_form.html** is relevant to notice the {% csrf_token %} field.
+Usually this is a invisible input to the user, used to secure forms, of for instance repetition attack.
+The **{{form}}** part is just receiving the form corresponding to the model Person.
+
+The **form.py** is a class that django uses to create the form for a specific model, in outr case the Person.
+
+
+Finnaly 
+
+
+
+
