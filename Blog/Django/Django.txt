@@ -878,4 +878,83 @@ The only detail here to consider is the comment **<form action="{% url 'person_d
 With the action field like this it works, but widthout it also works, because it will send a post to the current url path which is the same as the action showed here.
 
 
-#	
+# Real application
+
+In this section I will be creating a new Django app from beginning, so this section is very **important**, mainly if the first section was not well done.
+
+## Create Django application
+ 
+1. Create a new **Folder** where you want to create a new **django project**. 
+2. Then open **Pycharm** and go to **File > Create new project** and create a new project on the newly created **folder**.
+3. Now, on **Pycharm** go to **Terminal**, it must appear something like this: **(venv) C:\Users\Samsung\Documents\GitHub\Experiments\Blog\Django\applications\Django1_final>**
+4. The (venv) means that pycharm created a virtual console, which can access to **python** and **pip (packets manager of python)**
+5. To install **Django**, on **Pycharm Terminal** write the following: **pip install django** 
+6. To create project write on **Terminal in the working directory of the new project**: **django-admin startproject client_management**
+7. **client_management** is the project name.
+8. Inside your working folder django will create a folder with **cleint_management* name with the files necessary for the project. 
+9. <img src="imgs/new-django-project-client-management.png">
+
+
+## Migrate previous clients app to new project
+
+1. copy clients and templates folder to new project.
+2. Insert the templates folder inside clients folder
+3. Change the folder name with the templates to **"templates"**, because django automatically renders files from a folder with his name inside the app.
+4. <img src="migration-tree-folder.png">
+5. On **cliennt_management > client-management > settings.py** add the following line:
+	
+	'''
+	INSTALLED_APPS = [
+		'django.contrib.admin',
+		'django.contrib.auth',
+		'django.contrib.contenttypes',
+		'django.contrib.sessions',
+		'django.contrib.messages',
+		'django.contrib.staticfiles',
+		'clients',  # added app to installed apps
+	]
+	'''
+6. Now the **clients** app will be installed on runserver.
+7. Now we need to add the url paths of **clients app** to the project **urls.py**. So on **client_management > urls.py** add the following code:
+
+	'''
+	from django.urls import path, include
+	from django.contrib import admin
+	from clients import urls as clients_urls
+
+
+	urlpatterns = [
+		path('clients/', include(clients_urls)),
+		path('admin/', admin.site.urls),
+	]
+	'''
+8. Now every http request to **localhost:8000/clients/<clients-urls>** will be working.
+9. To migrate **clients app** models, write the following on the **Terminal** (always in the directory of the file **manage.py**): **python manage.py migrate**
+10. If the console says you need to install Pillow just do what it says: **pip install Pillow**
+11. dont forget of doing the command on 9 step
+12. To run the server, write on the **Terminal** the following : **python manage.py runserver**
+13. Go to http://127.0.0.1:8000/clients/list/
+
+Finally if everything is ok, we need to add the media files folder like this:
+
+Create on manage.py directory the a folder named "media". 
+Then on **client_management > settings.py** add the following code:
+
+	'''
+	# Media files
+
+	MEDIA_URL = '/media/'
+
+	MEDIA_ROOT = 'media'
+	'''
+
+
+## Login 
+
+Django already helps a lot in relation to logins
+What we want is that an user needs to insert username and password to access the urls.
+So
+
+
+
+
