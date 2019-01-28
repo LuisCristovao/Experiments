@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Sripts\CamMovement.cs" />
+    <Compile Include="Assets\Sripts\ManualRocket.cs" />
     <Compile Include="Assets\Sripts\Player.cs" />
     <Compile Include="Assets\Sripts\Rocket.cs" />
     <Reference Include="UnityEditor.StandardEvents">

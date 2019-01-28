@@ -13,11 +13,12 @@ public class Player : MonoBehaviour {
 
     private Rigidbody rb;
     private Transform tr;
-    public bool flying_mode,on_air;
+    public bool flying_mode,on_air,fast_state;
 	// Use this for initialization
 	void Start () {
         flying_mode = false;
         on_air = false;
+        fast_state = false;
         tr = GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
 	}
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour {
             }
             if (Input.GetKey("w"))
             {
+                
                 rb.velocity = new Vector3(2, rb.velocity.y, rb.velocity.z);
                 tr.rotation = Quaternion.AngleAxis(0, new Vector3(0, 0, 0));
             }
