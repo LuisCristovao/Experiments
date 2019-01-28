@@ -61,7 +61,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Sripts\CamMovement.cs" />
     <Compile Include="Assets\Sripts\Player.cs" />
+    <Compile Include="Assets\Sripts\Rocket.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/Samsung/Documents/GitHub/Experiments/Unity/EscapeNightmare/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
