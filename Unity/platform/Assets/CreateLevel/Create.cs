@@ -7,9 +7,17 @@ public class Create : MonoBehaviour {
 
     public GameObject block;
     public int size = 500;
+    public float speed = 0.1f;
+    public float zoom_speed=1;
+
     private GameObject[,] matrix;
+    Camera cam;
+    Transform tr;
+
 	// Use this for initialization
 	void Start () {
+        tr = GetComponent<Transform>();
+        cam = GetComponent<Camera>();
         matrix = new GameObject[size,size];
 	}
 	
@@ -35,11 +43,7 @@ public class Create : MonoBehaviour {
             }
             
         }
-        if (Input.GetMouseButton(1))
-        {
-            GetComponent<Camera>().orthographicSize += Input.GetAxis("Mouse Y");
-            transform.position = new Vector3(transform.position.x+Input.GetAxis("Mouse X"), transform.position.y+Input.GetAxis("Mouse Y"),-10);
-        }
+        
 
         if (Input.GetKey("e"))
         {
@@ -48,7 +52,27 @@ public class Create : MonoBehaviour {
                 Destroy(matrix[(int)x, (int)y]);
             }
         }
+        if (Input.GetMouseButton(1))
+        {
+            cam.orthographicSize = cam.orthographicSize + Input.GetAxis("Mouse Y") * zoom_speed;
+        }
 
+        if (Input.GetKey("d"))
+        {
+            tr.Translate(new Vector3(speed, 0, 0));
+        }
+        if (Input.GetKey("a"))
+        {
+            tr.Translate(new Vector3(-speed, 0, 0));
+        }
+        if (Input.GetKey("w"))
+        {
+            tr.Translate(new Vector3(0, speed, 0));
+        }
+        if (Input.GetKey("s"))
+        {
+            tr.Translate(new Vector3(0, -speed, 0));
+        }
 
 
     }

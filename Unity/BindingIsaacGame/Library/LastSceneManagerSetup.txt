@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/BIGame.unity
+- path: Assets/GenerateMap/GenMap.unity
   isLoaded: 1
   isActive: 1

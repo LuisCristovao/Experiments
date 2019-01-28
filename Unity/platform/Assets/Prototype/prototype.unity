@@ -940,7 +940,17 @@ Prefab:
     - target: {fileID: 114354366381746588, guid: e2a2a0405315d5643883c1e49f963aaa,
         type: 2}
       propertyPath: jump_strenght
-      value: 100
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114354366381746588, guid: e2a2a0405315d5643883c1e49f963aaa,
+        type: 2}
+      propertyPath: small_jump_factor
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114354366381746588, guid: e2a2a0405315d5643883c1e49f963aaa,
+        type: 2}
+      propertyPath: max_jump_time
+      value: 0.13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e2a2a0405315d5643883c1e49f963aaa, type: 2}

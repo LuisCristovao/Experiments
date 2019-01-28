@@ -7,14 +7,19 @@ public class Proto_Player : MonoBehaviour {
 
 
     private Rigidbody2D rb;
+    double time;
+
+
     public float speed = 2;
     public float change_dir_force = 2;
     public float jump_strenght = 10;
     public bool on_air = false;
-    
+    public float max_jump_time = 0.1f;
+    public float small_jump_factor = 2;
 
     // Use this for initialization
     void Start () {
+        time = 0;
         rb = GetComponent<Rigidbody2D>();
         on_air = false;
     }
@@ -51,24 +56,34 @@ public class Proto_Player : MonoBehaviour {
 
         if (Input.GetKey("w"))
         {
-            //rb.velocity = new Vector2(0, jump_strenght);
-            if (!on_air)
-            {
-                rb.AddForce(new Vector2(0, jump_strenght));
-                on_air = true;
-            }
-            else
-            {
-                
-                rb.AddForce(new Vector2(0, 4*rb.gravityScale));
-            }
+            time += Time.deltaTime;
             
 
+            //max jump
+            if (time > max_jump_time)
+            {
+                //rb.velocity = new Vector2(0, jump_strenght);
+                if (!on_air)
+                {
+                    print("Max jump");//take out!!!
+                    rb.AddForce(new Vector2(0, jump_strenght));
+                    on_air = true;
+                }
+            }
+
+            
         }
-        if (on_air)
+        if (Input.GetKeyUp("w"))
         {
-            rb.AddForce(new Vector2(0, 4*rb.gravityScale));
+            if (!on_air)
+            {
+                print("Small");//take out!!!
+                rb.AddForce(new Vector2(0, (jump_strenght*((float)time*small_jump_factor))));
+                on_air = true;
+            }
+            time = 0;
         }
+        
     }
         
 
