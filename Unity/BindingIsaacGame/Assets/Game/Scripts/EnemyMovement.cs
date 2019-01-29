@@ -10,7 +10,7 @@ public class EnemyMovement : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        vision = GetComponent<Transform>().GetChild(2).gameObject;
+        //vision = GetComponent<Transform>().GetChild(2).gameObject;
         rb = GetComponent<Rigidbody2D>();
         tr = GetComponent<Transform>();
         
@@ -20,7 +20,7 @@ public class EnemyMovement : MonoBehaviour {
 	void Update () {
         rb.velocity = new Vector2(0, 0);
         rb.angularVelocity = 0;
-        vision.GetComponent<Collider2D>();
+        //vision.GetComponent<Collider2D>();
 
        
     }
