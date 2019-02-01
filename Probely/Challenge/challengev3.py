@@ -44,16 +44,30 @@ class ProbelyApiRequest:
             content=json.loads(content)
             return content
         
-    def getScan(self,target_id,scan_id):
+    def GetScan(self,target_id,scan_id):
         url=self.url+target_id+'/scans/'+scan_id
 
         scan_result=self.SendRequest(url,"get")
         return scan_result
+    
+    def RiskScore(self,target_id,scan_id):
+        scan=self.GetScan(target_id,scan_id)
+        risk_score=scan['lows']+10*scan['mediums']+40*scan['highs'] 
+        print("risk score for id",target_id,"is",risk_score)
+    
+    def ListFindings(self,target_id,scan_id):
+        url=self.url+target_id+'/findings/?scan='+scan_id
+        content=self.SendRequest(url,"get")
+        return content
+#    def getFindings
         
 
-def compareScans(scan1,scan2):
-    for key in scan1:
-        print ("key:",key,";value:",scan1[key])        
+#def compareScans(scan1,scan2):
+#    fixed=[]
+#    not_fixed=[]
+#    new=[]
+#    for key in scan1:
+#        if scan1[key]        
 
 api=ProbelyApiRequest()
 
@@ -63,10 +77,9 @@ scan_id1='3hbQvcGEmLbW'
 scan_id2='2RnxpEEm2qd5'
 target_id='RzXFSNHH3qUY'
 
-scan_result1=api.getScan(target_id,scan_id1)
-scan_result2=api.getScan(target_id,scan_id2)
+#scan_result1=api.GetScan(target_id,scan_id1)
+#scan_result2=api.GetScan(target_id,scan_id2)
 
+#api.RiskScore(target_id,scan_id2)
 
-compareScans(scan_result1,scan_result2)
-print("\n------------------\n")
-compareScans(scan_result2,scan_result1)
+print(api.ListFindings(target_id,scan_id1)["results"][0]["fix"])
