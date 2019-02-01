@@ -79,11 +79,19 @@ class ProbelyApiRequest:
                     res2=results2[j]
                     if res1["id"]==res2["id"]:
                         on_both.append({"id":res1["id"],"index1":i,"index2":j})
+                        break
                     else:
                         if j==len(results2)-1:
-                            only_in_first.append({"id":res1["id"]})
-                    
-                    
+                            only_in_first.append({"id":res1["id"],"index":i})
+            
+            for i in range(len(results2)):
+                res2=results2[i]
+                for j in range(len(on_both)):
+                    if res2["id"]!=on_both[j]:
+                        only_in_second.append({"id":res2["id"],"index":i})
+                        break
+        
+        return (only_in_first,only_in_second,on_both)
     
     def CompareFindings(self,target_id,scan_id1,scan_id2):
         findings1=self.ListFindings(target_id,scan_id1)
@@ -94,23 +102,13 @@ class ProbelyApiRequest:
         self.Divisory()
         
         
-        
-        
-        
-        fixed_on_first=[]
-        not_fixed_on_both=[]
-        new_in_second=[]
-        
-        if len(findings1["results"])>=len(findings2["results"]):
-            
-            for i in range(len(findings1["results"])):
-                result1=findings1["results"][i]
-                result2=findings2["results"][i]
-                print("result",i)
-                print("result1 id:",result1["id"])
-                print("result2 id:",result2["id"])
+        (only_in_first,only_in_second,on_both)=self.SepResults(findings1["results"],findings2["results"])
                 
-            
+        print(on_both)
+        self.Divisory()
+        print(only_in_first)
+        self.Divisory()
+        print(only_in_second)
         
         
 
