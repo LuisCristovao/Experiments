@@ -87,9 +87,12 @@ class ProbelyApiRequest:
             for i in range(len(results2)):
                 res2=results2[i]
                 for j in range(len(on_both)):
-                    if res2["id"]!=on_both[j]:
-                        only_in_second.append({"id":res2["id"],"index":i})
+                    if res2["id"]==on_both[j]["id"]:
+                        
                         break
+                    else:
+                        if j==len(on_both)-1:
+                            only_in_second.append({"id":res2["id"],"index":i})
         
         return (only_in_first,only_in_second,on_both)
     
@@ -104,11 +107,14 @@ class ProbelyApiRequest:
         
         (only_in_first,only_in_second,on_both)=self.SepResults(findings1["results"],findings2["results"])
                 
-        print(on_both)
+        for val in on_both:
+            print(val)
         self.Divisory()
-        print(only_in_first)
+        for val in only_in_first:
+            print(val)
         self.Divisory()
-        print(only_in_second)
+        for val in only_in_second:
+            print(val)
         
         
 
