@@ -94,6 +94,32 @@ class ProbelyApiRequest:
                         if j==len(on_both)-1:
                             only_in_second.append({"id":res2["id"],"index":i})
         
+        else:
+            for i in range(len(results2)):
+                for j in range(len(results1)):
+                    res1=results1[j]
+                    res2=results2[i]
+                    if res1["id"]==res2["id"]:
+                        on_both.append({"id":res1["id"],"index1":j,"index2":i})
+                        break
+                    else:
+                        if j==len(results1)-1:
+                            only_in_second.append({"id":res2["id"],"index":j})
+            
+            for i in range(len(results1)):
+                res1=results1[i]
+                for j in range(len(on_both)):
+                    if res1["id"]==on_both[j]["id"]:
+                        break
+                    else:
+                        if j==len(on_both)-1:
+                            only_in_first.append({"id":res1["id"],"index":i})
+        
+        
+        
+        
+        
+        
         return (only_in_first,only_in_second,on_both)
     
     def CompareFindings(self,target_id,scan_id1,scan_id2):
