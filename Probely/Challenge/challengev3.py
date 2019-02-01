@@ -22,12 +22,18 @@ import requests
 import json
 
 
+
+
+
 class ProbelyApiRequest:
     
     def __init__(self):
         self.url='https://api.probely.com/targets/'
         self.auth='JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0ZW5hbnQiOiJwcm9iZWx5IiwidXNlcm5hbWUiOiJZVWt3WjhHZFhpUmkiLCJqdGkiOiJRRDdoWUFvdjdTYnIifQ.O53R154sjyE0I5iv_ykFkboz7i5qeQwRRk-Kve9hjIs'
-        
+    @staticmethod    
+    def Divisory():
+        print("\n________________________________\n\n________________________\n")
+    
     def SendRequest(self,url,method):
         headers ={
             'Content-Type':'application/json',
@@ -59,7 +65,53 @@ class ProbelyApiRequest:
         url=self.url+target_id+'/findings/?scan='+scan_id
         content=self.SendRequest(url,"get")
         return content
-#    def getFindings
+    
+    @staticmethod
+    def SepResults(results1,results2):
+        only_in_first=[]
+        only_in_second=[]
+        on_both=[]
+        
+        if len(results1)<=len(results2):
+            for i in range(len(results1)):
+                for j in range(len(results2)):
+                    res1=results1[i]
+                    res2=results2[j]
+                    if res1["id"]==res2["id"]:
+                        on_both.append({"id":res1["id"],"index1":i,"index2":j})
+                    else:
+                        if j==len(results2)-1:
+                            only_in_first.append({"id":res1["id"]})
+                    
+                    
+    
+    def CompareFindings(self,target_id,scan_id1,scan_id2):
+        findings1=self.ListFindings(target_id,scan_id1)
+        findings2=self.ListFindings(target_id,scan_id2)
+        
+        print("findings results from",scan_id1,":",len(findings1["results"]))
+        print("findings results from",scan_id2,":",len(findings2["results"]))
+        self.Divisory()
+        
+        
+        
+        
+        
+        fixed_on_first=[]
+        not_fixed_on_both=[]
+        new_in_second=[]
+        
+        if len(findings1["results"])>=len(findings2["results"]):
+            
+            for i in range(len(findings1["results"])):
+                result1=findings1["results"][i]
+                result2=findings2["results"][i]
+                print("result",i)
+                print("result1 id:",result1["id"])
+                print("result2 id:",result2["id"])
+                
+            
+        
         
 
 #def compareScans(scan1,scan2):
@@ -82,4 +134,20 @@ target_id='RzXFSNHH3qUY'
 
 #api.RiskScore(target_id,scan_id2)
 
-print(api.ListFindings(target_id,scan_id1)["results"][0]["fix"])
+#api.CompareFindings(target_id,scan_id1,scan_id2)
+
+#
+#findings1=api.ListFindings(target_id,scan_id1)
+#findings2=api.ListFindings(target_id,scan_id2)
+#
+#for key in findings1["results"][3]:
+#    print(key)
+#    print(findings1["results"][3][key])
+#
+#for key in findings2["results"][3]:
+#    print(key)
+#    print(findings2["results"][3][key])
+
+
+api.CompareFindings(target_id,scan_id1,scan_id2)
+
