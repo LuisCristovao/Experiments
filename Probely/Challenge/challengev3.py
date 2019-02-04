@@ -32,7 +32,7 @@ class ProbelyApiRequest:
         self.auth='JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0ZW5hbnQiOiJwcm9iZWx5IiwidXNlcm5hbWUiOiJZVWt3WjhHZFhpUmkiLCJqdGkiOiJRRDdoWUFvdjdTYnIifQ.O53R154sjyE0I5iv_ykFkboz7i5qeQwRRk-Kve9hjIs'
     @staticmethod    
     def Divisory():
-        print("\n________________________________\n\n________________________\n")
+        print("\n________________________________\n________________________________\n")
     
     def SendRequest(self,url,method):
         headers ={
@@ -78,11 +78,11 @@ class ProbelyApiRequest:
                     res1=results1[i]
                     res2=results2[j]
                     if res1["id"]==res2["id"]:
-                        on_both.append({"id":res1["id"],"index1":i,"index2":j})
+                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"]})
                         break
                     else:
                         if j==len(results2)-1:
-                            only_in_first.append({"id":res1["id"],"index":i})
+                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"]})
             
             for i in range(len(results2)):
                 res2=results2[i]
@@ -92,7 +92,7 @@ class ProbelyApiRequest:
                         break
                     else:
                         if j==len(on_both)-1:
-                            only_in_second.append({"id":res2["id"],"index":i})
+                            only_in_second.append({"id":res2["id"],"index":i,"state":res2["state"]})
         
         else:
             for i in range(len(results2)):
@@ -100,11 +100,11 @@ class ProbelyApiRequest:
                     res1=results1[j]
                     res2=results2[i]
                     if res1["id"]==res2["id"]:
-                        on_both.append({"id":res1["id"],"index1":j,"index2":i})
+                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"]})
                         break
                     else:
                         if j==len(results1)-1:
-                            only_in_second.append({"id":res2["id"],"index":j})
+                            only_in_second.append({"id":res2["id"],"index":j,"state":res2["state"]})
             
             for i in range(len(results1)):
                 res1=results1[i]
@@ -113,7 +113,7 @@ class ProbelyApiRequest:
                         break
                     else:
                         if j==len(on_both)-1:
-                            only_in_first.append({"id":res1["id"],"index":i})
+                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"]})
         
         
         
@@ -121,6 +121,8 @@ class ProbelyApiRequest:
         
         
         return (only_in_first,only_in_second,on_both)
+    
+    
     
     def CompareFindings(self,target_id,scan_id1,scan_id2):
         findings1=self.ListFindings(target_id,scan_id1)
@@ -133,14 +135,33 @@ class ProbelyApiRequest:
         
         (only_in_first,only_in_second,on_both)=self.SepResults(findings1["results"],findings2["results"])
                 
-        for val in on_both:
-            print(val)
-        self.Divisory()
+#        for val in on_both:
+#            print(val)
+#        self.Divisory()
+#        for val in only_in_first:
+#            print(val)
+#        self.Divisory()
+#        for val in only_in_second:
+#            print(val)
+        print("findings \"fixed\" not present in second scan:")
         for val in only_in_first:
-            print(val)
+            if val["state"]=="fixed":
+                print("id:",val["id"])
+        
+
         self.Divisory()
+
+        print("NotFixed findings equal in both scans:")
+        for val in on_both:
+            if val["state"]=="notfixed":
+                print("id:",val["id"])
+
+
+        self.Divisory()
+
+        print("New in second scan")
         for val in only_in_second:
-            print(val)
+            print("id:",val["id"])                
         
         
 
