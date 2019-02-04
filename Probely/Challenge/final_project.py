@@ -9,7 +9,8 @@ class ProbelyApiRequest:
     def __init__(self):
         self.url='https://api.probely.com/targets/'
         self.auth='JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0ZW5hbnQiOiJwcm9iZWx5IiwidXNlcm5hbWUiOiJZVWt3WjhHZFhpUmkiLCJqdGkiOiJRRDdoWUFvdjdTYnIifQ.O53R154sjyE0I5iv_ykFkboz7i5qeQwRRk-Kve9hjIs'
-        self.scan_id=""
+        self.scan_id=''
+        
     @staticmethod    
     def Divisory():
         print("\n________________________________\n________________________________\n")
@@ -47,15 +48,15 @@ class ProbelyApiRequest:
             if target_scan_content["id"]:
                 self.scan_id=target_scan_content["id"]
             
-                scan=self.GetScan(target_id,self.scan_id)
-                
-                while (scan["status"]!="completed"):
-                    print("Current scan status not completed...")
-                    #Sleep 1 sec
-                    sleep(1)
-                    scan=self.GetScan(target_id,self.scan_id)
-                
-                
+#                scan=self.GetScan(target_id,self.scan_id)
+#                
+#                while (scan["status"]!="completed"):
+#                    print("Current scan status not completed...")
+#                    #Sleep 1 sec
+#                    sleep(1)
+#                    scan=self.GetScan(target_id,self.scan_id)
+#                
+#                
                 print("Current scan status",target_scan_content["status"])
                 return target_scan_content
         except:
@@ -74,17 +75,17 @@ class ProbelyApiRequest:
             
             if scan_status_content!=None:
                 scan=self.GetScan(target_id,scan_status_content["id"])
-                print(scan["status"])
+                print("Scan status:",scan["status"])
                 risk_score=scan['lows']+10*scan['mediums']+40*scan['highs'] 
                 print("risk score for id",target_id,"is",risk_score)
             else:
                 scan=self.GetScan(target_id,self.scan_id)
-                print(scan["status"])
+                print("Scan status:",scan["status"])
                 risk_score=scan['lows']+10*scan['mediums']+40*scan['highs'] 
                 print("risk score for id",target_id,"is",risk_score)
         else:
             scan=self.GetScan(target_id,self.scan_id)
-            print(scan["status"])
+            print("Scan status:",scan["status"])
             risk_score=scan['lows']+10*scan['mediums']+40*scan['highs'] 
             print("risk score for id",target_id,"is",risk_score)
     
@@ -216,6 +217,7 @@ scan_id1='3hbQvcGEmLbW'
 scan_id2='2RnxpEEm2qd5'
 target_id='RzXFSNHH3qUY'
 
+print("Exercise 2")
 print("Comparing scans",scan_id1,scan_id2)
 api.CompareFindings(target_id,scan_id1,scan_id2)
 
@@ -230,20 +232,12 @@ fixed count towards the score.
 Calculate the risk score for the target with ID RzXFSNHH3qUY
 """
 
-#api=ProbelyApiRequest()
+api.Divisory()
+print("Exercise 1")
+api.scan_id='2t1hQBW4rki3'
 
-#scan_id=2t1hQBW4rki3
 #Calculate Risk Score for the target with ID RzXFSNHH3qUY
 target_id="RzXFSNHH3qUY"
 api.RiskScore(target_id)
 
 
-#time=0
-#while api.scan_id=='':
-#    sleep(10)
-#    api.ScanNow(target_id)
-#    time+=10
-#    print(time)
-#    
-#    
-#print(api.scan_id)    
