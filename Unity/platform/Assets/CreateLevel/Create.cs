@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,18 +10,42 @@ public class Create : MonoBehaviour {
     public int size = 500;
     public float speed = 0.1f;
     public float zoom_speed=1;
+    public GameObject[] platform_objects;
+
+
 
     private GameObject[,] matrix;
     Camera cam;
     Transform tr;
-
+    int platform_object_index = 0;
 	// Use this for initialization
 	void Start () {
         tr = GetComponent<Transform>();
         cam = GetComponent<Camera>();
         matrix = new GameObject[size,size];
 	}
-	
+	//void touchNumber(string num)
+ //   {
+ //       if (Input.GetKey(num))
+ //       {
+ //           platform_object_index = int.Parse(num);
+ //       }
+ //   }
+
+    void SelectPlatformObj()
+    {
+        int[] numbers = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        Action<string> touchNumber=(string n) => {
+            if (Input.GetKey(n))
+            {
+                platform_object_index = int.Parse(n);
+            }
+        };
+        foreach(int n in numbers)
+        {
+            touchNumber(n.ToString());
+        }    
+    }
 	// Update is called once per frame
 	void Update () {
         Vector3 pz = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -29,6 +54,11 @@ public class Create : MonoBehaviour {
         float x, y;
         x = Mathf.Floor(pz.x + 0.25f);
         y = Mathf.Floor(pz.y + 0.25f);
+
+        SelectPlatformObj();
+
+
+
         if (Input.GetMouseButton(0))
         {
             
@@ -36,7 +66,7 @@ public class Create : MonoBehaviour {
             
             if (x>=0 && x<size && y >=0 && y < size && matrix[(int)x,(int)y]==null)
             {
-                GameObject obj = Instantiate(block);
+                GameObject obj = Instantiate(platform_objects[platform_object_index]);
                 obj.transform.position = new Vector2(x, y);
                 print("click:" + obj.transform.position);
                 matrix[(int)obj.transform.position.x, (int)obj.transform.position.y] = obj;

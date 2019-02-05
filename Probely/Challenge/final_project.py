@@ -106,11 +106,11 @@ class ProbelyApiRequest:
                     res1=results1[i]
                     res2=results2[j]
                     if res1["id"]==res2["id"]:
-                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"]})
+                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"],"url":res1["url"]})
                         break
                     else:
                         if j==len(results2)-1:
-                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"]})
+                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"],"url":res1["url"]})
             
             for i in range(len(results2)):
                 res2=results2[i]
@@ -120,7 +120,7 @@ class ProbelyApiRequest:
                         break
                     else:
                         if j==len(on_both)-1:
-                            only_in_second.append({"id":res2["id"],"index":i,"state":res2["state"]})
+                            only_in_second.append({"id":res2["id"],"index":i,"state":res2["state"],"url":res2["url"]})
         
         else:
             for i in range(len(results2)):
@@ -128,11 +128,11 @@ class ProbelyApiRequest:
                     res1=results1[j]
                     res2=results2[i]
                     if res1["id"]==res2["id"]:
-                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"]})
+                        on_both.append({"id":res1["id"],"index1":i,"index2":j,"state":res1["state"],"url":res1["url"]})
                         break
                     else:
                         if j==len(results1)-1:
-                            only_in_second.append({"id":res2["id"],"index":j,"state":res2["state"]})
+                            only_in_second.append({"id":res2["id"],"index":j,"state":res2["state"],"url":res2["url"]})
             
             for i in range(len(results1)):
                 res1=results1[i]
@@ -141,7 +141,7 @@ class ProbelyApiRequest:
                         break
                     else:
                         if j==len(on_both)-1:
-                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"]})
+                            only_in_first.append({"id":res1["id"],"index":i,"state":res1["state"],"url":res1["url"]})
         
         
         
@@ -174,7 +174,7 @@ class ProbelyApiRequest:
         print("findings \"fixed\" not present in second scan:")
         for val in only_in_first:
             if val["state"]=="fixed":
-                print("id:",val["id"])
+                print("id:",val["id"],"; url:",val["url"])
         
 
         self.Divisory()
@@ -182,16 +182,16 @@ class ProbelyApiRequest:
         print("NotFixed findings equal in both scans:")
         for val in on_both:
             if val["state"]=="notfixed":
-                print("id:",val["id"])
+                print("id:",val["id"],"; url:",val["url"])
 
 
         self.Divisory()
 
         print("New in second scan")
         for val in only_in_second:
-            print("id:",val["id"])                
+            print("id:",val["id"],"; url:",val["url"])                
 
-
+#-------------------------------------------------------------------------------
 
 try:
     if api.url:

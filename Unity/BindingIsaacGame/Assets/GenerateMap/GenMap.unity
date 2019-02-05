@@ -189,7 +189,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 188951182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 350, y: 350, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -209,7 +209,7 @@ MonoBehaviour:
   block: {fileID: 1246248339063116, guid: 7a40cd0f197fb6741bf5990fe4e7adee, type: 2}
   size: 500
   speed: 0.1
-  mouse_speed: 1
+  zoom_speed: 1
 --- !u!1001 &490149262
 Prefab:
   m_ObjectHideFlags: 0
@@ -219,11 +219,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4624244533102352, guid: e592fb7d396c494428220c39ac361af9, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 4624244533102352, guid: e592fb7d396c494428220c39ac361af9, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 350
       objectReference: {fileID: 0}
     - target: {fileID: 4624244533102352, guid: e592fb7d396c494428220c39ac361af9, type: 2}
       propertyPath: m_LocalPosition.z

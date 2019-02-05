@@ -125,7 +125,7 @@ public class GM_CameraMovement : MonoBehaviour {
     public GameObject block;
     public int size = 500;
     public float speed = 0.1f;
-    public float mouse_speed = 1;
+    public float zoom_speed = 1;
 
     
     LevelObjects[,] matrix; 
@@ -176,7 +176,7 @@ public class GM_CameraMovement : MonoBehaviour {
 
         if (Input.GetMouseButton(1))
         {
-            cam.orthographicSize = cam.orthographicSize + Input.GetAxis("Mouse Y")*mouse_speed;
+            cam.orthographicSize = cam.orthographicSize + Input.GetAxis("Mouse Y")*zoom_speed;
         }
 
         if (Input.GetKey("d"))

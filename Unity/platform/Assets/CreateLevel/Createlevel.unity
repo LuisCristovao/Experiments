@@ -206,5 +206,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9491b320939f3d049b5fdbdc9c433ea2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  block: {fileID: 1830842435774454, guid: 1205840882c40bd4593d75633a410e0c, type: 2}
+  block: {fileID: 1574403457617504, guid: ffa61fe5f446db940a7bbde17f30250c, type: 2}
   size: 500
+  speed: 0.1
+  zoom_speed: 1
+  platform_objects:
+  - {fileID: 1574403457617504, guid: ffa61fe5f446db940a7bbde17f30250c, type: 2}
+  - {fileID: 1830842435774454, guid: 1205840882c40bd4593d75633a410e0c, type: 2}
