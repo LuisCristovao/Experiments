@@ -3,6 +3,104 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+//abstract class LevelObjects
+//{
+//    public int id;
+//    public string name;
+//    public GameObject obj;
+
+
+
+//    public LevelObjects(int _id, string _name, GameObject _obj)
+//    {
+//        id = _id;
+//        name = _name;
+//        obj = _obj;
+//    }
+
+
+
+//    abstract public void Create();
+
+//    abstract public void Delete(int new_id, string new_name);
+
+    
+//}
+
+//class Air : LevelObjects
+//{
+//    public Wall(int _id, string _name, GameObject _obj) : base(_id, _name, _obj)
+//    {
+
+//    }
+
+//    public override void Create()
+//    {
+//        throw new System.NotImplementedException();
+//    }
+
+//    public override void Delete(int new_id, string new_name)
+//    {
+//        //GameObject.Destroy(obj);
+//        id = new_id;
+//        name = new_name;
+
+//    }
+
+//    public override bool Equals(object obj)
+//    {
+//        return base.Equals(obj);
+//    }
+
+//    public override int GetHashCode()
+//    {
+//        return base.GetHashCode();
+//    }
+
+//    public override string ToString()
+//    {
+//        return base.ToString();
+//    }
+//}
+
+//class Relations
+//{
+//    //Store level objects id/name relations
+//    Dictionary<string, int> name_id_relation = new Dictionary<string, int>();
+//    Dictionary<int, string> id_name_relation = new Dictionary<int, string>();
+
+//    public Relations()
+//    {
+//        this.name_id_relation = new Dictionary<string, int>()
+//        {
+//            { "Floor", 0 },
+//            { "Block", 1 },
+//        };
+//        this.id_name_relation = new Dictionary<int, string>()
+//        {
+//            {0,"Floor" },
+//            {1,"Block" },
+//        };
+//    }
+
+//    public string getName(int id)
+//    {
+//        return id_name_relation[id];
+//    }
+//    public int getID(string name)
+//    {
+//        return name_id_relation[name];
+//    }
+
+//}
+
+
+
+
+
+
 public class Create : MonoBehaviour {
 
 
