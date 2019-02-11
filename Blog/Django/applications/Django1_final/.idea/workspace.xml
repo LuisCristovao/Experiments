@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7a102643-bb6e-4ee9-b6ed-6baba9d9519f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide-shm" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide-shm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide-wal" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/.vs/BindingIsaacGame/v15/Server/sqlite3/storage.ide-wal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Assets/GenerateMap/GenMap.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Assets/GenerateMap/GenMap.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Assets/GenerateMap/Scripts/GM_CameraMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Assets/GenerateMap/Scripts/GM_CameraMovement.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/CurrentLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/CurrentLayout.dwlt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/ScriptAssemblies/Assembly-CSharp.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/ScriptAssemblies/Assembly-CSharp.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/assetDatabase3" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/assetDatabase3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/metadata/5c/5cab3c5e14aaa1349b86946d267315d5" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/metadata/5c/5cab3c5e14aaa1349b86946d267315d5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/shadercompiler-UnityShaderCompiler.exe0.log" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/Library/shadercompiler-UnityShaderCompiler.exe0.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../Unity/BindingIsaacGame/obj/Debug/Assembly-CSharp.csprojAssemblyReference.cache" afterDir="false" />
-    </list>
+    <list default="true" id="7a102643-bb6e-4ee9-b6ed-6baba9d9519f" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,6 +81,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -117,7 +104,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -152,9 +138,9 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.24973656" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.24973656" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" order="0" visible="true" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="0" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="2" />
       <window_info anchor="bottom" id="Message" order="3" />

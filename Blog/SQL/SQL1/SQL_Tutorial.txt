@@ -1,0 +1,9 @@
+# SQL Tutorial
+
+# Basics 1
+
+## Select Query
+
+The format is **Select <column names> from <table>**. For instance, using w3school tutorial from a Schema **X** the query:
+**Select * from clients;** will get all rows from all columns from table **clients** of Schema/DB **X**.
+
