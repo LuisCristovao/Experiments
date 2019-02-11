@@ -1,0 +1,121 @@
+First question: Find the most bought product(quantity) in DB
+we need to search in two tables
+In Products(p) and in OrderDetails(o)
+
+We need a query like this: select ProductID,ProductName,Price, Total Quantity
+the first 3 columns can be found in Products table the quantity in OrderDetails
+
+let us do this for a single selected product:
+
+SELECT p.ProductID,p.ProductName,p.Price,SUM(o.Quantity) as "Total Quantity"
+FROM [Products] as p
+INNER JOIN OrderDetails as o
+on o.ProductID=p.ProductID
+where o.ProductID=2 
+
+Result:
+->ProductID,ProductName,Price,Total Quantity
+->	  2	   ,   Chang   ,  19 ,    341
+
+Now let us see this for all products and make a top 10:
+
+SELECT p.ProductID,p.ProductName,p.Price,SUM(o.Quantity) as "Total Quantity"
+FROM [Products] as p
+INNER JOIN OrderDetails as o
+on o.ProductID=p.ProductID
+group by p.ProductID --	it can be o.ProductID it will have same result
+
+This will show all products and the quantity of times they were bought
+to make a top 10:
+
+SELECT p.ProductID,p.ProductName,p.Price,SUM(o.Quantity) as "Total Quantity"
+FROM [Products] as p
+INNER JOIN OrderDetails as o
+on o.ProductID=p.ProductID
+group by p.ProductID	
+order by [Total Quantity] desc 
+limit 10
+
+result:
+=> the most bought product is 31 - "Gorgonzola Telino" with 458 boughts
+
+//______________________________________________________________________________________
+Now let us see the product that gave the biggest revenue?
+what columns we need the previous ones  plus the multiplication of (Total Quantity)*Price
+
+So this is very similar to previous so:
+
+SELECT p.ProductID,p.ProductName,p.Price,SUM(o.Quantity) as "Total Quantity",(SUM(o.Quantity)*p.Price) as "Total Profit"
+FROM [Products] as p
+INNER JOIN OrderDetails as o
+on o.ProductID=p.ProductID
+group by p.ProductID	
+order by [Total Profit] desc 
+limit 10
+
+result:
+=>The most profitable product is different from the most sold and it is :
+=>Côte de Blaye that costs 263.5, sold 239 units, and as profit of 62976.5
+
+
+"Gorgonzola Telino" dont even appears in the top 10
+
+//_________________________________________________________________________________________________
+
+Now let us ask this question who was the company that sold more and or obtain more profit.
+let us see the last one what company obtain more profit
+
+We know that Products table as SupplierID we know that OrderDetails has the quantity sold of each product.
+We need to use these 3 tables (Products,OrderDetails, Suppliers). what we need to see?
+
+SupplierID,SupplierName,COuntry, Total Profit= (Qunatity of products sold times the price)
+
+first lets select the products sold by single company, for instance supplierID=1.
+
+SELECT s.SupplierID,s.SupplierName,s.Country,p.ProductID,p.ProductName,p.Price 
+FROM [Suppliers] as s
+inner join Products as p
+on s.SupplierID=p.SupplierID
+where s.SupplierID=1
+
+Now let us see the quantity of each product sold by this company
+
+SELECT  s.SupplierID,s.SupplierName,s.Country,p.ProductID,p.ProductName,p.Price,sum(o.Quantity) as "Total Sold"
+FROM [Suppliers] as s
+inner join Products as p
+on s.SupplierID=p.SupplierID
+inner join OrderDetails as o
+on p.ProductID=o.ProductID
+where s.SupplierID=1
+group by p.ProductID
+
+Now the profit for each product company 1 sells
+
+SELECT  s.SupplierID,s.SupplierName,s.Country,p.ProductID,p.ProductName,p.Price,sum(o.Quantity) as "Total Sold",(p.Price*sum(o.Quantity)) as "Profit"
+FROM [Suppliers] as s
+inner join Products as p
+on s.SupplierID=p.SupplierID
+inner join OrderDetails as o
+on p.ProductID=o.ProductID
+where s.SupplierID=1
+group by p.ProductID
+order by Profit desc
+
+With this query is possible to see that the most profitable product is productID=2
+
+Now yes we can measure the most profitable company
+
+For instance profit of company 1:
+
+SELECT  s.SupplierID,s.SupplierName,s.Country,(p.Price*sum(o.Quantity)) as "Profit"
+FROM [Suppliers] as s
+inner join Products as p
+on s.SupplierID=p.SupplierID
+inner join OrderDetails as o
+on p.ProductID=o.ProductID
+where s.SupplierID=1
+
+result: 11020 está errado!!!!!!!!!!! n funciona isto
+
+ 
+
