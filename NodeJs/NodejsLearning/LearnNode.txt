@@ -1,0 +1,15 @@
+Understanding Asynchronous JavaScript
+
+A chave para perceber isto de ser asincrone é o seguinte:
+O node js corre cada linha uma de cada vez, não fica a espera de nada.
+Se ele não espera como consegue alguma coisa? Atravez de callback functions
+
+Como o nome diz callback chamar outra vez é por exemplo o seguinte:
+-> vou colocar a roupa na maquina
+-> depois vou me embora fazer outra tarefa qualquer.
+-> quando a maquina apitar (callback) eu vou lá e meto a roupa na maquina de secar.
+
+É assim que em nodejs conseguimos fazer algum return que n seja imediato é inserindo uma função callback dentro de outra função para chamar o node 
+outra vez aquele sitio.
+
+

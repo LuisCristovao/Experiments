@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    </head>
+    <body ng-app="myApp">
+        <div  ng-controller="myCtrl">
+            Text: <input value="" type="text" name="text" id="text" ng-model="text" ng-change="Encrypt()">Pass: <input  ng-chage="Encrypt()" type="password" name="pass" id="pass" ng-model="pass"><button id="ecrypt" ng-click="Encrypt()">Encrypt</button><br>
+            <p id="enctext">Encrypted Text: </p> <!--<input value="" type="text" name="enc_text" id="enctext" ng-model="enctext">-->
+            <!--<div>
+                {{Answer}}
+            </div>-->
+        </div>
+    </body>
+    <script>
+        var app=angular.module('myApp', []);
+        app.controller('myCtrl', ['$scope', function($scope) {
+            
+            $scope.Encrypt=function(){
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(this.responseText);
+                        //$scope.enctext=this.responseText;
+                        $("#enctext").html("Encrypted Text: "+this.responseText)
+                    }
+                };
+                
+                xhttp.open("post", "http://127.0.0.1:80/encrypt/"+$scope.text+"/"+$scope.pass);
+                //xhttp.setRequestHeader("Access-Control-Allow-Origin", "http://127.0.0.1:80");
+                xhttp.setRequestHeader("Content-Type","text/plain;charset=UTF-8")
+                //xhttp.send("text="+$scope.text);
+                xhttp.send();
+            }
+        }]);
+    </script>
+    
+</html>
