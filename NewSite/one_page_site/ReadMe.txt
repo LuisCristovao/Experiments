@@ -41,3 +41,6 @@ For instance:
 	if(window.location.hash=="#Contact"){	
 		GetContent("ContactContent.html")	
 	}
+
+
+GetContent could be done with a fetch or an ajax request
