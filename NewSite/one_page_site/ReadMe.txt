@@ -44,3 +44,6 @@ For instance:
 
 
 GetContent could be done with a fetch or an ajax request
+
+### Automate cretion of new project
+
