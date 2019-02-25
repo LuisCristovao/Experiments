@@ -9,8 +9,9 @@ import flask as fl
 
 from importlib.machinery import SourceFileLoader
 
-foo = SourceFileLoader("aed", "/modules/aed.py").load_module()
-foo.test()
+#import module aed.py from folder modules
+aed = SourceFileLoader("aed.py", "modules/aed.py").load_module()
+aed.test()
 
 
 
@@ -25,7 +26,7 @@ foo.test()
 
 
 
-app = fl.Flask(__name__)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+#app = fl.Flask(__name__)
+#
+#if __name__ == '__main__':
+#    app.run(host='0.0.0.0', port=80)

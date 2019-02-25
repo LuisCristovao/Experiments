@@ -3,6 +3,7 @@
 
 
 
+
         
         
         
@@ -135,7 +136,7 @@ To automate the site creation I will have to create a python script that fills u
     [  
         {  
             "id":"id": array index number,
-            "main id": id from the table with all projects(foreing key),
+            "blog id": id from the table with all projects(foreing key),
             "title":"X",  
             "type":"blog or project".
             "short description":"x",  
