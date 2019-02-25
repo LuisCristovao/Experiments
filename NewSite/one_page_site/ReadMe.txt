@@ -1,5 +1,7 @@
 
 
+
+
         
         
         
@@ -47,6 +49,12 @@ Trying to copy this structure, with just one template page where the rest HTML i
 - It must be possible to search by category or just by writing a text in search input.  
 - The search engine must be capable of search in the text of projects pages.  
 - There will be template pages to show all projects  
+- Must have the following menu sites: **home, projects,blog posts,tags,youtube,github,contact**
+    - home will show 3 recent projects (of any type, blog or not) and 3 random.
+    - projects will show off all projects in chronological (recent to oldest edit)
+    - blog posts will show off all blog posts the same way as projects page.
+    - tags will show alphabet with all tags.
+    - the rest is  the same as the previous blog
   
   
   
@@ -125,12 +133,13 @@ To automate the site creation I will have to create a python script that fills u
 #### Blog Posts Table Formate:
     [  
         {  
-	        "id":"id": array index number,
+            "id":"id": array index number,
             "main id": id from the table with all projects(foreing key),
             "title":"X",  
             "type":"blog or project".
             "short description":"x",  
-            "date":"dd/mm/yyyy",  
+            "creation date":"dd/mm/yyyy",
+            "last update date":"dd/mm/yyyy",  
             "link": "project or page link",  
             "image": "image link",  
             "search tags":["x1","bla bla","x2"]  
@@ -163,28 +172,73 @@ If I choose to add a post, the program should make me answer a form to fill the 
 Probably will do this I could also do a Django but, is simpler if I just do a one file server that handles everything
 
 #### Edit Post:
-The same html form but now the inputs are already filled.
+The same HTML form but now the inputs are already filled.
 #### Delete Post:
-The first phase can just be insert the post id and the program will delete the post in all tables (CASCADE Delete)
+The first phase can just be inserting the post id and the program will delete the post in all tables (CASCADE Delete)
 
 
 The python program will always check if the exists a title with the same text and it always will insert the posts in the main posts table. The posts table should be the reference to create the others.
 
 ### Search Tags Page:
-This page should be like the projects and blog posts showcase pages, but instead of an Image it should show a Big Letter like A,B,C ... and under them the list of tags: **#unity** links. This page should be generated from Search tags.json table and only print the letters that exist. 
+This page should be like the projects and blog posts showcase pages, but instead of an Image, it should show a Big Letter like A, B, C ... and under them the list of tags: **#unity** links. This page should be generated from Search tags.json table and only print the letters that exist. 
+
+Each tag must has an href to the following: **#search-tags : [tag1,tag2]** 
+What this will do is search for all projects with these tags and show off with HTML cards.
+
+**In this page there will exist another search input box to filter the tags**
 
 ### Serving Pages:
-The mnethod  I came up with is with # links such as: **<a href="#Projects"...** the **Js script** detects the change in the url and serves the page. I will do the url with **#** because othewise the browser or github server will try to serve another page that probaly does not exists. 
+The method  I came up with is with # links such as **<a href="#Projects"...** the **Js script** detects the change in the URL and serves the page. I will do the URL with **#** because otherwise the browser or Github server will try to serve another page that probably does not exists. 
 
 ### Search Engine:
-To simplefy this I will just use tags and a python or js program to generate from the pages the important tags.
-The search engine itself will use **window.location.search** of the url. Meaning when there is a change in the **?** of the url than the engine starts running. It has priority over the normal pages. What the search engine will do is the following:
+To simplify this I will just use tags and a python or js program to generate from the pages the important tags.
+The search engine itself will use **window.location.search** of the URL. Meaning when there is a change in the **?** of the URL than the engine starts running. It has priority over the normal pages. What the search engine will do is the following:
 
- - Read input and change the url **?query**
- - The search engine will find the tags that best corelate with the query.
- - The algorithm will search for the best tags that match the query and send a JSON with it to categories page so the user sees th........ To continue....
+ - Read input and change the URL **?query**
+ - The search engine will find the tags that best correlate with the query.
+ - The algorithm will search for the best tags that match the query the user to the following hash URL:**#search-tags : [tag1,tag2,...]**
+     - This means that the server will show the projects with those tags.
  
+ 
+## Implementation
+### Steps:
+ - Organize folders: **index.html, ReadMe.txt, SiteFolder[Pages, DB, Images,Projects, Blog, Videos, JS, CSS, SiteManagement]**
+ - DB's: 
+     - pages.json (has the map between url hash and actual path location)
+     - all_projects.json (it has all content created for site blog/projects...)
+     - projects.json
+     - blog.json
+ - Fill DB with some records and create js file to generate project show off page
+ - If previous point works then create python program to add/edit/delete projects easily, and changes all json files.
+ - Change template.html name 
+ - create new branch, and replace previous site with new if every thing is working than merge
 
-## Conclusion
-Apperantly this is it 
+
+### after new site migration, to do:
+- IMplement tags page:
+    - Create a python program (or add new flask URL)
+    - To read from DB and create **SearchTags.json**
+- Search input
+- Tags Filter input.
+
+
+# Implementation
+
+## Flask Server
+This server should do the following:
+
+ - Don't care about presentation just basic html
+ - Have a home page where the user can select the following option:
+     - Add
+     - Edit
+     - Delete
+     - Generate Tags json
+ All of them were explained previously but in relation to their implementation I will explain in the following section
+
+### Add
+Is 
+
+## Project Page
+This page should be a simple html that imports a **js file** that reads **projects.json** file and generates the site.
+
 
