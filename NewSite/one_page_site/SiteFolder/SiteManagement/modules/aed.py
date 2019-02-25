@@ -31,7 +31,13 @@ def get_json_file(filepath):
 def dump_json_in_file(filepath,json_val):
     with open(filepath, mode='w', encoding='utf-8') as f:
         json.dump(json_val, f)
-    
+
+
+def get_all_posts():
+    #dirpath=get_dirpath_less(2) #to work locally
+    dirpath=get_dirpath_less(1)# to work as a module of server
+    print(get_json_file(dirpath + "DB/all_posts.json"))
+        
 
 print(__name__)
 

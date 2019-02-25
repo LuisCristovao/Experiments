@@ -234,6 +234,7 @@ This server should do the following:
      - Add
      - Edit
      - Delete
+     - Search id by title
      - Generate Tags json
 
 All of them were explained previously but in relation to their implementation, I will explain in the coming section.
