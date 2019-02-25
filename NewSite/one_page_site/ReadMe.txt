@@ -2,6 +2,7 @@
 
 
 
+
         
         
         
@@ -227,18 +228,38 @@ The search engine itself will use **window.location.search** of the URL. Meaning
 ## Flask Server
 This server should do the following:
 
- - Don't care about presentation just basic html
+ - Don't care about presentation just basic HTML
  - Have a home page where the user can select the following option:
      - Add
      - Edit
      - Delete
      - Generate Tags json
- All of them were explained previously but in relation to their implementation I will explain in the following section
 
-### Add
-Is 
+All of them were explained previously but in relation to their implementation, I will explain in the coming section.
+The flask app will have the following format:
+
+ - server.py (contains the server and the modules that it uses)
+ - aed.py (add edit delete module)
+ - tags.py
+ - templates/... (will contain pages to serve )
+
+
+### Add Update
+- The server.py will serve the page add_edit.html which will be able to add or edit a post. 
+- If is adding then no input of the form is filled, otherwise the contrary.  
+- As it is a template I can send the form data. The HTML template must decide if it is to add or update depending if it receives info from the server or not.
+- Then is just send add/update post with form data, and in the server side, the module aed.py should handle the rest.
+
+#### aed.py:
+receives the form post and turns it to json and adds to the current json db and then it saves the json to file **all_projects.json**. From there it will update the others jsons like projects and blog posts.
+
+### Delete
+Just a simple form with one input with row id and an "are you sure" question.
+
+### Generate tags 
+For later...
 
 ## Project Page
-This page should be a simple html that imports a **js file** that reads **projects.json** file and generates the site.
+This page should be a simple HTML that imports a **js file** that reads **projects.json** file and generates the site.
 
 
