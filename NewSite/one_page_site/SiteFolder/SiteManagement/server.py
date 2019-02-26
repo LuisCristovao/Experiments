@@ -45,7 +45,7 @@ def add_db():
 def edit():
     global aed
     form_inputs=aed.send_all_posts_form()
-    return fl.render_template('edit.html')
+    return fl.render_template('edit.html',menu=form_inputs)
     #return 'get edit'
 
     
@@ -63,8 +63,16 @@ def edit_db():
 @app.route('/getDbIds')
 def get_db_ids():
     global aed
-    print("helloooo")
+#    print("helloooo")
     return str(aed.select_all_ids())
+
+@app.route('/select_row',methods=['POST'])
+def select_row():
+    global aed
+    id_=int(fl.request.data.decode("ascii").split("=")[1])
+    print(id_)
+    return json.dumps(aed.select_post(id_))
+    
     
     
 @app.route('/delete')

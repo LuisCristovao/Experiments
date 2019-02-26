@@ -14,7 +14,7 @@
 </body>
 <script>
     //global vars--------------
-
+    var menu = JSON.parse('{{menu|tojson|safe}}')
 
     //global functions-----------------------
     function fillForm(menu) {
@@ -27,16 +27,16 @@
             },
             "not direct": {
                 "option": (key) => {
-                    out = key + ':<br><select name="' + key + '"><option value="project">project</option>'
+                    out = key + ':<br><select id="' + key + '" name="' + key + '"><option value="project">project</option>'
                     out += '<option value="blog post">blog post</option>blog post</select><br>'
                     return out
                 },
                 "search": (key) => {
-                    out = key + ":<br><input name='" + key + "' type='text' placeholder='separate tags with comma' ><br>"
+                    out = key + ":<br><input id='" + key + "' name='" + key + "' type='text' placeholder='separate tags with comma' ><br>"
                     return out
                 },
                 "textarea": (key) => {
-                    out = key + ':<br><textarea name ="' + key + '"></textarea><br>'
+                    out = key + ':<br><textarea id="' + key + '" name ="' + key + '"></textarea><br>'
                     return out
                 }
             }
@@ -44,10 +44,10 @@
 
 
         var form = document.getElementById("form")
-        var html = ""
+        var html = form.innerHTML
         for (key in menu) {
             if (menu[key]["type"] == ifs["direct"][menu[key]["type"]]) {
-                html += key + ":<br><input name='" + key + "' type='" + menu[key]["type"] + "' ><br>"
+                html += key + ":<br><input id='" + key + "' name='" + key + "' type='" + menu[key]["type"] + "' ><br>"
             } else {
                 html += ifs["not direct"][menu[key]["type"]](key)
             }
@@ -62,6 +62,18 @@
         return val
     }
 
+    async function selectRow(id) {
+
+        let response = await fetch('select_row', {
+            method: "POST",
+            "Content-Type": "application/x-www-form-urlencoded",
+            body: "id=" + id
+        });
+        //let val = await response.json();
+        let val = await response.json();
+        return val
+    }
+
     async function fillSelectBox() {
         var ids = await getIds()
         var select = document.getElementById("select_id")
@@ -71,11 +83,31 @@
                 options += '<option value="' + value + '">' + value + '</option>'
             }
             select.innerHTML = options
+            fillForm(menu)
         }
     }
+
+    async function fillFormValues() {
+        var select = document.getElementById("select_id")
+        var row = await selectRow(select.value)
+        //alert(row)
+        for (key in menu) {
+            var el = document.getElementById(key)
+            el.value = row[key]
+        }
+    }
+
     //Main-------------------    
     //fillForm(menu)
+    
+    setTimeout(()=>{
+        document.getElementById("select_id").addEventListener('change', () => {
+        fillFormValues()
+    })},1500)
     fillSelectBox()
+    setTimeout(() => {
+        fillFormValues()
+    }, 1500)
 
 </script>
 
