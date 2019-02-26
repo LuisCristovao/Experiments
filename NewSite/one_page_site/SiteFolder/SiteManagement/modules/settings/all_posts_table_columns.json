@@ -1,0 +1,10 @@
+{
+    "title": {"type":"text"},
+    "type": {"type":"option","options":["project","blog post"]},
+    "short description": {"type":"textarea"},
+    "creation date": {"type":"date"},
+    "last update date": {"type":"date"},
+    "link": {"type":"text"},
+    "image url": {"type":"text"},
+    "search tags": {"type":"search"}
+}

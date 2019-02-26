@@ -1,14 +1,1 @@
-[  
-        {  
-            "id": 0,
-            "title":"first post",  
-            "type":"project",
-            "short description":"bla bla ...",  
-            "creation date":"01/02/2017",
-            "last update date":"01/02/2017",  
-            "link": "SiteFolder/Projects/X/X.html",  
-            "image": "SiteFolder/Images/X/X.gif",  
-            "search tags":["x1","bla bla","x2"]  
-          
-        }  
-]  
+[{"id": 0, "title": "first post", "type": "project", "short description": "bla bla ...", "creation date": "01/02/2017", "last update date": "01/02/2017", "link": "SiteFolder/Projects/X/X.html", "image url": "SiteFolder/Images/X/X.gif", "search tags": ["x1", "bla bla", "x2"]}, {"creation date": "2019-02-05", "image url": "dwdaw", "last update date": "2019-02-21", "link": "wadascde", "search tags": "unity,games,game,volley", "short description": "ouigfisufh ouisgf suegf soiuegfso eiuf \r\ndi ufsiufsu iefosiuegfoius efgose fgose ufigsoeui fgoseiufgoseuifoesiuefi sg efgseiu fgosi uegfos uiegfo suiegfo suiefgos efuieg fowui egf owiegf wouiegowuie fgowiuef owiuego weigfowefwiue fowief.", "title": "sdfsfsefwef", "type": "project", "id": 1}]
