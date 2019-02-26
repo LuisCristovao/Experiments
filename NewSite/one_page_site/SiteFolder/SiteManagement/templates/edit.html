@@ -5,14 +5,16 @@
 </head>
 
 <body>
-    <form id="form" action="/edit_db" method="post">
 
+    <form id="form" action="/edit_db" method="post">
+        id:<br><select name="id" id="select_id">
+
+        </select><br>
     </form>
 </body>
 <script>
     //global vars--------------
-    var menu = JSON.parse('{{menu|tojson|safe}}')
-    var values = JSON.parse('{{values|tojson|safe}}')
+
 
     //global functions-----------------------
     function fillForm(menu) {
@@ -53,9 +55,27 @@
         html += "<br><input type='submit' value='Submit'>"
         form.innerHTML = html
     }
+    async function getIds() {
+        //let response = await fetch('/getDbIds',{method:"POST",body:data});
+        let response = await fetch('getDbIds');
+        let val = await response.json();
+        return val
+    }
 
+    async function fillSelectBox() {
+        var ids = await getIds()
+        var select = document.getElementById("select_id")
+        if (ids.length > 0) {
+            var options = ""
+            for (value in ids) {
+                options += '<option value="' + value + '">' + value + '</option>'
+            }
+            select.innerHTML = options
+        }
+    }
     //Main-------------------    
-    fillForm(menu)
+    //fillForm(menu)
+    fillSelectBox()
 
 </script>
 

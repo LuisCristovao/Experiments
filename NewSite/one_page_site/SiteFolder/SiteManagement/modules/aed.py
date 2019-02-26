@@ -125,7 +125,15 @@ def select_post(id_):
     '''
     
     db=get_all_posts()
-    return db[id_]            
+    return db[id_]
+
+def select_all_ids():
+    '''
+    goal:
+        return array with all existing ids 
+    '''
+    db=get_all_posts()
+    return [num for num in range(len(db))]
 
 print(__name__)
 

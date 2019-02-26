@@ -244,16 +244,21 @@ The flask app will have the following format:
  - aed.py (add edit delete module)
  - tags.py
  - templates/... (will contain pages to serve )
+ - settings (contains json with aditional info to the server)
 
 
-### Add Update
-- The server.py will serve the page add_edit.html which will be able to add or edit a post. 
+### Add 
+- The server.py will serve the page add.html which will be able to add  post. 
 - If is adding then no input of the form is filled, otherwise the contrary.  
-- As it is a template I can send the form data. The HTML template must decide if it is to add or update depending if it receives info from the server or not.
-- Then is just send add/update post with form data, and in the server side, the module aed.py should handle the rest.
+- As it is a template I can send the form data. 
+- Then is just send add post with form data, and in the server side, the module aed.py should handle the rest.
 
 #### aed.py:
-receives the form post and turns it to json and adds to the current json db and then it saves the json to file **all_projects.json**. From there it will update the others jsons like projects and blog posts.
+- receives the form post and turns it to json and adds to the current json db in **all_projects.json**. 
+- Sends the form to the html page in such a way that it knows which is a number a string or a date or an select box.
+
+### Edit 
+The same as add but in the html the user first needs to select the id first and then it appears the already filled form.
 
 ### Delete
 Just a simple form with one input with row id and an "are you sure" question.

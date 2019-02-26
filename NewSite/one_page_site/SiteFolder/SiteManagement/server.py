@@ -30,13 +30,6 @@ def add():
     return fl.render_template('add.html',menu=form_inputs)
     #return 'get add'
 
-#@app.route('/edit')
-#def edit():
-#    global aed
-#    form_inputs=aed.send_all_posts_form()
-#    return fl.render_template('edit.html',menu=form_inputs,values=)
-    #return 'get edit'
-
 @app.route('/add_db',methods=["POST"])
 def add_db():
     global aed
@@ -47,6 +40,14 @@ def add_db():
         return 'Added:<br><br>'+json.dumps(received_values)
     else:
         return 'Error occured in inserting data on db all_posts'
+
+@app.route('/edit')
+def edit():
+    global aed
+    form_inputs=aed.send_all_posts_form()
+    return fl.render_template('edit.html')
+    #return 'get edit'
+
     
 @app.route('/edit_db',methods=["POST"])
 def edit_db():
@@ -59,7 +60,13 @@ def edit_db():
     else:
         return 'Error occured in inserting data on db all_posts'
 
-
+@app.route('/getDbIds')
+def get_db_ids():
+    global aed
+    print("helloooo")
+    return str(aed.select_all_ids())
+    
+    
 @app.route('/delete')
 def delete():
     #return fl.render_template('delete.html')
