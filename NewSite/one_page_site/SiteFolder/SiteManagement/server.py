@@ -27,21 +27,34 @@ def index_route():
 def add():
     global aed
     form_inputs=aed.send_all_posts_form()
-    return fl.render_template('add_edit.html',menu=form_inputs)
+    return fl.render_template('add.html',menu=form_inputs)
     #return 'get add'
 
-@app.route('/edit')
-def edit():
-    #return fl.render_template('add_edit.html')
-    return 'get edit'
+#@app.route('/edit')
+#def edit():
+#    global aed
+#    form_inputs=aed.send_all_posts_form()
+#    return fl.render_template('edit.html',menu=form_inputs,values=)
+    #return 'get edit'
 
-@app.route('/add_edit',methods=["POST"])
-def add_edit():
+@app.route('/add_db',methods=["POST"])
+def add_db():
     global aed
     received_values={}
     for key in fl.request.form:
         received_values[key]=fl.request.form[key]
-    if aed.add_edit_posts_row(received_values):
+    if aed.add_posts_row(received_values):
+        return 'Added:<br><br>'+json.dumps(received_values)
+    else:
+        return 'Error occured in inserting data on db all_posts'
+    
+@app.route('/edit_db',methods=["POST"])
+def edit_db():
+    global aed
+    received_values={}
+    for key in fl.request.form:
+        received_values[key]=fl.request.form[key]
+    if aed.add_posts_row(received_values):
         return 'Added:<br><br>'+json.dumps(received_values)
     else:
         return 'Error occured in inserting data on db all_posts'

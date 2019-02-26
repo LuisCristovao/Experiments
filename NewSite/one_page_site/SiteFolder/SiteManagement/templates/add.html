@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>add</title>
+</head>
+
+<body>
+    <form id="form" action="/add_db" method="post">
+
+    </form>
+</body>
+<script>
+    //global vars--------------
+    var menu = JSON.parse('{{menu|tojson|safe}}')
+
+    //global functions-----------------------
+    function fillForm(menu) {
+
+        var ifs = {
+            "direct": {
+                "number": "number",
+                "text": "text",
+                "date": "date"
+            },
+            "not direct": {
+                "option": (key) => {
+                    out = key + ':<br><select name="' + key + '"><option value="project">project</option>'
+                    out += '<option value="blog post">blog post</option>blog post</select><br>'
+                    return out
+                },
+                "search": (key) => {
+                    out = key + ":<br><input name='" + key + "' type='text' placeholder='separate tags with comma' ><br>"
+                    return out
+                },
+                "textarea": (key) => {
+                    out = key + ':<br><textarea name ="'+key+'"></textarea><br>'
+                    return out
+                }
+            }
+        }
+
+
+        var form = document.getElementById("form")
+        var html = ""
+        for (key in menu) {
+            if (menu[key]["type"] == ifs["direct"][menu[key]["type"]]) {
+                html += key + ":<br><input name='" + key + "' type='" + menu[key]["type"] + "' ><br>"
+            } else {
+                html += ifs["not direct"][menu[key]["type"]](key)
+            }
+        }
+        html += "<br><input type='submit' value='Submit'>"
+        form.innerHTML = html
+    }
+
+    //Main-------------------    
+    fillForm(menu)
+
+</script>
+
+</html>

@@ -93,7 +93,16 @@ def send_all_posts_form():
     return data
 
 
-def add_edit_posts_row(data):
+def add_posts_row(data):
+    '''
+    goal:
+        add row to all_posts.json
+        
+    inputs:
+        data:
+            json object with data to insert on a row
+    '''
+    
     try:
         db=get_all_posts()
         data["id"]=len(db)
@@ -104,7 +113,19 @@ def add_edit_posts_row(data):
         return True
     except:
         return False
+
+def select_post(id_):
+    '''
+    goal:
+        return a row with some id in all_posts.json 
         
+    inputs:
+        id_:
+            row id 
+    '''
+    
+    db=get_all_posts()
+    return db[id_]            
 
 print(__name__)
 

@@ -1,13 +1,18 @@
 <html>
 
+<head>
+    <title>edit</title>
+</head>
+
 <body>
-    <form id="form" action="/add_edit" method="post">
+    <form id="form" action="/edit_db" method="post">
 
     </form>
 </body>
 <script>
     //global vars--------------
     var menu = JSON.parse('{{menu|tojson|safe}}')
+    var values = JSON.parse('{{values|tojson|safe}}')
 
     //global functions-----------------------
     function fillForm(menu) {
@@ -29,7 +34,7 @@
                     return out
                 },
                 "textarea": (key) => {
-                    out = key + ':<br><textarea name ="'+key+'"></textarea><br>'
+                    out = key + ':<br><textarea name ="' + key + '"></textarea><br>'
                     return out
                 }
             }
