@@ -4,6 +4,7 @@
 
 
 
+
         
         
         
@@ -244,21 +245,27 @@ The flask app will have the following format:
  - aed.py (add edit delete module)
  - tags.py
  - templates/... (will contain pages to serve )
- - settings (contains json with aditional info to the server)
+ - settings (contains JSON with additional info to the server)
 
 
 ### Add 
-- The server.py will serve the page add.html which will be able to add  post. 
+- The server.py will serve the page add.html which will be able to add a post. 
 - If is adding then no input of the form is filled, otherwise the contrary.  
 - As it is a template I can send the form data. 
-- Then is just send add post with form data, and in the server side, the module aed.py should handle the rest.
+- Then is just send add a post with form data, and in the server side, the module aed.py should handle the rest.
 
 #### aed.py:
-- receives the form post and turns it to json and adds to the current json db in **all_projects.json**. 
-- Sends the form to the html page in such a way that it knows which is a number a string or a date or an select box.
+- receives the form post and turns it to json and adds to the current json DB in **all_projects.json**. 
+- Sends the form to the HTML page in such a way that it knows which is a number a string or a date or a select box.
 
 ### Edit 
-The same as add but in the html the user first needs to select the id first and then it appears the already filled form.
+The same as add but in the HTML the user first needs to select the id first and then it appears the already filled form.
+
+ - The HTML must have a select box with all id's
+ - on select box change it must send a post (fetch) and if id = -1 then DB is empty; else create a select box with available id's
+ - if DB is not empty then show form with filled inputs
+
+
 
 ### Delete
 Just a simple form with one input with row id and an "are you sure" question.
@@ -267,6 +274,41 @@ Just a simple form with one input with row id and an "are you sure" question.
 For later...
 
 ## Project Page
-This page should be a simple HTML that imports a **js file** that reads **projects.json** file and generates the site.
+This page should be a simple HTML that imports a **js file** that reads **all_posts.json** file and generates the site.
+
+ - Need a function to read the json file
+ - need function that processes that json to create the cards thats it
+ - All cards should be same size.
+ - Need to filter by type
+ - need to roder by last update or creation date the posts
+ - Footer to load more projects, better load more projects on scroll bottom, thats it.
+
+## Notes
+ JSON format already organizes alphabetically the key!!!!!!!!
+### Scroll bottom
+Scroll works like this:
+
+ 1. Page as a visibility window that is called window.
+ 2. the **document.body.offsetHeight** or **document.body.scrollHeight**  is the complet page height and we have a visibility window that slides through the document page height.
+ 3. to detect the bottom is when **document.body.scrollTop + window.innerHeight == document.body.scrollHeight**. **scrollTop**  represents where the top of the view window is in the **document height**
+ 4. To do this there are a lot of ways:
 
 
+	    \$(window).scroll(function () {
+	        if (\$(window).scrollTop() + \$(window).height() == \$(document).height()) {
+	            alert("bottom!");
+	        }
+	    });
+
+OR    
+
+ 
+
+    setInterval(() => {
+        if (prev_scrollTop != document.body.scrollTop) {
+            prev_scrollTop = document.body.scrollTop
+            if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
+                alert("bottom!")
+            }
+        }
+    }, 100)

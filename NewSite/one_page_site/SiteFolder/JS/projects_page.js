@@ -10,7 +10,8 @@
 //            </div>
 //          </div>
 //        </div>
-
+//Global vars
+var prev_scrollTop = 0
 
 //Global functions
 async function getDBPosts() {
@@ -24,22 +25,50 @@ async function fillGrid() {
     //alert(JSON.stringify(data))
     var html = ""
     for (index in data) {
-        var val = data[index]
-        html += '<div class="col-lg-4 col-sm-6 portfolio-item" style="margin-bottom: 20pt">'
-        html += '<div class="card " >'
-        html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
-        html += '<div class="card-body">'
-        html += '<h4 class="card-title">'
-        html += '<a href="' + val["link"] + '">' + val["title"] + '</a>'
-        html += '</h4>'
-        html += '<p class="card-text">' + val["short description"] + '</p>'
-        html += '</h4>'
-        html += '</div>'
-        html += '</div>'
-        html += '</div>'
+        if (index < 9) {
+
+            var val = data[index]
+            html += '<div class="col-lg-4 col-sm-6" style="margin-bottom: 20pt">'
+            html += '<div class="card" >'
+            html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
+            html += '<div class="card-body">'
+            html += '<h4 class="card-title">'
+            html += '<a href="' + val["link"] + '">' + val["title"] + '</a>'
+            html += '</h4>'
+            html += '<p class="card-text">' + val["short description"] + '</p>'
+            html += '</h4>'
+            html += '</div>'
+            html += '</div>'
+            html += '</div>'
+        }
 
     }
-    grid.innerHTML=html
+    grid.innerHTML = html
+}
+
+function loadMoreProjects() {
+    //    $(window).scroll(function () {
+    //        if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+    //            alert("bottom!");
+    //        }
+    //    });
+    //    document.body.addEventListener("scroll", () => {
+    //        if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
+    //            alert("bottom!")
+    //        }
+    //        alert("moved!")
+    //    })
+    if (prev_scrollTop != document.body.scrollTop) {
+        prev_scrollTop = document.body.scrollTop
+        if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
+            alert("bottom!")
+        }
+    }
+
 }
 //main-----
 fillGrid()
+setInterval(() => {
+    loadMoreProjects()
+}, 100)
+//loadMoreProjects()
