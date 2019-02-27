@@ -1,16 +1,17 @@
 <html>
 
 <head>
-    <title>edit</title>
+    <title>delete</title>
 </head>
 
 <body>
 
-    <form id="form" action="/edit_db" method="post">
+    <div id="form">
         id:<br><select name="id" id="select_id">
 
         </select><br>
-    </form>
+    </div>
+    <h1 id="answer"></h1>
 </body>
 <script>
     //global vars--------------
@@ -27,16 +28,16 @@
             },
             "not direct": {
                 "option": (key) => {
-                    out = key + ':<br><select id="' + key + '" name="' + key + '"><option value="project">project</option>'
+                    out = key + ':<br><select id="' + key + '" name="' + key + '" disabled><option value="project">project</option>'
                     out += '<option value="blog post">blog post</option>blog post</select><br>'
                     return out
                 },
                 "search": (key) => {
-                    out = key + ":<br><input id='" + key + "' name='" + key + "' type='text' placeholder='separate tags with comma' ><br>"
+                    out = key + ":<br><input id='" + key + "' name='" + key + "' type='text' placeholder='separate tags with comma' disabled><br>"
                     return out
                 },
                 "textarea": (key) => {
-                    out = key + ':<br><textarea id="' + key + '" name ="' + key + '"></textarea><br>'
+                    out = key + ':<br><textarea id="' + key + '" name ="' + key + '" disabled></textarea><br>'
                     return out
                 }
             }
@@ -47,14 +48,44 @@
         var html = form.innerHTML
         for (key in menu) {
             if (menu[key]["type"] == ifs["direct"][menu[key]["type"]]) {
-                html += key + ":<br><input id='" + key + "' name='" + key + "' type='" + menu[key]["type"] + "' ><br>"
+                html += key + ":<br><input id='" + key + "' name='" + key + "' type='" + menu[key]["type"] + "' disabled><br>"
             } else {
                 html += ifs["not direct"][menu[key]["type"]](key)
             }
         }
-        html += "<br><input type='submit' value='Submit'>"
+        html += "<br><input type='submit' value='Delete' onclick='ask()'>"
         form.innerHTML = html
     }
+
+    async function deletePost(id) {
+
+        let response = await fetch('delete_db', {
+            method: "POST",
+            "Content-Type": "application/x-www-form-urlencoded",
+            body: "id=" + id
+        });
+        //let val = await response.json();
+        let val = await response.text();
+        return val
+    }
+
+
+    async function ask() {
+        var select = document.getElementById("select_id")
+        if (confirm("Are you sure you want to delete row with id " + select.value + "?")) {
+
+            var ans = document.getElementById("answer")
+            ans.innerHTML = await deletePost(select.value)
+            if (ans.innerHTML == "Deleted with Success!") {
+                ans.style.color = "green"
+                fillSelectBox(false)
+                fillFormValues()
+            } else {
+                ans.style.color = "red"
+            }
+        }
+    }
+
     async function getIds() {
         //let response = await fetch('/getDbIds',{method:"POST",body:data});
         let response = await fetch('getDbIds');
@@ -74,7 +105,7 @@
         return val
     }
 
-    async function fillSelectBox() {
+    async function fillSelectBox(fill_form) {
         var ids = await getIds()
         var select = document.getElementById("select_id")
         if (ids.length > 0) {
@@ -83,13 +114,16 @@
                 options += '<option value="' + value + '">' + value + '</option>'
             }
             select.innerHTML = options
-            fillForm(menu)
+            if (fill_form) {
+
+                fillForm(menu)
+            }
         }
     }
 
     async function fillFormValues() {
         var select = document.getElementById("select_id")
-        
+
         var row = await selectRow(select.value)
         //alert(row)
         for (key in menu) {
@@ -101,17 +135,17 @@
     //Main-------------------    
     //fillForm(menu)
     window.onload = () => {
-        fillSelectBox()
+        fillSelectBox(true)
 
         setTimeout(() => {
             document.getElementById("select_id").addEventListener('change', () => {
                 fillFormValues()
             })
-        }, 500)//wait until page is loaded
+        }, 500) //wait until page is loaded
 
         setTimeout(() => {
             fillFormValues()
-        }, 500)//wait until page is loaded
+        }, 500) //wait until page is loaded
     }
 
 </script>

@@ -76,8 +76,19 @@ def select_row():
     
 @app.route('/delete')
 def delete():
-    #return fl.render_template('delete.html')
-    return 'get delete'
+    global aed
+    form_inputs=aed.send_all_posts_form()
+    return fl.render_template('delete.html',menu=form_inputs)
+#    return 'get delete'
+    
+@app.route('/delete_db',methods=["POST"])
+def delete_db():
+    global aed
+    id_=int(fl.request.data.decode("ascii").split("=")[1])
+    if aed.delete_posts_row(id_):
+        return 'Deleted with Success!'
+    else:
+        return 'Error deleting!'
 
 @app.route('/search')
 def search():
