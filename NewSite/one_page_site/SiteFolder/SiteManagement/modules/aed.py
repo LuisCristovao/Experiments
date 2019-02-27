@@ -113,6 +113,30 @@ def add_posts_row(data):
         return True
     except:
         return False
+    
+def edit_posts_row(data):
+    '''
+    goal:
+        edit row in all_posts.json
+        
+    inputs:
+        data:
+            json object with data to edit  row
+    '''
+    
+    try:
+        db=get_all_posts()
+        print(db[2])
+        id_=int(data["id"])
+        print(id_)
+        db[id_]=data
+        
+        #dump json object in db all_post.json
+        dirpath=get_dirpath_less(1)# to work as a module of server
+        dump_json_in_file(dirpath + "DB/all_posts.json",db)
+        return True
+    except:
+        return False    
 
 def select_post(id_):
     '''

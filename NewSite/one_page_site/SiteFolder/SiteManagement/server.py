@@ -55,10 +55,10 @@ def edit_db():
     received_values={}
     for key in fl.request.form:
         received_values[key]=fl.request.form[key]
-    if aed.add_posts_row(received_values):
-        return 'Added:<br><br>'+json.dumps(received_values)
+    if aed.edit_posts_row(received_values):
+        return 'Edit:<br><br>'+json.dumps(received_values)
     else:
-        return 'Error occured in inserting data on db all_posts'
+        return 'Error occured while edit data on db all_posts'
 
 @app.route('/getDbIds')
 def get_db_ids():
@@ -69,9 +69,7 @@ def get_db_ids():
 @app.route('/select_row',methods=['POST'])
 def select_row():
     global aed
-    print(fl.request.data)
     id_=int(fl.request.data.decode("ascii").split("=")[1])
-    print(id_)
     return json.dumps(aed.select_post(id_))
     
     
