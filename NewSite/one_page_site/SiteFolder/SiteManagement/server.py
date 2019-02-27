@@ -69,6 +69,7 @@ def get_db_ids():
 @app.route('/select_row',methods=['POST'])
 def select_row():
     global aed
+    print(fl.request.data)
     id_=int(fl.request.data.decode("ascii").split("=")[1])
     print(id_)
     return json.dumps(aed.select_post(id_))

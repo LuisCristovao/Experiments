@@ -89,6 +89,7 @@
 
     async function fillFormValues() {
         var select = document.getElementById("select_id")
+        
         var row = await selectRow(select.value)
         //alert(row)
         for (key in menu) {
@@ -99,15 +100,19 @@
 
     //Main-------------------    
     //fillForm(menu)
-    
-    setTimeout(()=>{
-        document.getElementById("select_id").addEventListener('change', () => {
-        fillFormValues()
-    })},1500)
-    fillSelectBox()
-    setTimeout(() => {
-        fillFormValues()
-    }, 1500)
+    window.onload = async () => {
+        fillSelectBox()
+
+        setTimeout(() => {
+            document.getElementById("select_id").addEventListener('change', () => {
+                fillFormValues()
+            })
+        }, 500)//wait until page is loaded
+
+        setTimeout(() => {
+            fillFormValues()
+        }, 500)//wait until page is loaded
+    }
 
 </script>
 
