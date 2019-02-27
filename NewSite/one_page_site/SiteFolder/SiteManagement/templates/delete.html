@@ -78,10 +78,12 @@
             ans.innerHTML = await deletePost(select.value)
             if (ans.innerHTML == "Deleted with Success!") {
                 ans.style.color = "green"
+                setTimeout(()=>{ans.innerHTML=""},1000)
                 fillSelectBox(false)
                 fillFormValues()
             } else {
                 ans.style.color = "red"
+                setTimeout(()=>{ans.innerHTML=""},1000)
             }
         }
     }
