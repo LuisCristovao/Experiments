@@ -21,7 +21,7 @@ async function getDBPosts() {
 async function fillGrid() {
     var grid = document.getElementById("projects_grid")
     data = await getDBPosts()
-    alert(JSON.stringify(data))
+    //alert(JSON.stringify(data))
     var html = ""
     for (index in data) {
         var val = data[index]
