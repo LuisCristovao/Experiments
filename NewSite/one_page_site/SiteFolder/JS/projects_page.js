@@ -49,15 +49,27 @@ function fillGrid() {
 
             var val = data[index]
             html += jsonToHml(val)
+            loaded_projects++
+        }else{
+            break
         }
-        loaded_projects++
+        
     }
     grid.innerHTML = html
 
 }
 
 function loadMoreProjects() {
-
+    var grid = document.getElementById("projects_grid")
+    var html=grid.innerHTML
+    for (index in [0,1,2]){
+        if(db[loaded_projects]!=undefined){
+            
+            html+=jsonToHml(db[loaded_projects])
+            loaded_projects++
+        }
+    }
+    grid.innerHTML = html
 }
 
 function detectScrollBottom() {
@@ -65,7 +77,7 @@ function detectScrollBottom() {
     if (prev_scrollTop != document.body.scrollTop) {
         prev_scrollTop = document.body.scrollTop
         if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
-            alert("bottom!")
+            loadMoreProjects()
         }
     }
 

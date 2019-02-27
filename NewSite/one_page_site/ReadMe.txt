@@ -312,3 +312,5 @@ OR
             }
         }
     }, 100)
+
+**next: need to delete the first fillGrid function and only use loadMore projects to insert project in page**
