@@ -32,6 +32,8 @@ function Init() {
     requestAnimationFrame(server.run)
     requestAnimationFrame(scroll.detectScrollTopUnderNavBar)
 }
+
+
 //-------------------------------------------------------------------
 //scroll class  controls navbar when scroll down and a button to scroll up
 class Scroll {
@@ -42,7 +44,16 @@ class Scroll {
     }
 
     
-
+    screenHightBiggerThanWidth(){
+        return (screen.availHeight>=screen.availWidth)
+    }
+     scrollBtnDimensions(){
+        if (this.screenHightBiggerThanWidth()){
+            return {"font-size":"2em","left":"92%"}
+        }else{
+            return {"font-size":"3em","left":"90%"}
+        }
+    }
     createScrollTopBtn() {
 
         if (document.getElementById("scrollToTopBtn") == null) {
@@ -52,7 +63,8 @@ class Scroll {
             body.appendChild(div)
             var height = document.body.scrollTop + window.innerHeight * 0.80;
             //console.log(height)
-            div.setAttribute("style", "background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:2em;color:blue;position:absolute;top:" + height + "px;left:90%;width:10%,height:10%;")
+            var btn_dimensions=this.scrollBtnDimensions()
+            div.setAttribute("style", "background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:"+btn_dimensions["font-size"]+";color:blue;position:absolute;top:" + height + "px;left:"+btn_dimensions["left"]+";width:10%,height:10%;")
             div.setAttribute("id", "scrollToTopBtn")
             div.innerHTML = "^"
             div.setAttribute("onclick", "scrollToTop(this)")
@@ -61,6 +73,9 @@ class Scroll {
             //console.log(height)
             var btn = document.getElementById("scrollToTopBtn")
             btn.style.top = height + "px"
+            var btn_dimensions=this.scrollBtnDimensions()
+            btn.style.left=btn_dimensions["left"]
+            btn.style["font-size"]=btn_dimensions["font-size"]
         }
     }
     detectScrollTopUnderNavBar() {
