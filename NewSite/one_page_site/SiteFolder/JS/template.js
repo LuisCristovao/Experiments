@@ -19,6 +19,32 @@ function SearchKeyPress(event,input){
     }
     
 }
+function scrollToTop(btn){
+    
+    document.body.scrollTo(0,0)
+    btn.parentNode.removeChild(btn);
+}
+function createScrollTopBtn(){
+    
+    if(document.getElementById("scrollToTopBtn")==null){
+        
+        var body=document.body
+        var div=document.createElement("div")
+        body.appendChild(div)
+        var height=document.body.scrollTop+window.innerHeight*0.80;
+        console.log(height)
+        div.setAttribute("style","background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:2em;color:blue;position:absolute;top:"+height+"px;left:90%;width:10%,height:10%;")
+        div.setAttribute("id","scrollToTopBtn")
+        div.innerHTML="^"
+        div.setAttribute("onclick","scrollToTop(this)")
+    }
+    else{
+        var height=document.body.scrollTop+window.innerHeight*0.80;
+        console.log(height)
+        var btn=document.getElementById("scrollToTopBtn")
+        btn.style.top=height+"px"
+    }
+}
 var navbar_visibility_point=63
 function detectScrollTopUnderNavBar(){
     var nav=document.getElementById("navbar")
@@ -28,10 +54,17 @@ function detectScrollTopUnderNavBar(){
         nav.style["z-index"]=1
         nav.style.top=document.body.scrollTop+"px"
         nav.style.width="100%"
+        
+        createScrollTopBtn()
+        
     }
     else{
         nav.style=""
-        
+        var btn=document.getElementById("scrollToTopBtn")
+        if(btn!=null){
+            
+            btn.parentNode.removeChild(btn);
+        }
     }
     requestAnimationFrame(detectScrollTopUnderNavBar)
 }

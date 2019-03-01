@@ -467,7 +467,16 @@
 },
     {
         "creation date": "2019-02-15",
-        "image url": "SiteFolder/Images/GoodVsEvilLowRes.gif",
+        "image url": "SiteFolder/Images/giphy.gif",
+        "last update date": "2019-02-21",
+        "link": "https://luiscristovao.github.io/Projects/AnimationProject/Game.html",
+        "search tags": "turn base,game,html",
+        "short description": "Turn based game. For one player or two players.",
+        "title": "Good vs Evil Game",
+        "type": "project"
+},{
+        "creation date": "2019-02-15",
+        "image url": "SiteFolder/Images/giphy.gif",
         "last update date": "2019-02-21",
         "link": "https://luiscristovao.github.io/Projects/AnimationProject/Game.html",
         "search tags": "turn base,game,html",
