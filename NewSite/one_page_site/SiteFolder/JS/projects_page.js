@@ -82,17 +82,17 @@ function detectScrollBottom() {
             loadMoreProjects()
         }
     }
-
+    requestAnimationFrame(detectScrollBottom)
 }
 async function init() {
 
 
     db = await getDBPosts()
-
+    requestAnimationFrame(detectScrollBottom)
     //fillGrid()
-    setInterval(() => {
-        detectScrollBottom()
-    }, 100)
+//    setInterval(() => {
+//        detectScrollBottom()
+//    }, 100)
 
 }
 //main-----

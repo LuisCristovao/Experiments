@@ -227,6 +227,13 @@ The search engine itself will use **window.location.search** of the URL. Meaning
 
 # Implementation
 
+## Template Page
+
+### Basic Functionality
+ Already working, but basically it detects if #page and gets the page html and it inserts in inner html of div= content.
+ ### NavBar
+ it should follow user if he is scrolling down the page. Also it should appear a botton on the side to scroll back up
+
 ## Flask Server
 This server should do the following:
 
@@ -314,3 +321,4 @@ OR
     }, 100)
 
 **next: need to delete the first fillGrid function and only use loadMore projects to insert project in page**
+

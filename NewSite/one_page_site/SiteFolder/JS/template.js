@@ -19,11 +19,29 @@ function SearchKeyPress(event,input){
     }
     
 }
+var navbar_visibility_point=63
+function detectScrollTopUnderNavBar(){
+    var nav=document.getElementById("navbar")
+    if(document.body.scrollTop>navbar_visibility_point){
+        
+        nav.style.position="absolute"
+        nav.style["z-index"]=1
+        nav.style.top=document.body.scrollTop+"px"
+        nav.style.width="100%"
+    }
+    else{
+        nav.style=""
+        
+    }
+    requestAnimationFrame(detectScrollTopUnderNavBar)
+}
 
-//
+
+//function to do at beginning
 function Init(){
     server=new ServePages()
     requestAnimationFrame(server.run)
+    requestAnimationFrame(detectScrollTopUnderNavBar)
 }
 //-------------------------------------------------------------------
 //Class to Serve the html pages
