@@ -6,5 +6,6 @@
     "last update date": {"type":"date"},
     "link": {"type":"text"},
     "image url": {"type":"text"},
-    "search tags": {"type":"search"}
+    "search tags": {"type":"search"},
+    "secondary search tags":{"type":"search"}
 }

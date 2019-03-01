@@ -2,11 +2,11 @@
 //global variables
 var server;
 var scroll;
-//global functions
+//global functions-------------------------------------
 function Search(btn) {
     var parent = btn.parentElement
     var input = parent.children[0]
-    window.location.search = input.value
+    window.location.hash = "search=" + encodeSearchQuery(input.value)
 
 }
 
@@ -14,25 +14,42 @@ function SearchKeyPress(event, input) {
     //press enter
     if (event.keyCode == 13) {
         var value = input.value
-        window.location.search = input.value
+        window.location.hash = "search=" + encodeSearchQuery(input.value)
 
     }
 
 }
+
 function scrollToTop(btn) {
 
-        document.body.scrollTo(0, 0)
-        btn.parentNode.removeChild(btn);
-    }
+    document.body.scrollTo(0, 0)
+    btn.parentNode.removeChild(btn);
+}
 //function to do at beginning
 function Init() {
     server = new ServePages()
-    scroll= new Scroll()
-   
+    scroll = new Scroll()
+
     requestAnimationFrame(server.run)
     requestAnimationFrame(scroll.detectScrollTopUnderNavBar)
 }
+String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
+function encodeSearchQuery(query) {
+    return query.replaceAll(" ", "+")
+}
+//function htmlEncode(value) {
+//    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+//    //then grab the encoded contents back out.  The div never exists on the page.
+//    return $('<div/>').text(value).html();
+//}
+//
+//function htmlDecode(value) {
+//    return $('<div/>').html(value).text();
+//}
 
 //-------------------------------------------------------------------
 //scroll class  controls navbar when scroll down and a button to scroll up
@@ -40,18 +57,24 @@ class Scroll {
     constructor() {
         this.navbar_visibility_point = 63
         this.nav = document.getElementById("navbar")
-        this.detectScrollTopUnderNavBar=this.detectScrollTopUnderNavBar.bind(this);
+        this.detectScrollTopUnderNavBar = this.detectScrollTopUnderNavBar.bind(this);
     }
 
-    
-    screenHightBiggerThanWidth(){
-        return (screen.availHeight>=screen.availWidth)
+
+    screenHightBiggerThanWidth() {
+        return (screen.availHeight >= screen.availWidth)
     }
-     scrollBtnDimensions(){
-        if (this.screenHightBiggerThanWidth()){
-            return {"font-size":"2em","left":"92%"}
-        }else{
-            return {"font-size":"3em","left":"90%"}
+    scrollBtnDimensions() {
+        if (this.screenHightBiggerThanWidth()) {
+            return {
+                "font-size": "2em",
+                "left": "92%"
+            }
+        } else {
+            return {
+                "font-size": "3em",
+                "left": "90%"
+            }
         }
     }
     createScrollTopBtn() {
@@ -63,8 +86,8 @@ class Scroll {
             body.appendChild(div)
             var height = document.body.scrollTop + window.innerHeight * 0.80;
             //console.log(height)
-            var btn_dimensions=this.scrollBtnDimensions()
-            div.setAttribute("style", "background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:"+btn_dimensions["font-size"]+";color:blue;position:absolute;top:" + height + "px;left:"+btn_dimensions["left"]+";width:10%,height:10%;")
+            var btn_dimensions = this.scrollBtnDimensions()
+            div.setAttribute("style", "background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:" + btn_dimensions["font-size"] + ";color:blue;position:absolute;top:" + height + "px;left:" + btn_dimensions["left"] + ";width:10%,height:10%;")
             div.setAttribute("id", "scrollToTopBtn")
             div.innerHTML = "^"
             div.setAttribute("onclick", "scrollToTop(this)")
@@ -73,9 +96,9 @@ class Scroll {
             //console.log(height)
             var btn = document.getElementById("scrollToTopBtn")
             btn.style.top = height + "px"
-            var btn_dimensions=this.scrollBtnDimensions()
-            btn.style.left=btn_dimensions["left"]
-            btn.style["font-size"]=btn_dimensions["font-size"]
+            var btn_dimensions = this.scrollBtnDimensions()
+            btn.style.left = btn_dimensions["left"]
+            btn.style["font-size"] = btn_dimensions["font-size"]
         }
     }
     detectScrollTopUnderNavBar() {
@@ -118,7 +141,17 @@ class ServePages {
             return false
         }
     }
-
+    DetectString(string, expression_to_find) {
+        var n = string.indexOf(expression_to_find);
+        if (n == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    detectSearch() {
+        return this.DetectString(window.location.hash,"search=")
+    }
     updatePreviousPage() {
         this.previous_page = this.actual_page
     }
@@ -179,8 +212,14 @@ class ServePages {
             if (this.pages != undefined) {
 
                 this.updatePreviousPage()
-                var page = this.pages[window.location.hash]
-                this.getHtml(page)
+                //if get="search="
+                if (this.detectSearch()){
+                    alert("search")
+                }else{
+                    
+                    var page = this.pages[window.location.hash]
+                    this.getHtml(page)
+                }
             }
         }
         requestAnimationFrame(this.run)

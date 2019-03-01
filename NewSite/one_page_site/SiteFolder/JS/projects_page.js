@@ -30,9 +30,7 @@ function AddMoreInfoToCards(data) {
     html += '<li class="list-group-item">'
     html += '<strong>Search Tags:</strong><br>'
     for (var i in search_tags) {
-
         html += '<a href="?' + search_tags[i] + '">' + search_tags[i] + '</a>&nbsp;'
-
     }
     html += '</li>'
     html += '</ul>'
@@ -54,10 +52,6 @@ function jsonToHml(data) {
     html += '</h4>'
     html += '</div>'
     html += AddMoreInfoToCards(val)
-    //html+= '<ul class="list-group list-group-flush">'
-    //html+= '<li class="list-group-item"><strong>Last Update:</strong><br>12/02/2018</li>'
-    //html+= '<li class="list-group-item"><strong>Search Tags:</strong><br><a href="#">unity</a>&nbsp;<a href="#">games</a></li>'
-    //html+= '</ul>'
     html += '</div>'
     html += '</div>'
     return html
