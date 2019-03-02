@@ -92,7 +92,7 @@ function loadMoreProjects() {
 }
 
 function detectScrollBottom() {
-    if (window.innerHeight == document.body.scrollHeight) {
+    if (window.innerHeight == document.body.scrollHeight && loaded_projects>=0) {
         loadMoreProjects()
     }
     if (prev_scrollTop != document.body.scrollTop) {
