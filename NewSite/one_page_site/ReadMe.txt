@@ -272,7 +272,12 @@ The same as add but in the HTML the user first needs to select the id first and 
  - on select box change it must send a post (fetch) and if id = -1 then DB is empty; else create a select box with available id's
  - if DB is not empty then show form with filled inputs
 
+### Add to DB considerations
 
+ - On adding to db a project I need to order by creation date.
+ - Later on the index.html page I just need to select 3 of the recently updated posts and insert there, plus random projects.
+ - 
+   
 
 ### Delete
 Just a simple form with one input with row id and an "are you sure" question.
@@ -289,6 +294,9 @@ This page should be a simple HTML that imports a **js file** that reads **all_po
  - Need to filter by type
  - need to roder by last update or creation date the posts
  - Footer to load more projects, better load more projects on scroll bottom, thats it.
+### New Approach
+Need a template for show off pages (projects, blog posts and search )
+That receives a json array and a title and does the rest.
 
 ## Search Engine
 
@@ -304,7 +312,27 @@ The DB will have another column **secondary search tags** that will only show up
 
  If this method does not work, probably the best way to aproach this subject is to use the already created server page and detect the keyword **search=** in the **#** probaby going to do this way....
 
+ #### Easy Way
+Get DB and search for projects with similar tags than the query
+
+ #### Hard Way
+
+ - Generate primary tags db that map **(primary tags, projects)**
+ - For the search input do as the previous section
+
+#### Search Algorithm Basic
+
+    //need to have array with query tags
+    var query_tags=getQueryTags()
+    for(post in db){
+	    var post_tags=post['search tags']
+    }...
+
+
+
+ 
 This might be done later.
+
 ### Tags/categories page
 This will be just another page that will collect from a json all tags that exist in the DB and insert in the page like this:
 
@@ -321,6 +349,7 @@ This will be just another page that will collect from a json all tags that exist
         ...
     }
 I will make this way because t seems that if this is in this format, then on JSON.parse and later on with **for(key in json)** every thing will be ordered automatically.
+
 ## Notes
  JSON format already organizes alphabetically the key!!!!!!!!
 ### Scroll bottom
@@ -351,5 +380,15 @@ OR
         }
     }, 100)
 
-**next: need to delete the first fillGrid function and only use loadMore projects to insert project in page**
+**PRIORITY**
+Make template page for show off pages like projects, blog posts and search posts. 
+
+**next:**
+
+ - **Show Creation date  on projects**
+ - **Order in flask server by creation date**
+ - **Search engine is for later but can make the tags**
+ - filter project from blog
+ - First implementation of search engine is just search for tags as they appear
+ - And create the categories page for now
 

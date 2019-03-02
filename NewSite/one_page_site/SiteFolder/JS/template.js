@@ -230,7 +230,7 @@ class ServePages {
 //Search Engine----------------------------
 class SearchEngine {
     constructor() {
-
+        
     }
     
     async getDBPosts() {
@@ -238,6 +238,29 @@ class SearchEngine {
         let val = await response.json();
         return val
     }
+    getQuery(){
+        return window.location.hash.split("=")[1].split("+")
+    }
+    async findPosts(){
+        var posts_index=[]
+        var all_posts=await this.getDBPosts()
+        var query_tags=this.getQuery()//array with tags
+        for(var i in all_posts){
+            var post=all_posts[i]
+            var post_tags=post['search tags']
+            post_tags.concat(post['secondary search tags'])
+            for(var j in post_tags){
+                for(var e in query_tags){
+                    if(query_tags[e]==post_tags[j]){
+                        posts_index.push(i)
+                    }
+                }
+            }
+            
+        }
+        return posts_index
+    }
+    
 }
 
 
