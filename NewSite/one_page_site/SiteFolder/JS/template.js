@@ -150,7 +150,7 @@ class ServePages {
         }
     }
     detectSearch() {
-        return this.DetectString(window.location.hash,"search=")
+        return this.DetectString(window.location.hash, "search=")
     }
     updatePreviousPage() {
         this.previous_page = this.actual_page
@@ -213,10 +213,10 @@ class ServePages {
 
                 this.updatePreviousPage()
                 //if get="search="
-                if (this.detectSearch()){
+                if (this.detectSearch()) {
                     alert("search")
-                }else{
-                    
+                } else {
+
                     var page = this.pages[window.location.hash]
                     this.getHtml(page)
                 }
@@ -226,6 +226,18 @@ class ServePages {
     }
 
 
+}
+//Search Engine----------------------------
+class SearchEngine {
+    constructor() {
+
+    }
+    
+    async getDBPosts() {
+        let response = await fetch('SiteFolder/DB/all_posts.json');
+        let val = await response.json();
+        return val
+    }
 }
 
 

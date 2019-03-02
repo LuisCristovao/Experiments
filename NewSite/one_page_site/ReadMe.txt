@@ -199,7 +199,7 @@ The search engine itself will use **window.location.search** of the URL. Meaning
 
  - Read input and change the URL **?query**
  - The search engine will find the tags that best correlate with the query.
- - The algorithm will search for the best tags that match the query the user to the following hash URL:**#search-tags : [tag1,tag2,...]**
+ - The algorithm will search for the best tags that match the query the user to the following hash URL:**#search-tags = [tag1,tag2,...]**
      - This means that the server will show the projects with those tags.
  
  
@@ -233,7 +233,7 @@ The search engine itself will use **window.location.search** of the URL. Meaning
  Already working, but basically it detects if #page and gets the page html and it inserts in inner html of div= content.
  ### NavBar
  it should follow user if he is scrolling down the page. Also it should appear a botton on the side to scroll back up
-
+To do this I should detetct he scrollTop
 ## Flask Server
 This server should do the following:
 
@@ -290,6 +290,37 @@ This page should be a simple HTML that imports a **js file** that reads **all_po
  - need to roder by last update or creation date the posts
  - Footer to load more projects, better load more projects on scroll bottom, thats it.
 
+## Search Engine
+
+### Search Input at top
+
+ - Need to detect with priority the search tag!! (in the server page class)
+ - the search get should be **? \<query\>**
+ - For instance: **?unity+games+turn base+** 
+ - still need to do html encode and decode
+ - If **?unity+games+turn base+**  this tag appears than the page should show all posts with this tags
+
+The DB will have another column **secondary search tags** that will only show up in the search engine to server search purposes.
+
+ If this method does not work, probably the best way to aproach this subject is to use the already created server page and detect the keyword **search=** in the **#** probaby going to do this way....
+
+This might be done later.
+### Tags/categories page
+This will be just another page that will collect from a json all tags that exist in the DB and insert in the page like this:
+
+    |   A   |    B   |   C   |
+	-ab...   - ba..   -...
+	-ac...	 - be..   -...
+    |   D   | ...
+
+#### SearchTags.json File Formate:
+
+    {
+        "A":{"aba":"aba","abc":"abc"},
+        "B":{...same with b},
+        ...
+    }
+I will make this way because t seems that if this is in this format, then on JSON.parse and later on with **for(key in json)** every thing will be ordered automatically.
 ## Notes
  JSON format already organizes alphabetically the key!!!!!!!!
 ### Scroll bottom

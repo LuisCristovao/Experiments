@@ -7,6 +7,7 @@ Created on Mon Feb 25 18:14:14 2019
 
 import json
 import os
+from datetime import datetime
  
 def get_dirpath_less(less):
     '''
@@ -27,11 +28,16 @@ def get_dirpath_less(less):
     
     return out
 
-def test():
+def strToDate(date_str):
     '''
-    Bla bla...
+    goal: 
+        convert string to date object
+    inputs:
+        date_str: string with date in format yyyy-mm-dd
+    returns:
+        date object
     '''
-    print("Test import \n\n")
+    return datetime.strptime(date_str,'%Y-%m-%d')
 
 def get_json_file(filepath):
     '''
@@ -77,7 +83,38 @@ def get_all_posts():
     return get_json_file(dirpath + "DB/all_posts.json")
     
     
-
+def insertByDate(db,new_data):
+    '''
+    goal:
+        Insert new post on json DB, but order by creation date.
+        Here we consider already that the db is ordered
+    inpouts:
+        db:
+            all json db like [post1,post2]
+        new_data:
+            new post data
+        returns:
+            new ordered db array
+    '''
+    new_db=[]
+    target_date=strToDate(new_data["creation date"])
+    if len(db)==0:
+        new_db.append(new_data)
+    else:
+        
+        for i in range(len(db)):
+            db_date=strToDate(db[i]["creation date"])
+            
+            if target_date>=db_date:
+                new_db.append(db[i])
+                if i==len(db)-1:
+                    new_db.append(new_data)
+            else:
+                new_db.append(new_data)
+                new_db.append(db[i])
+        
+    return new_db
+        
 
 def send_all_posts_form():
     '''
@@ -106,10 +143,12 @@ def add_posts_row(data):
     try:
         db=get_all_posts()
         #data["id"]=len(db)
-        db.append(data)
+        new_db=insertByDate(db,data)
+        
+        #db.append(data)
         #dump json object in db all_post.json
         dirpath=get_dirpath_less(1)# to work as a module of server
-        dump_json_in_file(dirpath + "DB/all_posts.json",db)
+        dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
         return True
     except:
         return False
