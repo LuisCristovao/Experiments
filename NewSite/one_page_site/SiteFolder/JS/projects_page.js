@@ -85,7 +85,7 @@ function loadMoreProjects() {
         if (db[loaded_projects] != undefined) {
 
             html += jsonToHml(db[loaded_projects])
-            loaded_projects++
+            loaded_projects--//invert order to insert most recent posts in front
         }
     }
     grid.innerHTML = html
@@ -107,6 +107,7 @@ async function init() {
 
 
     db = await getDBPosts()
+    loaded_projects=db.length-1
     requestAnimationFrame(detectScrollBottom)
     //fillGrid()
     //    setInterval(() => {
