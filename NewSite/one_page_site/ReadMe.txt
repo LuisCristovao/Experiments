@@ -350,6 +350,10 @@ This will be just another page that will collect from a json all tags that exist
     }
 I will make this way because t seems that if this is in this format, then on JSON.parse and later on with **for(key in json)** every thing will be ordered automatically.
 
+### Migration 
+Python program that sees the previous db and generates the new one.
+
+
 ## Notes
  JSON format already organizes alphabetically the key!!!!!!!!
 ### Scroll bottom
@@ -380,15 +384,11 @@ OR
         }
     }, 100)
 
-**PRIORITY**
-Make template page for show off pages like projects, blog posts and search posts. 
 
-**next:**
+**next:** 
 
- - **Show Creation date  on projects**
- - **Order in flask server by creation date**
- - **Search engine is for later but can make the tags**
- - filter project from blog
- - First implementation of search engine is just search for tags as they appear
- - And create the categories page for now
+ **1. make home page.
+ 2.  solve error on search engine thats is not comparing
+    secondary tags.
+3. improve search engine**
 
