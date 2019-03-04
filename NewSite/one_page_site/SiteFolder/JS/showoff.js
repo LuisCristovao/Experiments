@@ -9,10 +9,13 @@ async function getDBPosts() {
     let val = await response.json();
     return val
 }
-function searchBlogPosts() {
+async function searchBlogPosts() {
     $("#showOffTitle").html("Blog Posts")
+    db = await getDBPosts()
+    loaded_projects = db.length - 1
+    requestAnimationFrame(detectScrollBottom)
 }
-function searchProjects(){
+async function searchProjects() {
     $("#showOffTitle").html("Project Posts")
 }
 
@@ -38,7 +41,10 @@ function jsonToHml(data) {
     var val = data
     html += '<div class="col-lg-4 col-sm-6" style="margin-bottom: 20pt">'
     html += '<div class="card" >'
-    html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
+    if (val["image url"] != "") {
+
+        html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
+    }
     html += '<div class="card-body">'
     html += '<h4 class="card-title">'
     html += '<a href="' + val["link"] + '">' + val["title"] + '</a>'
@@ -106,5 +112,3 @@ function main_init() {
 }
 //main-------------------
 init()
-
-

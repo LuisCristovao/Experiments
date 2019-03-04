@@ -150,7 +150,7 @@ class ServePages {
         }
     }
     detectSearch() {
-        return this.DetectString(window.location.hash, "search=")
+        return this.DetectString(window.location.search, "search=")
     }
     updatePreviousPage() {
         this.previous_page = this.actual_page
@@ -212,14 +212,11 @@ class ServePages {
             if (this.pages != undefined) {
 
                 this.updatePreviousPage()
-                //if get="search="
-                if (this.detectSearch()) {
-                    alert("search")
-                } else {
 
-                    var page = this.pages[window.location.search]
-                    this.getHtml(page)
-                }
+                var page_url=window.location.search.split("=")[0]// the .split is to detect when is search 
+                var page = this.pages[page_url]
+                this.getHtml(page)
+
             }
         }
         requestAnimationFrame(this.run)
@@ -230,37 +227,37 @@ class ServePages {
 //Search Engine----------------------------
 class SearchEngine {
     constructor() {
-        
+
     }
-    
+
     async getDBPosts() {
         let response = await fetch('SiteFolder/DB/all_posts.json');
         let val = await response.json();
         return val
     }
-    getQuery(){
-        return window.location.hash.split("=")[1].split("+")
+    getQuery() {
+        return window.location.search.split("=")[1].split("+")
     }
-    async findPosts(){
-        var posts_index=[]
-        var all_posts=await this.getDBPosts()
-        var query_tags=this.getQuery()//array with tags
-        for(var i in all_posts){
-            var post=all_posts[i]
-            var post_tags=post['search tags']
+    async findPosts() {
+        var posts_index = []
+        var all_posts = await this.getDBPosts()
+        var query_tags = this.getQuery() //array with tags
+        for (var i in all_posts) {
+            var post = all_posts[i]
+            var post_tags = post['search tags']
             post_tags.concat(post['secondary search tags'])
-            for(var j in post_tags){
-                for(var e in query_tags){
-                    if(query_tags[e]==post_tags[j]){
+            for (var j in post_tags) {
+                for (var e in query_tags) {
+                    if (query_tags[e] == post_tags[j]) {
                         posts_index.push(i)
                     }
                 }
             }
-            
+
         }
         return posts_index
     }
-    
+
 }
 
 

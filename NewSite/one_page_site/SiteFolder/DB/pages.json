@@ -1,4 +1,5 @@
 {
 	"?Projects": "SiteFolder/Pages/Projects.html",
-	"?Blog": "SiteFolder/Pages/ShowOffTemplate.html"
+	"?Blog": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?search":"SiteFolder/Pages/ShowOffTemplate.html"
 }

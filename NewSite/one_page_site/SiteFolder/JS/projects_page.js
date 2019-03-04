@@ -31,7 +31,7 @@ function AddMoreInfoToCards(data) {
     html += '<li class="list-group-item">'
     html += '<strong>Search Tags:</strong><br>'
     for (var i in search_tags) {
-        html += '<a href="#search=' + search_tags[i] + '">' + search_tags[i] + '</a>&nbsp;'
+        html += '<a href="?search=' + search_tags[i] + '">' + search_tags[i] + '</a>&nbsp;'
     }
     html += '</li>'
     html += '</ul>'
@@ -43,7 +43,10 @@ function jsonToHml(data) {
     var val = data
     html += '<div class="col-lg-4 col-sm-6" style="margin-bottom: 20pt">'
     html += '<div class="card" >'
-    html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
+    if (val["image url"] != "") {
+
+        html += '<a href="' + val["link"] + '"><img class="card-img-top" src="' + val["image url"] + '" alt=""></a>'
+    }
     html += '<div class="card-body">'
     html += '<h4 class="card-title">'
     html += '<a href="' + val["link"] + '">' + val["title"] + '</a>'
