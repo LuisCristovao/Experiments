@@ -2,7 +2,7 @@
 var prev_scrollTop = 0
 var db;
 var loaded_projects = 0
-
+var search_engine=new SearchEngine()
 //global functions
 async function getDBPosts() {
     let response = await fetch('SiteFolder/DB/all_posts.json');
@@ -25,8 +25,24 @@ async function searchBlogPosts() {
 }
 async function searchProjects() {
     $("#showOffTitle").html("Project Posts")
+    db = await getDBPosts()
+    var project_posts=[]
+    for(var i in db){
+        if(db[i]["type"]=="project"){
+            project_posts.push(db[i])
+        }
+    }
+    db=project_posts
+    loaded_projects = db.length - 1
+    requestAnimationFrame(detectScrollBottom)
 }
-
+async function searchPostsByTags(){
+    $("#showOffTitle").html("Search Results")
+    
+    db=await search_engine.findPosts()
+    loaded_projects = db.length - 1
+    requestAnimationFrame(detectScrollBottom)
+}
 function AddMoreInfoToCards(data) {
     var html = ""
     var vals = data
@@ -101,7 +117,7 @@ async function init() {
     if (options[window.location.search] != null) {
         options[window.location.search]()
     } else {
-        alert("search showoff")
+        searchPostsByTags()
     }
 
 }

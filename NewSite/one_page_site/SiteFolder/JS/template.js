@@ -239,23 +239,23 @@ class SearchEngine {
         return window.location.search.split("=")[1].split("+")
     }
     async findPosts() {
-        var posts_index = []
+        var select_posts = []
         var all_posts = await this.getDBPosts()
         var query_tags = this.getQuery() //array with tags
         for (var i in all_posts) {
             var post = all_posts[i]
-            var post_tags = post['search tags']
-            post_tags.concat(post['secondary search tags'])
+            var post_tags = post['search tags'].split(",")
+            post_tags.concat(post['secondary search tags'].split(","))
             for (var j in post_tags) {
                 for (var e in query_tags) {
                     if (query_tags[e] == post_tags[j]) {
-                        posts_index.push(i)
+                        select_posts.push(post)
                     }
                 }
             }
 
         }
-        return posts_index
+        return select_posts
     }
 
 }
