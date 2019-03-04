@@ -12,6 +12,14 @@ async function getDBPosts() {
 async function searchBlogPosts() {
     $("#showOffTitle").html("Blog Posts")
     db = await getDBPosts()
+    //filter only blog posts type
+    var blog_posts=[]
+    for(var i in db){
+        if(db[i]["type"]=="blog post"){
+            blog_posts.push(db[i])
+        }
+    }
+    db=blog_posts
     loaded_projects = db.length - 1
     requestAnimationFrame(detectScrollBottom)
 }
@@ -29,7 +37,7 @@ function AddMoreInfoToCards(data) {
     html += '<li class="list-group-item">'
     html += '<strong>Search Tags:</strong><br>'
     for (var i in search_tags) {
-        html += '<a href="#search=' + search_tags[i] + '">' + search_tags[i] + '</a>&nbsp;'
+        html += '<a href="?search=' + search_tags[i] + '">' + search_tags[i] + '</a>&nbsp;'
     }
     html += '</li>'
     html += '</ul>'

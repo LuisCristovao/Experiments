@@ -96,8 +96,10 @@ def insertByDate(db,new_data):
         returns:
             new ordered db array
     '''
+    print(db)
     new_db=[]
     target_date=strToDate(new_data["creation date"])
+    already_inserted_new_data=False
     if len(db)==0:
         new_db.append(new_data)
     else:
@@ -110,8 +112,12 @@ def insertByDate(db,new_data):
                 if i==len(db)-1:
                     new_db.append(new_data)
             else:
-                new_db.append(new_data)
+                if(not already_inserted_new_data):
+                    new_db.append(new_data)
+                    already_inserted_new_data=True
                 new_db.append(db[i])
+                
+    
         
     return new_db
         
@@ -167,11 +173,12 @@ def edit_posts_row(data):
         db=get_all_posts()
         id_=int(data["id"])
         del data["id"]
-        db[id_]=data
+        del db[id_]
+        new_db=insertByDate(db,data)
         
         #dump json object in db all_post.json
         dirpath=get_dirpath_less(1)# to work as a module of server
-        dump_json_in_file(dirpath + "DB/all_posts.json",db)
+        dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
         return True
     except:
         return False   

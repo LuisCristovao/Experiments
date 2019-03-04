@@ -18,7 +18,14 @@ var loaded_projects = 0
 async function getDBPosts() {
     let response = await fetch('SiteFolder/DB/all_posts.json');
     let val = await response.json();
-    return val
+    var project_posts=[]
+    for(var i in val){
+        if(val[i]["type"]=="project"){
+            project_posts.push(val[i])
+        }
+    }
+    
+    return project_posts
 }
 
 function AddMoreInfoToCards(data) {
