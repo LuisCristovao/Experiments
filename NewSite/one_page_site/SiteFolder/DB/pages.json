@@ -1,4 +1,4 @@
 {
-	"#Projects": "SiteFolder/Pages/Projects.html",
-	"#Blog": "Blog.html"
+	"?Projects": "SiteFolder/Pages/Projects.html",
+	"?Blog": "SiteFolder/Pages/ShowOffTemplate.html"
 }

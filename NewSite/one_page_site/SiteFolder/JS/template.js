@@ -6,7 +6,7 @@ var scroll;
 function Search(btn) {
     var parent = btn.parentElement
     var input = parent.children[0]
-    window.location.hash = "search=" + encodeSearchQuery(input.value)
+    window.location.search = "search=" + encodeSearchQuery(input.value)
 
 }
 
@@ -14,7 +14,7 @@ function SearchKeyPress(event, input) {
     //press enter
     if (event.keyCode == 13) {
         var value = input.value
-        window.location.hash = "search=" + encodeSearchQuery(input.value)
+        window.location.search = "search=" + encodeSearchQuery(input.value)
 
     }
 
@@ -127,7 +127,7 @@ class Scroll {
 class ServePages {
 
     constructor() {
-        this.actual_page = window.location.hash
+        this.actual_page = window.location.search
         this.previous_page = ""
         this.pages;
         this.getPages()
@@ -205,7 +205,7 @@ class ServePages {
     //        return allText;
     //    }
     run = () => {
-        this.setActualPage(window.location.hash)
+        this.setActualPage(window.location.search)
 
         if (this.detectChange()) {
 
@@ -217,7 +217,7 @@ class ServePages {
                     alert("search")
                 } else {
 
-                    var page = this.pages[window.location.hash]
+                    var page = this.pages[window.location.search]
                     this.getHtml(page)
                 }
             }
