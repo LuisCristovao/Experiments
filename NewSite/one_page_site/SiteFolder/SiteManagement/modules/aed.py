@@ -5,28 +5,16 @@ Created on Mon Feb 25 18:14:14 2019
 @author: Luis Cristovao
 """
 
-import json
-import os
+
 from datetime import datetime
- 
-def get_dirpath_less(less):
-    '''
-    goal: get current directory or a parent directory
-    inputs:
-        less: number that determines the parent folder the user wants.
-              for instance in this folder tree : C > main > templates > index.html (working dir)
-                                                            static  
-              if we used get_dirpath_less(1) we would obtain: C/main/
-              if we used get_dirpath_less(0) we would obtain: C/main/templates/
-    '''
-    
-    out=""
-    dirpath = os.getcwd()
-    array=dirpath.split("\\")
-    for i in range(len(array)-less):
-        out+=array[i]+"\\"
-    
-    return out
+#import json_files #to import json_files module locally
+#import urls as pages # to import urls.py locally
+from importlib.machinery import SourceFileLoader
+
+#to import module in json_files.py when using server
+json_files=SourceFileLoader("json_files.py", "modules/json_files.py").load_module() 
+#to import module in urls.py when using server
+pages=SourceFileLoader("urls.py", "modules/urls.py").load_module() 
 
 def strToDate(date_str):
     '''
@@ -39,38 +27,24 @@ def strToDate(date_str):
     '''
     return datetime.strptime(date_str,'%Y-%m-%d')
 
-def get_json_file(filepath):
-    '''
-     goal: 
-        gets json object in file
-     inputs:
-        filepath:
-            complet path including filename of the file to write to.
-     returns:
-        json object
-    '''
-    
-    print("open file:",filepath,"\n")
-    with open(filepath) as f:
-        data = json.load(f)
-        
-    
-    return data
 
-def dump_json_in_file(filepath,json_val):
+def detect_if_unique(db,new_title):
     '''
-    goal: 
-        writes json object in file
+    goal:
+        detect if post has unique title and if that is true returns true else returns false
     inputs:
-        filepath:
-            complet path including filename of the file to write to.
-        json_val:
-            json object
+        db:
+            json with all posts data
+        new_title
+            
     '''
-    
-    with open(filepath, mode='w', encoding='utf-8') as f:
-        json.dump(json_val, f)
-
+    unique= True
+    for val in db:
+        if val["title"]==new_title:
+            return False
+        
+    return unique
+               
 
 def get_all_posts():
     '''
@@ -79,8 +53,8 @@ def get_all_posts():
     '''
     
     #dirpath=get_dirpath_less(2) #to work locally
-    dirpath=get_dirpath_less(1)# to work as a module of server
-    return get_json_file(dirpath + "DB/all_posts.json")
+    dirpath=json_files.get_dirpath_less(1)# to work as a module of server
+    return json_files.get_json_file(dirpath + "DB/all_posts.json")
     
     
 def insertByDate(db,new_data):
@@ -96,7 +70,7 @@ def insertByDate(db,new_data):
         returns:
             new ordered db array
     '''
-    print(db)
+    #print(db)
     new_db=[]
     target_date=strToDate(new_data["creation date"])
     already_inserted_new_data=False
@@ -130,9 +104,9 @@ def send_all_posts_form():
         gets json settings/all_posts_table_columns.json and sends it.
     '''
     
-    dirpath=get_dirpath_less(0)
+    dirpath=json_files.get_dirpath_less(0)
     dirpath+="modules/"# to work as a module of server; comment this to work locally
-    data=get_json_file(dirpath+"settings/all_posts_table_columns.json")
+    data=json_files.get_json_file(dirpath+"settings/all_posts_table_columns.json")
     return data
 
 
@@ -148,14 +122,19 @@ def add_posts_row(data):
     
     try:
         db=get_all_posts()
+        url="?"+data["title"].replace(" ","-")
+        page=data["page location"]
         #data["id"]=len(db)
-        new_db=insertByDate(db,data)
-        
-        #db.append(data)
-        #dump json object in db all_post.json
-        dirpath=get_dirpath_less(1)# to work as a module of server
-        dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
-        return True
+        if detect_if_unique(db,data["title"]):
+            new_db=insertByDate(db,data)
+            pages.writeRowDB(url,page)
+            #db.append(data)
+            #dump json object in db all_post.json
+            dirpath=json_files.get_dirpath_less(1)# to work as a module of server
+            json_files.dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
+            return True
+        else:
+            return False
     except:
         return False
     
@@ -172,14 +151,21 @@ def edit_posts_row(data):
     try:
         db=get_all_posts()
         id_=int(data["id"])
+        url="?"+data["title"].replace(" ","-")
+        old_url=db[id_]["link"]
+        page=data["page location"]
         del data["id"]
-        del db[id_]
-        new_db=insertByDate(db,data)
         
-        #dump json object in db all_post.json
-        dirpath=get_dirpath_less(1)# to work as a module of server
-        dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
-        return True
+        if detect_if_unique(db,data["title"]):
+            del db[id_]
+            new_db=insertByDate(db,data)
+            pages.editRowDB(old_url,url,page)
+            #dump json object in db all_post.json
+            dirpath=json_files.get_dirpath_less(1)# to work as a module of server
+            json_files.dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
+            return True
+        else:
+            return False
     except:
         return False   
     
@@ -195,11 +181,12 @@ def delete_posts_row(id_):
     try:
         db=get_all_posts()
         print(id_)
+        url=db[id_]["link"]
         del db[id_]
-        
+        pages.deleteRowDB(url)
         #dump json object in db all_post.json
-        dirpath=get_dirpath_less(1)# to work as a module of server
-        dump_json_in_file(dirpath + "DB/all_posts.json",db)
+        dirpath=json_files.get_dirpath_less(1)# to work as a module of server
+        json_files.dump_json_in_file(dirpath + "DB/all_posts.json",db)
         return True
     except:
         return False       

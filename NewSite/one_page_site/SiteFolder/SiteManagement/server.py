@@ -12,6 +12,8 @@ import json
 aed = SourceFileLoader("aed.py", "modules/aed.py").load_module()
 #aed.get_all_posts()
 index=SourceFileLoader("index.py", "modules/index.py").load_module()
+
+json_files=SourceFileLoader("json_files.py", "modules/json_files.py").load_module()
 #print(json.dumps(index.Menu()))
 #Start server-----------------------------
 app = fl.Flask(__name__)
