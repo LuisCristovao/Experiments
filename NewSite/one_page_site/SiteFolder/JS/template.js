@@ -128,7 +128,7 @@ class ServePages {
 
     constructor() {
         this.actual_page = window.location.search
-        this.previous_page = ""
+        this.previous_page = "--default--"//just a string that differs from rest
         this.pages;
         this.getPages()
         //setTimeout(()=>{},1000)

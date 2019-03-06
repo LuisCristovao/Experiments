@@ -1,1 +1,7 @@
-{"?Projects": "SiteFolder/Pages/ShowOffTemplate.html", "?Blog": "SiteFolder/Pages/ShowOffTemplate.html", "?search": "SiteFolder/Pages/ShowOffTemplate.html", "?xxx": "x.html"}
+{
+    "":"SiteFolder/Pages/home.html",
+    "?Projects": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?Blog": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?search": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?xxx": "x.html"
+}
