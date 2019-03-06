@@ -126,10 +126,12 @@ def add_posts_row(data):
         page=data["page location"]
         #data["id"]=len(db)
         if detect_if_unique(db,data["title"]):
-            data["link"]=url
+            if data["page location"]!="":
+                data["link"]=url
+                pages.writeRowDB(url,page)
             new_db=insertByDate(db,data)
             
-            pages.writeRowDB(url,page)
+            
             #db.append(data)
             #dump json object in db all_post.json
             dirpath=json_files.get_dirpath_less(1)# to work as a module of server
@@ -158,11 +160,13 @@ def edit_posts_row(data):
         page=data["page location"]
         del data["id"]
         
-        if detect_if_unique(db,data["title"]):
+        if detect_if_unique(db,data["title"]) or data["title"]==db[id_]["title"]:
             del db[id_]
-            data["link"]=url
+            if page!="":
+                data["link"]=url
+                pages.editRowDB(old_url,url,page)
             new_db=insertByDate(db,data)
-            pages.editRowDB(old_url,url,page)
+            
             #dump json object in db all_post.json
             dirpath=json_files.get_dirpath_less(1)# to work as a module of server
             json_files.dump_json_in_file(dirpath + "DB/all_posts.json",new_db)
