@@ -126,7 +126,9 @@ def add_posts_row(data):
         page=data["page location"]
         #data["id"]=len(db)
         if detect_if_unique(db,data["title"]):
+            data["link"]=url
             new_db=insertByDate(db,data)
+            
             pages.writeRowDB(url,page)
             #db.append(data)
             #dump json object in db all_post.json
@@ -158,6 +160,7 @@ def edit_posts_row(data):
         
         if detect_if_unique(db,data["title"]):
             del db[id_]
+            data["link"]=url
             new_db=insertByDate(db,data)
             pages.editRowDB(old_url,url,page)
             #dump json object in db all_post.json
