@@ -350,40 +350,22 @@ This will be just another page that will collect from a json all tags that exist
     }
 I will make this way because t seems that if this is in this format, then on JSON.parse and later on with **for(key in json)** every thing will be ordered automatically.
 
-### Migration 
+
+## Home page
+As said previously, it will have 3 recently updated projects and 3 random projects
+Maybe in future I create a page only with recently updated order
+
+## Migration 
 Python program that sees the previous db and generates the new one.
 
 
 ## Notes
  JSON format already organizes alphabetically the key!!!!!!!!
-### Scroll bottom
-Scroll works like this:
+### Important
 
- 1. Page as a visibility window that is called window.
- 2. the **document.body.offsetHeight** or **document.body.scrollHeight**  is the complet page height and we have a visibility window that slides through the document page height.
- 3. to detect the bottom is when **document.body.scrollTop + window.innerHeight == document.body.scrollHeight**. **scrollTop**  represents where the top of the view window is in the **document height**
- 4. To do this there are a lot of ways:
+Search posts should only memorize post id in order to not insert repeated posts.Also should put in front those posts that match more the query tags.
 
-
-	    \$(window).scroll(function () {
-	        if (\$(window).scrollTop() + \$(window).height() == \$(document).height()) {
-	            alert("bottom!");
-	        }
-	    });
-
-OR    
-
- 
-
-    setInterval(() => {
-        if (prev_scrollTop != document.body.scrollTop) {
-            prev_scrollTop = document.body.scrollTop
-            if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
-                alert("bottom!")
-            }
-        }
-    }, 100)
-
+Every time I insert a post on DB, it should always update search_tags.json (add,edit, delete). Also should update the list of most recent posts???
 
 **next:** 
 
