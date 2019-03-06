@@ -367,6 +367,8 @@ Search posts should only memorize post id in order to not insert repeated posts.
 
 Every time I insert a post on DB, it should always update search_tags.json (add,edit, delete). Also should update the list of most recent posts???
 
+Already decided better orginise posts db by most **recently updated.**
+
 **next:** 
 
  **1. make home page.
