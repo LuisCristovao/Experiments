@@ -61,19 +61,21 @@ class Scroll {
     }
 
 
-    screenHightBiggerThanWidth() {
+    screenHeightBiggerThanWidth() {
         return (screen.availHeight >= screen.availWidth)
     }
     scrollBtnDimensions() {
-        if (this.screenHightBiggerThanWidth()) {
+        if (this.screenHeightBiggerThanWidth()) {
             return {
                 "font-size": "2em",
-                "left": "92%"
+                "left": "92%",
+                "height": 0.80
             }
         } else {
             return {
                 "font-size": "3em",
-                "left": "90%"
+                "left": "90%",
+                "height": 0.70
             }
         }
     }
@@ -84,19 +86,21 @@ class Scroll {
             var body = document.body
             var div = document.createElement("div")
             body.appendChild(div)
-            var height = document.body.scrollTop + window.innerHeight * 0.80;
-            //console.log(height)
             var btn_dimensions = this.scrollBtnDimensions()
+            var height = document.body.scrollTop + window.innerHeight * btn_dimensions["height"];
+            //console.log(height)
+
             div.setAttribute("style", "background-color:white;cursor:pointer;border-radius:25px;border:1px solid black;font-size:" + btn_dimensions["font-size"] + ";color:blue;position:absolute;top:" + height + "px;left:" + btn_dimensions["left"] + ";width:10%,height:10%;")
             div.setAttribute("id", "scrollToTopBtn")
             div.innerHTML = "^"
             div.setAttribute("onclick", "scrollToTop(this)")
         } else {
-            var height = document.body.scrollTop + window.innerHeight * 0.80;
+            var btn_dimensions = this.scrollBtnDimensions()
+            var height = document.body.scrollTop + window.innerHeight * btn_dimensions["height"];
             //console.log(height)
             var btn = document.getElementById("scrollToTopBtn")
             btn.style.top = height + "px"
-            var btn_dimensions = this.scrollBtnDimensions()
+            
             btn.style.left = btn_dimensions["left"]
             btn.style["font-size"] = btn_dimensions["font-size"]
         }
@@ -128,7 +132,7 @@ class ServePages {
 
     constructor() {
         this.actual_page = window.location.search
-        this.previous_page = "--default--"//just a string that differs from rest
+        this.previous_page = "--default--" //just a string that differs from rest
         this.pages;
         this.getPages()
         //setTimeout(()=>{},1000)
@@ -213,7 +217,7 @@ class ServePages {
 
                 this.updatePreviousPage()
 
-                var page_url=window.location.search.split("=")[0]// the .split is to detect when is search 
+                var page_url = window.location.search.split("=")[0] // the .split is to detect when is search 
                 var page = this.pages[page_url]
                 this.getHtml(page)
 
