@@ -87,12 +87,14 @@ def insertByDate(db,new_data):
             if target_date>=db_date and not already_inserted_new_data: 
                 new_db.append(new_data)
                 already_inserted_new_data=True
-                if i==len(db)-1:
-                    new_db.append(db[i])
+                new_db.append(db[i])
                     
             else:
                 new_db.append(db[i])
-                
+            
+#            print("\n-----------------------\n")
+#            print(new_db)
+#            print("\n-----------------------\n")    
         
         if not already_inserted_new_data:
             new_db.append(new_data)

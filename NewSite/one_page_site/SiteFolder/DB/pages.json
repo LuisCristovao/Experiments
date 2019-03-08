@@ -2,9 +2,6 @@
     "": "SiteFolder/Pages/home.html",
     "?Projects": "SiteFolder/Pages/ShowOffTemplate.html",
     "?Blog": "SiteFolder/Pages/ShowOffTemplate.html",
-    "?search": "SiteFolder/Pages/ShowOffTemplate.html",
-    "?calculator-game": "calculator-page.html",
-    "?xxx": "x.html",
-    "?test-blog-post": "blog-test.html",
-    "?ChatRooms-Node-Js": "chat-rooms-page.html"
+    "?search": "SiteFolder/Pages/ShowOffTemplate.html"
+    
 }
