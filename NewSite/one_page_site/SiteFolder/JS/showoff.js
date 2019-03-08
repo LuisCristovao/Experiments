@@ -20,7 +20,9 @@ async function searchBlogPosts() {
         }
     }
     db=blog_posts
-    loaded_projects = db.length - 1
+    //invert array so to show more recent at front
+    db=search_engine.invertArrayOrder(db)
+    loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
 async function searchProjects() {
@@ -33,14 +35,16 @@ async function searchProjects() {
         }
     }
     db=project_posts
-    loaded_projects = db.length - 1
+    //invert array so to show more recent at front
+    db=search_engine.invertArrayOrder(db)
+    loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
 async function searchPostsByTags(){
     $("#showOffTitle").html("Search Results")
     
     db=await search_engine.findPosts()
-    loaded_projects = db.length - 1
+    loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
 function AddMoreInfoToCards(data) {
@@ -86,11 +90,11 @@ function jsonToHml(data) {
 function loadMoreProjects() {
     var grid = document.getElementById("showOffGrid")
     var html = grid.innerHTML
-    for (index in [0, 1, 2]) {
+    for (index in [0, 1, 2]) {//load 3 posts each time this is triggered
         if (db[loaded_projects] != undefined) {
 
             html += jsonToHml(db[loaded_projects])
-            loaded_projects-- //invert order to insert most recent posts in front
+            loaded_projects++
         }
     }
     grid.innerHTML = html

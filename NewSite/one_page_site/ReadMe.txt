@@ -376,3 +376,7 @@ Already decided better orginise posts db by most **recently updated.**
     secondary tags.
 3. improve search engine**
 
+### Errors
+
+ 1. Edit row replicated row, but can't replicate error
+ 2. project page with only 3 projects but with a card high enough to enable page scroll, automatically scrolls up when I reach the bottom of page. This happens in desktop view.
