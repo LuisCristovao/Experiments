@@ -60,7 +60,7 @@ def get_all_posts():
 def insertByDate(db,new_data):
     '''
     goal:
-        Insert new post on json DB, but order by creation date.
+        Insert new post on json DB, but order by last update date.
         Here we consider already that the db is ordered
     inpouts:
         db:
@@ -72,14 +72,14 @@ def insertByDate(db,new_data):
     '''
     #print(db)
     new_db=[]
-    target_date=strToDate(new_data["creation date"])
+    target_date=strToDate(new_data["last update date"])
     already_inserted_new_data=False
     if len(db)==0:
         new_db.append(new_data)
     else:
         
         for i in range(len(db)):
-            db_date=strToDate(db[i]["creation date"])
+            db_date=strToDate(db[i]["last update date"])
             
             if target_date>=db_date:
                 new_db.append(db[i])
