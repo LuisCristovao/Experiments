@@ -28,6 +28,7 @@ async function searchBlogPosts() {
 async function searchProjects() {
     $("#showOffTitle").html("Project Posts")
     db = await getDBPosts()
+    //filter posts by projects posts
     var project_posts=[]
     for(var i in db){
         if(db[i]["type"]=="project"){
@@ -102,7 +103,8 @@ function loadMoreProjects() {
 }
 
 function detectScrollBottom() {
-    if (window.innerHeight == document.body.scrollHeight && loaded_projects >= 0) {
+    //Just to load projects in the begining (just loaded the page)
+    if (window.innerHeight == document.body.scrollHeight && loaded_projects<db.length) {
         loadMoreProjects()
     }
     if (prev_scrollTop != document.body.scrollTop) {
