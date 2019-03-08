@@ -21,7 +21,7 @@ async function searchBlogPosts() {
     }
     db=blog_posts
     //invert array so to show more recent at front
-    db=search_engine.invertArrayOrder(db)
+    //db=search_engine.invertArrayOrder(db)
     loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
@@ -36,7 +36,7 @@ async function searchProjects() {
     }
     db=project_posts
     //invert array so to show more recent at front
-    db=search_engine.invertArrayOrder(db)
+    //db=search_engine.invertArrayOrder(db)
     loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
@@ -44,6 +44,7 @@ async function searchPostsByTags(){
     $("#showOffTitle").html("Search Results")
     
     db=await search_engine.findPosts()
+    
     loaded_projects = 0
     requestAnimationFrame(detectScrollBottom)
 }
