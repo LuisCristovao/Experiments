@@ -41,15 +41,16 @@ String.prototype.replaceAll = function (search, replacement) {
 function encodeSearchQuery(query) {
     return query.replaceAll(" ", "+")
 }
-//function htmlEncode(value) {
-//    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
-//    //then grab the encoded contents back out.  The div never exists on the page.
-//    return $('<div/>').text(value).html();
-//}
-//
-//function htmlDecode(value) {
-//    return $('<div/>').html(value).text();
-//}
+
+function htmlEncode(value) {
+    //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+    //then grab the encoded contents back out.  The div never exists on the page.
+    return $('<div/>').text(value).html();
+}
+
+function htmlDecode(value) {
+    return $('<div/>').html(value).text();
+}
 
 //-------------------------------------------------------------------
 //scroll class  controls navbar when scroll down and a button to scroll up
@@ -100,7 +101,7 @@ class Scroll {
             //console.log(height)
             var btn = document.getElementById("scrollToTopBtn")
             btn.style.top = height + "px"
-            
+
             btn.style.left = btn_dimensions["left"]
             btn.style["font-size"] = btn_dimensions["font-size"]
         }
