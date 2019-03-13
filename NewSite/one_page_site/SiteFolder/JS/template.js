@@ -56,7 +56,7 @@ function htmlDecode(value) {
 //scroll class  controls navbar when scroll down and a button to scroll up
 class Scroll {
     constructor() {
-        this.navbar_visibility_point = 63
+        this.navbar_visibility_point = 80
         this.nav = document.getElementById("navbar")
         this.detectScrollTopUnderNavBar = this.detectScrollTopUnderNavBar.bind(this);
     }
