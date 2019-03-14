@@ -27,24 +27,29 @@
         var ul = document.getElementById("contacts")
         var html = ""
         for (name in contacts) {
-            html += '<li>' + name + ':<input onkeypress="submitChange(event,this)" value="' + contacts[name] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
+            html += '<li><input value="' + name + '" onkeypress="submitChange(event)" disabled>:<input onkeypress="submitChange(event)" value="' + contacts[name] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
         }
+        html+='<li><button onclick="InsertInputRow(this)">Add Row</button></li>'
         ul.innerHTML = html
     }
-
+    function InsertInputRow(btn){
+        btn.outerHTML='<input placeholder="contact name" onkeypress="submitChange(event)">:<input placeholder="contact number" onkeypress="submitChange(event)">'
+    }
     function toggle(btn) {
         var parent = btn.parentElement;
-        var input = parent.children[0]
-        input.disabled = !input.disabled
+        var input0 = parent.children[0]
+        var input1 = parent.children[1]
+        input0.disabled = !input0.disabled
+        input1.disabled = !input1.disabled
     }
 
-    function submitChange(event, input) {
+    function submitChange(event) {
         if (event.keyCode == 13) { //enter
             //alert("press enter")
             var url = '/insertDB';
             var data = getInputData()
-            sendPost(url,data)
-            document.location.reload()//reload page
+            sendPost(url, data)
+            document.location.reload() //reload page
         }
     }
     async function sendPost(url, data) {
@@ -55,17 +60,18 @@
                 'Content-Type': 'application/json'
             }
         })
-        let val= await response
+        let val = await response
         return val
     }
-    function getInputData(){
-        var contacts_ele=document.getElementById("contacts")
-        data={}
-        for(var index=0; index<contacts_ele.children.length;index++){
-            var li=contacts_ele.children[index]
-            var name=li.innerText.split(":")[0]
-            var number=li.children[0].value
-            data[name]=number
+
+    function getInputData() {
+        var contacts_ele = document.getElementById("contacts")
+        data = {}
+        for (var index = 0; index < contacts_ele.children.length; index++) {
+            var li = contacts_ele.children[index]
+            var name = li.children[0].value
+            var number = li.children[1].value
+            data[name] = number
         }
         console.log(data)
         return data
