@@ -40,11 +40,11 @@
 
     function submitChange(event, input) {
         if (event.keyCode == 13) { //enter
-            alert("press enter")
+            //alert("press enter")
             var url = '/insertDB';
             var data = getInputData()
             sendPost(url,data)
-
+            document.location.reload()//reload page
         }
     }
     async function sendPost(url, data) {
