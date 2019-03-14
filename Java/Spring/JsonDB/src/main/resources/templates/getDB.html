@@ -42,9 +42,7 @@
         if (event.keyCode == 13) { //enter
             alert("press enter")
             var url = '/insertDB';
-            var data = {
-                username: 'example'
-            };
+            var data = getInputData()
             sendPost(url,data)
 
         }
@@ -60,7 +58,18 @@
         let val= await response
         return val
     }
-
+    function getInputData(){
+        var contacts_ele=document.getElementById("contacts")
+        data={}
+        for(var index=0; index<contacts_ele.children.length;index++){
+            var li=contacts_ele.children[index]
+            var name=li.innerText.split(":")[0]
+            var number=li.children[0].value
+            data[name]=number
+        }
+        console.log(data)
+        return data
+    }
     window.onload = Init()
 
 </script>
