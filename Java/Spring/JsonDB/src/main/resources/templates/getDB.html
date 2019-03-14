@@ -1,0 +1,25 @@
+<html>
+
+<head>
+    <title>get DB</title>
+</head>
+
+<body>
+<h1>Test</h1>
+</body>
+    
+<script>
+    async function getDB() {
+        let response = await fetch('/getDB');
+        let val = await response.text();
+        return val
+    }
+    async function  Init(){
+        json_val= await getDB()
+        json_val=JSON.parse(json_val)
+        alert(json_val["ola"])
+    }
+    window.onload=Init()
+</script>
+
+</html>
