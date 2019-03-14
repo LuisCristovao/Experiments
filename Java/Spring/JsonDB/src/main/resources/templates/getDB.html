@@ -5,21 +5,64 @@
 </head>
 
 <body>
-<h1>Test</h1>
+    <h1>Test</h1>
+    <ul id="contacts">
+
+    </ul>
 </body>
-    
+
 <script>
     async function getDB() {
         let response = await fetch('/getDB');
         let val = await response.text();
         return val
     }
-    async function  Init(){
-        json_val= await getDB()
-        json_val=JSON.parse(json_val)
-        alert(json_val["ola"])
+    async function Init() {
+        json_val = await getDB()
+        json_val = JSON.parse(json_val)
+        insert_contacts(json_val)
     }
-    window.onload=Init()
+
+    function insert_contacts(contacts) {
+        var ul = document.getElementById("contacts")
+        var html = ""
+        for (name in contacts) {
+            html += '<li>' + name + ':<input onkeypress="submitChange(event,this)" value="' + contacts[name] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
+        }
+        ul.innerHTML = html
+    }
+
+    function toggle(btn) {
+        var parent = btn.parentElement;
+        var input = parent.children[0]
+        input.disabled = !input.disabled
+    }
+
+    function submitChange(event, input) {
+        if (event.keyCode == 13) { //enter
+            alert("press enter")
+            var url = '/insertDB';
+            var data = {
+                username: 'example'
+            };
+            sendPost(url,data)
+
+        }
+    }
+    async function sendPost(url, data) {
+        let response = await fetch(url, {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        let val= await response
+        return val
+    }
+
+    window.onload = Init()
+
 </script>
 
 </html>

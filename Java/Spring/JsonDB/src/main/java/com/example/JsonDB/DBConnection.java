@@ -2,12 +2,12 @@ package com.example.JsonDB;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class DBConnection {
 	private JSONObject db;
@@ -21,8 +21,32 @@ public class DBConnection {
 	public JSONObject getDb() {
 		return db;
 	}
-	public void setDb(JSONObject db) {
-		this.db = db;
+	public boolean setDb(String db) {
+		JSONParser parser = new JSONParser();
+		JSONObject json = null;
+		try {
+			json = (JSONObject) parser.parse(db);
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		this.db = json;
+		writeJsonToFile(this.db);
+		return true;
+	}
+	private boolean writeJsonToFile(JSONObject db) {
+		try (FileWriter file = new FileWriter(this.path)) {
+
+            file.write(db.toJSONString());
+            file.flush();
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 	private JSONObject getJsonObj() {
 		// Read JSon file
