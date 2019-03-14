@@ -27,13 +27,13 @@
         var ul = document.getElementById("contacts")
         var html = ""
         for (name in contacts) {
-            html += '<li><input value="' + name + '" onkeypress="submitChange(event)" disabled>:<input onkeypress="submitChange(event)" value="' + contacts[name] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
+            html += '<li><input value="' + name + '" onkeypress="submitChange(event,true)" disabled>:<input onkeypress="submitChange(event,true)" value="' + contacts[name] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
         }
         html+='<li><button onclick="InsertInputRow(this)">Add Row</button></li>'
         ul.innerHTML = html
     }
     function InsertInputRow(btn){
-        btn.outerHTML='<input placeholder="contact name" onkeypress="submitChange(event)">:<input placeholder="contact number" onkeypress="submitChange(event)">'
+        btn.outerHTML='<input placeholder="contact name" onkeypress="submitChange(event,false)">:<input placeholder="contact number" onkeypress="submitChange(event,false)">'
     }
     function toggle(btn) {
         var parent = btn.parentElement;
@@ -43,11 +43,11 @@
         input1.disabled = !input1.disabled
     }
 
-    function submitChange(event) {
+    function submitChange(event,edit) {
         if (event.keyCode == 13) { //enter
             //alert("press enter")
             var url = '/insertDB';
-            var data = getInputData()
+            var data = getInputData(edit)
             sendPost(url, data)
             document.location.reload() //reload page
         }
@@ -64,10 +64,11 @@
         return val
     }
 
-    function getInputData() {
+    function getInputData(edit) {
         var contacts_ele = document.getElementById("contacts")
         data = {}
-        for (var index = 0; index < contacts_ele.children.length; index++) {
+        var len=(edit)?contacts_ele.children.length-1:contacts_ele.children.length;
+        for (var index = 0; index < len; index++) {
             var li = contacts_ele.children[index]
             var name = li.children[0].value
             var number = li.children[1].value
