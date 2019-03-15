@@ -1,0 +1,25 @@
+<h1>Hello!</h1>
+<input placeholder="msg to send server" onkeypress="handleInput(event,this)">
+<h1 id="answer"></h1>
+<script>
+	async function handleInput(event,input){
+		if (event.keyCode == 13) { //enter
+            //alert("press enter")
+            var url = '/test';
+            var data = input.value
+            var res= await sendPost(url, data)
+            document.getElementById("answer").innerHTML=res
+        }
+	}
+	async function sendPost(url, data) {
+	    let response = await fetch(url, {
+	        method: 'POST', // or 'PUT'
+	        body: JSON.stringify(data), // data can be `string` or {object}!
+	        headers: {
+	            'Content-Type': 'text/plain;'
+	        }
+	    })
+	    let val = await response.text()
+	    return val
+	}
+</script>
