@@ -29,6 +29,9 @@ public class Question {
 
     @Column(columnDefinition = "text")
     private String description;
+    
+    
+    private Double testdouble;
 
     public Long getId() {
         return id;
@@ -53,4 +56,13 @@ public class Question {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	public Double getTestdouble() {
+		return testdouble;
+	}
+
+	public void setTestdouble(Double testdouble) {
+		this.testdouble = testdouble;
+	}
+    
 }
