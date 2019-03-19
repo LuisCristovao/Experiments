@@ -365,21 +365,19 @@ Python program that sees the previous db and generates the new one.
 
 Search posts should only memorize post id in order to not insert repeated posts.Also should put in front those posts that match more the query tags.
 
-Every time I insert a post on DB, it should always update search_tags.json (add,edit, delete). Also should update the list of most recent posts???
+Every time I insert a post on DB, it should always update search_tags.json (add,edit, delete).
 
 
 
 **next:** 
 
- **1. make home page.
- 2.  
-3. improve search engine**
+1. **improve search engine**
+2. ** make tags page**
 
 ### Errors
 
- 1. Edit row replicated row, but can't replicate error
- 2. project page with only 3 projects but with a card high enough to enable page scroll, automatically scrolls up when I reach the bottom of page. This happens in desktop view.(?search=automation)
- 3. html encode on tags not working, for instance hiperlink to ?search=machine learning => ?search=machine%20learning. What I need is decodeURI() encodeURI(), no solution maybe send post... which i will not do
- 4. 
+ 1. ?search=recent on phone mode has an error find out (more or less fixed!!!)
+ 2.   html encode on tags not working, for instance hiperlink to ?search=machine learning => ?search=machine%20learning. What I need is decodeURI() encodeURI(), no solution maybe send post... which i will not do
+ 
 
 
