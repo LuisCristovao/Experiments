@@ -15,7 +15,7 @@ json_files=SourceFileLoader("json_files.py", "modules/json_files.py").load_modul
 def getDB():
     '''
     goal:
-        return json object inside DB/pages.json
+        return json object inside DB/tags.json
     '''
     
     #dirpath=json_files.get_dirpath_less(2) #to work locally
@@ -23,6 +23,10 @@ def getDB():
     return json_files.get_json_file(dirpath + "DB/tags.json")
 
 def dumpInDB(new_db):
+    '''
+    goal:
+        dump json in to file DB/tags.json
+    '''
     try:
         #dirpath=json_files.get_dirpath_less(2) #to work locally
         dirpath=json_files.get_dirpath_less(1)# to work as a module of server
@@ -31,54 +35,79 @@ def dumpInDB(new_db):
     except:
         return False
 
-def detect_if_unique(db,tag_name):
-    '''
-    goal:
-        detect if post has unique title and if that is true returns true else returns false
-    inputs:
-        db:
-            json with all posts data
-        new_title
-            
-    '''
-    unique= True
-    for key in db:
-        if key==url:
-            return False
-        
-    return unique
+#def detect_if_unique(db,tag_name):
+#    '''
+#    goal:
+#        detect if post has unique title and if that is true returns true else returns false
+#    inputs:
+#        db:
+#            json with all posts data
+#        new_title
+#            
+#    '''
+#    unique= True
+#    for key in db:
+#        if key==url:
+#            return False
+#        
+#    return unique
 
-def writeRowDB(url,page_site):
+def writeEditRowDB(tag_name):
     try:
         db=getDB()
-        if detect_if_unique(db,url):
-            db[url]=page_site
-            dumpInDB(db)
-            return True
+        if tag_name[0].upper() in db:
+            db[tag_name[0].upper()][tag_name]=tag_name
         else:
-            return False
-    except:
-        return False
-    
-    
-def editRowDB(old_url,new_url,new_page_site):
-    try:
-        db=getDB()
-        if detect_if_unique(db,new_url):
-            del db[old_url]
-            db[new_url]=new_page_site
-            dumpInDB(db)
-            return True
-        else:
-            return False
-    except:
-        return False
-    
-def deleteRowDB(url):
-    try:
-        db=getDB()
-        del db[url]
+            db[tag_name[0].upper()]={}
+            db[tag_name[0].upper()][tag_name]=tag_name
+        
         dumpInDB(db)
+        return True
+        
+    except:
+        return False
+
+def writeEditTags(tags):
+    try:
+        
+        for tag in tags.split(","):
+            writeEditRowDB(tag)
+        return True
+    except:
+        return False
+
+
+
+
+
+    
+#    
+#def editRowDB(old_url,new_url,new_page_site):
+#    try:
+#        db=getDB()
+#        if detect_if_unique(db,new_url):
+#            del db[old_url]
+#            db[new_url]=new_page_site
+#            dumpInDB(db)
+#            return True
+#        else:
+#            return False
+#    except:
+#        return False
+    
+def deleteRowDB(tag_name):
+    try:
+        db=getDB()
+        del db[tag_name[0].upper()][tag_name]
+        dumpInDB(db)
+        return True
+    except:
+        return False
+    
+def deleteTags(tags):
+    try:
+        for tag in tags:
+            deleteRowDB(tag)
         return True
     except:
         return False

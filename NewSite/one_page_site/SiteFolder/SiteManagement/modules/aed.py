@@ -15,6 +15,8 @@ from importlib.machinery import SourceFileLoader
 json_files=SourceFileLoader("json_files.py", "modules/json_files.py").load_module() 
 #to import module in urls.py when using server
 pages=SourceFileLoader("urls.py", "modules/urls.py").load_module() 
+#to import module in tags.py when using server
+tags=SourceFileLoader("tags.py", "modules/tags.py").load_module() 
 
 def strToDate(date_str):
     '''
@@ -139,6 +141,9 @@ def add_posts_row(data):
                 pages.writeRowDB(url,page)
             new_db=insertByDate(db,data)
             
+            #add tags to tags db
+            tags.writeEditTags(data["search tags"])
+            tags.writeEditTags(data["secondary search tags"])
             
             #db.append(data)
             #dump json object in db all_post.json
@@ -174,6 +179,10 @@ def edit_posts_row(data):
                 data["link"]=url
                 pages.editRowDB(old_url,url,page)
             new_db=insertByDate(db,data)
+            
+            #add tags to tags db
+            tags.writeEditTags(data["search tags"])
+            tags.writeEditTags(data["secondary search tags"])
             
             #dump json object in db all_post.json
             dirpath=json_files.get_dirpath_less(1)# to work as a module of server
