@@ -11,6 +11,6 @@ public class PageController {
     public String getPage()
     {
 
-        return "hello";
+        return "contactsDB";
     }
 }

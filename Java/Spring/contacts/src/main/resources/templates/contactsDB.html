@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>Contacts DB</title>
+</head>
+
+<body>
+    <h1>Contacts</h1>
+    <ul id="contacts">
+
+    </ul>
+</body>
+
+<script>
+    async function getDB() {
+        let response = await fetch('/contacts');
+        let val = await response.text();
+        return val
+    }
+    async function Init() {
+        json_val = await getDB()
+        json_val = JSON.parse(json_val)
+        insert_contacts(json_val)
+    }
+
+    function insert_contacts(contacts) {
+        var ul = document.getElementById("contacts")
+        var html = ""
+        contacts=contacts["content"]
+        for (index in contacts) {
+            html += '<li><input value="' + contacts[index]["name"] + '" onkeypress="submitChange(event,true)" disabled>:<input onkeypress="submitChange(event,true)" value="' + contacts[index]["number"] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
+        }
+        html+='<li><button onclick="InsertInputRow(this)">Add Row</button></li>'
+        ul.innerHTML = html
+    }
+    function InsertInputRow(btn){
+        btn.outerHTML='<input placeholder="contact name" onkeypress="submitChange(event,false)">:<input placeholder="contact number" onkeypress="submitChange(event,false)">'
+    }
+    function toggle(btn) {
+        var parent = btn.parentElement;
+        var input0 = parent.children[0]
+        var input1 = parent.children[1]
+        input0.disabled = !input0.disabled
+        input1.disabled = !input1.disabled
+    }
+
+    function submitChange(event,edit) {
+        if (event.keyCode == 13) { //enter
+            //alert("press enter")
+            var url = '/contacts';
+            var data = getInputData(edit)
+            sendPost(url, data)
+            document.location.reload() //reload page
+        }
+    }
+    async function sendPost(url, data) {
+        let response = await fetch(url, {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(data), // data can be `string` or {object}!
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        let val = await response
+        return val
+    }
+
+    function getInputData(edit) {
+        var contacts_ele = document.getElementById("contacts")
+        data = {}
+        var len=(edit)?contacts_ele.children.length-1:contacts_ele.children.length;
+        for (var index = 0; index < len; index++) {
+        	
+        		var li = contacts_ele.children[index]
+            if(!li.disabled){
+                var name = li.children[0].value
+                var number = li.children[1].value
+                data["name"] = name
+                data["number"]= number
+        	}
+            
+        }
+        console.log(data)
+        return data
+    }
+    window.onload = Init()
+
+</script>
+
+</html>
