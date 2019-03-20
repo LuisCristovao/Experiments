@@ -5,6 +5,7 @@
 
 
 
+
         
         
         
@@ -343,6 +344,7 @@ This will be just another page that will collect from a json all tags that exist
 
 The page should be like this but dont know if I really need loading because there will always be finite number of tags but load is more general so probably will do loading... 
 
+If I can I must have **4 columns** by row
 
 #### SearchTags.json File Formate:
 
