@@ -6,6 +6,7 @@
 
 
 
+
         
         
         
@@ -376,8 +377,10 @@ Every time I insert a post on DB, it should always update search_tags.json (add,
 
 **next:** 
 
-1. **improve search engine**
-2. ** make tags page**
+1. **show possible tags in search input**
+2. **improve search engine**
+3. ** make tags page**(done)
+4. **make python db migration project**
 
 ### Errors
 
