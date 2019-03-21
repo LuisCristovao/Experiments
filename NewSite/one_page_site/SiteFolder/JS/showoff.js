@@ -107,9 +107,9 @@ function detectScrollBottom() {
     if (window.innerHeight == document.body.scrollHeight && loaded_projects<db.length) {
         loadMoreProjects()
     }
-    if (prev_scrollTop != document.body.scrollTop) {
+    if (Math.round(prev_scrollTop) != Math.round(document.body.scrollTop)) {
         prev_scrollTop = document.body.scrollTop
-        if ((document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
+        if (Math.round(document.body.scrollTop + window.innerHeight) == document.body.scrollHeight) {
             loadMoreProjects()
         }
     }

@@ -97,7 +97,7 @@ def search():
     #return fl.render_template('search.html')
     return 'get search WIP'
 
-@app.route('/generate_tags')
+@app.route('/migrate')
 def gen_tags():
     #return fl.render_template('gen_tags.html')
     return 'get tags WIP'
