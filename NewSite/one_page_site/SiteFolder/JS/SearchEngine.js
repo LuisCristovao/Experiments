@@ -115,8 +115,9 @@ class SearchEngine{
         return select_posts
     }
 
-    onKeyPressSuggestion(search_query){
-        console.log(search_query)
+    onKeyPressSuggestion(search_input){
+        
+        console.log(search_input.value)
     }
 
 

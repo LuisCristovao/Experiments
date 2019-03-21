@@ -330,7 +330,13 @@ Get DB and search for projects with similar tags than the query
 	    var post_tags=post['search tags']
     }...
 
+### Show suggestions
+OK here is where I use the tags.json file. Basically, on the keypress I will search for best tags and everything works ok, meaning the code to find posts from tags is already final (need to do optimizations...)
 
+#### On key press function.
+On each character inserted in the search input, the program will test progressively what tag is most approximated. It needs to detect **spaces** because the search engine will suggest a tag by query words separated by **spaces**. To do this I may check how many words are in search query and search for the latest word in search query.
+
+On search Engine I need to create function **onKeyPressSuggestion()** and need to have progression index..
 
  
 This might be done later.
@@ -381,6 +387,7 @@ Every time I insert a post on DB, it should always update search_tags.json (add,
 2. **improve search engine**
 3. ** make tags page**(done)
 4. **make python db migration project**
+5. **insert comments...**
 
 ### Errors
 
