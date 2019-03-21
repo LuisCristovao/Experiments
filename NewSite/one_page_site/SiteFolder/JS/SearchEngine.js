@@ -1,7 +1,12 @@
 //Search Engine----------------------------
-class SearchEngine {
-    constructor() {
+class SearchEngine{ 
+    //this.suggestions_index;
+    //this.tagsdb;
+    
 
+    constructor() {
+        this.suggestions_index=0
+        this.tagsdb=async ()=>{return await this.getTags()}
     }
     invertArrayOrder(array) {
         var new_arr = []
@@ -15,9 +20,16 @@ class SearchEngine {
         let val = await response.json();
         return val
     }
+    async getTags() {
+        let response = await fetch('SiteFolder/DB/tags.json');
+        let val = await response.json();
+        return val
+    }
+
     getQuery() {
         return window.location.search.split("=")[1].split("+")
     }
+
     orderBestIndex(selected_posts_map) {
         var ordered_posts_id = []
         var ordered_posts_tuple = []
@@ -103,7 +115,9 @@ class SearchEngine {
         return select_posts
     }
 
-
+    onKeyPressSuggestion(search_query){
+        console.log(search_query)
+    }
 
 
     supercompare(search_word, word) {

@@ -2,6 +2,7 @@
 //global variables
 var server;
 var scroll;
+var search_engine;
 //global functions-------------------------------------
 function Search(btn) {
     var parent = btn.parentElement
@@ -11,6 +12,7 @@ function Search(btn) {
 }
 
 function SearchKeyPress(event, input) {
+    search_engine.onKeyPressSuggestion(input.value)
     //press enter
     if (event.keyCode == 13) {
         var value = input.value
@@ -29,7 +31,7 @@ function scrollToTop(btn) {
 function Init() {
     server = new ServePages()
     scroll = new Scroll()
-
+    setTimeout(()=>{search_engine=new SearchEngine()},200)
     requestAnimationFrame(server.run)
     requestAnimationFrame(scroll.detectScrollTopUnderNavBar)
 }
