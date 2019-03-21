@@ -338,6 +338,9 @@ On each character inserted in the search input, the program will test progressiv
 
 On search Engine I need to create function **onKeyPressSuggestion()** and need to have progression index..
 
+#### onKeyPressSuggestion()
+Gets tags.json 
+
  
 This might be done later.
 
