@@ -12,7 +12,7 @@ function Search(btn) {
 }
 
 function SearchKeyPress(event, input) {
-    search_engine.onKeyPressSuggestion(input)
+    setTimeout(()=>{search_engine.onKeyPressSuggestion(input)},100)
     //press enter
     if (event.keyCode == 13) {
         var value = input.value

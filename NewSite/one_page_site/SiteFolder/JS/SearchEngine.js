@@ -1,13 +1,15 @@
 //Search Engine----------------------------
-class SearchEngine{ 
+class SearchEngine {
     //this.suggestions_index;
     //this.tagsdb;
-    
+
 
     constructor() {
-        this.suggestions_index=0
-        this.tagsdb=async ()=>{return await this.getTags()}
-        this.search_suggestions=[]
+        this.suggestions_index = 0
+        this.tagsdb = async () => {
+            return await this.getTags()
+        }
+        this.search_suggestions = []
     }
     invertArrayOrder(array) {
         var new_arr = []
@@ -76,7 +78,7 @@ class SearchEngine{
     arrayUpperCase(array) {
         var new_array = []
         for (var i = 0; i < array.length; i++) {
-            var val=array[i]
+            var val = array[i]
             new_array.push(val.toUpperCase())
         }
         return new_array
@@ -115,17 +117,24 @@ class SearchEngine{
         }
         return select_posts
     }
-    
-    createSuggestionDiv(input,suggestions){
-        var div=document.createElement("div")
-        div.setAttribute("class","card")
-        div.setAttribute("style",'"position:absolute;top:100px;width:300px;"')
-        div.textContent="Ola"
-        input.parentElement.appendChild(div)
+
+    createSuggestionDiv(input, suggestions) {
+        var div = input.parentElement
+        var html = div.innerHTML
+        var width = div.offsetWidth
+        html += '<div class="card" style="width:' + width + 'px">'
+        html += '<ul class="list-group list-group-flush">'
+        for (var i = 0; i < suggestions.length; i++) {
+            var val = suggestions[i]
+            html += '<li class="list-group-item">'+val+'</li>'
+        }
+        html+='</ul>'
+        html += '</div>'
+        div.innerHTML=html
     }
-    
-    onKeyPressSuggestion(search_input){
-        //this.createSuggestionDiv(search_input,search_input.value.split(" "))
+
+    onKeyPressSuggestion(search_input) {
+        this.createSuggestionDiv(search_input,search_input.value.split(" "))
         console.log(search_input.value)
     }
 
