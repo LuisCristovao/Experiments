@@ -31,7 +31,8 @@ function scrollToTop(btn) {
 function Init() {
     server = new ServePages()
     scroll = new Scroll()
-    setTimeout(()=>{search_engine=new SearchEngine()},200)
+    search_engine=new SearchEngine()
+    
     requestAnimationFrame(server.run)
     requestAnimationFrame(scroll.detectScrollTopUnderNavBar)
 }
@@ -232,4 +233,5 @@ class ServePages {
 
 }
 //Main-------------------------------
-window.onload = Init()
+//to do function after complet load need to do this!!!
+window.onload=()=>{Init()};
