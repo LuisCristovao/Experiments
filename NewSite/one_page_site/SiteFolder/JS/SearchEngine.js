@@ -7,6 +7,7 @@ class SearchEngine{
     constructor() {
         this.suggestions_index=0
         this.tagsdb=async ()=>{return await this.getTags()}
+        this.search_suggestions=[]
     }
     invertArrayOrder(array) {
         var new_arr = []
@@ -114,9 +115,17 @@ class SearchEngine{
         }
         return select_posts
     }
-
+    
+    createSuggestionDiv(input,suggestions){
+        var div=document.createElement("div")
+        div.setAttribute("class","card")
+        div.setAttribute("style",'"position:absolute;top:100px;width:300px;"')
+        div.textContent="Ola"
+        input.parentElement.appendChild(div)
+    }
+    
     onKeyPressSuggestion(search_input){
-        
+        //this.createSuggestionDiv(search_input,search_input.value.split(" "))
         console.log(search_input.value)
     }
 
