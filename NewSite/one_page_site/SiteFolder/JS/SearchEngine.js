@@ -3,9 +3,9 @@ class SearchEngine {
     constructor() {
 
     }
-    invertArrayOrder(array){
-        var new_arr=[]
-        for(var i=array.length-1;i>=0;i--){
+    invertArrayOrder(array) {
+        var new_arr = []
+        for (var i = array.length - 1; i >= 0; i--) {
             new_arr.push(array[i])
         }
         return new_arr
@@ -31,21 +31,21 @@ class SearchEngine {
         }
         var change = false
         //order array with inverted buble sort (decrescent)
-        if(ordered_posts_tuple.length>1){
-            
-            for (var i = 0; !ordered; i = (i + 1) % (ordered_posts_tuple.length-1)) {
+        if (ordered_posts_tuple.length > 1) {
+
+            for (var i = 0; !ordered; i = (i + 1) % (ordered_posts_tuple.length - 1)) {
                 if (ordered_posts_tuple[i]["value"] < ordered_posts_tuple[i + 1]["value"]) {
                     //change order
-                    var backup=ordered_posts_tuple[i]
-                    ordered_posts_tuple[i]=ordered_posts_tuple[i+1]
-                    ordered_posts_tuple[i+1]=backup
+                    var backup = ordered_posts_tuple[i]
+                    ordered_posts_tuple[i] = ordered_posts_tuple[i + 1]
+                    ordered_posts_tuple[i + 1] = backup
                     change = true
                 }
-                if ((i+1) == ordered_posts_tuple.length - 1) {
-                    if(change==false){
-                        ordered=true
-                    }else{
-                        change=false
+                if ((i + 1) == ordered_posts_tuple.length - 1) {
+                    if (change == false) {
+                        ordered = true
+                    } else {
+                        change = false
                     }
                 }
 
@@ -57,15 +57,28 @@ class SearchEngine {
         }
         return ordered_posts_id
     }
-    
+
+
+
+    arrayUpperCase(array) {
+        var new_array = []
+        for (var i = 0; i < array.length; i++) {
+            var val=array[i]
+            new_array.push(val.toUpperCase())
+        }
+        return new_array
+    }
+
+
+
     async findPosts() {
         var select_posts = {}
         var all_posts = await this.getDBPosts()
-        var query_tags = this.getQuery() //array with tags
+        var query_tags = this.arrayUpperCase(this.getQuery()) //array with tags
         for (var i in all_posts) {
             var post = all_posts[i]
-            var post_tags = post['search tags'].split(",")
-            post_tags = post_tags.concat(post['secondary search tags'].split(","))
+            var post_tags = this.arrayUpperCase(post['search tags'].split(","))
+            post_tags = post_tags.concat(this.arrayUpperCase(post['secondary search tags'].split(",")))
             for (var j in post_tags) {
                 for (var e in query_tags) {
                     if (query_tags[e] == post_tags[j]) {
@@ -81,14 +94,17 @@ class SearchEngine {
             }
 
         }
-        var ids=this.orderBestIndex(select_posts)
+        var ids = this.orderBestIndex(select_posts)
         //get posts from id's
-        select_posts=[]
-        for(var i in ids){
+        select_posts = []
+        for (var i in ids) {
             select_posts.push(all_posts[ids[i]])
         }
         return select_posts
     }
+
+
+
 
     supercompare(search_word, word) {
         //Second method
