@@ -26,16 +26,18 @@
     function insert_contacts(contacts) {
         var ul = document.getElementById("contacts")
         var html = ""
-        contacts=contacts["content"]
+        contacts = contacts["content"]
         for (index in contacts) {
-            html += '<li><input value="' + contacts[index]["name"] + '" onkeypress="submitChange(event,true)" disabled>:<input onkeypress="submitChange(event,true)" value="' + contacts[index]["number"] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
+            html += '<li><input db_id="' + contacts[index]["id"] + '"  value="' + contacts[index]["name"] + '" onkeypress="submitChange(event,true,this)" disabled>:<input onkeypress="submitChange(event,true,this)" value="' + contacts[index]["number"] + '" disabled><button onclick="toggle(this)">Edit</button></li>'
         }
-        html+='<li><button onclick="InsertInputRow(this)">Add Row</button></li>'
+        html += '<li><button onclick="InsertInputRow(this)">Add Row</button></li>'
         ul.innerHTML = html
     }
-    function InsertInputRow(btn){
-        btn.outerHTML='<input placeholder="contact name" onkeypress="submitChange(event,false)">:<input placeholder="contact number" onkeypress="submitChange(event,false)">'
+
+    function InsertInputRow(btn) {
+        btn.outerHTML = '<input placeholder="contact name" onkeypress="submitChange(event,false,this)">:<input placeholder="contact number" onkeypress="submitChange(event,false,this)">'
     }
+
     function toggle(btn) {
         var parent = btn.parentElement;
         var input0 = parent.children[0]
@@ -44,13 +46,13 @@
         input1.disabled = !input1.disabled
     }
 
-    function submitChange(event,edit) {
+    function submitChange(event, edit, input) {
         if (event.keyCode == 13) { //enter
             //alert("press enter")
             var url = '/contacts';
-            var data = getInputData(edit)
+            var data = getInputData(edit, input.parentElement)
             sendPost(url, data)
-            document.location.reload() //reload page
+            window.location.reload() //reload page
         }
     }
     async function sendPost(url, data) {
@@ -65,21 +67,20 @@
         return val
     }
 
-    function getInputData(edit) {
+    function getInputData(edit, li) {
         var contacts_ele = document.getElementById("contacts")
         data = {}
-        var len=(edit)?contacts_ele.children.length-1:contacts_ele.children.length;
-        for (var index = 0; index < len; index++) {
-        	
-        		var li = contacts_ele.children[index]
-            if(!li.disabled){
-                var name = li.children[0].value
-                var number = li.children[1].value
-                data["name"] = name
-                data["number"]= number
-        	}
-            
+
+        var name = li.children[0].value
+        var number = li.children[1].value
+
+        if (edit) {
+            var id = li.children[0].getAttribute("db_id")
+            data["id"] = id
         }
+        data["name"] = name
+        data["number"] = number
+
         console.log(data)
         return data
     }

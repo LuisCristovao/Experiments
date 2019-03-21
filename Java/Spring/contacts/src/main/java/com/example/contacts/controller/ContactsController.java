@@ -21,13 +21,18 @@ public class ContactsController {
     private ContactsRepository contactsRepository;
 
     @GetMapping("/contacts")
-    public Page<Contacts> getQuestions(Pageable pageable) {
+    public Page<Contacts> getContacts(Pageable pageable) {
         return contactsRepository.findAll(pageable);
     }
 
 
     @PostMapping("/contacts")
-    public Contacts createQuestion(@Valid @RequestBody Contacts question) {
+    public Contacts createContact(@Valid @RequestBody Contacts question) {
+        return contactsRepository.save(question);
+    }
+    
+    @PostMapping("/contacts_edit")
+    public Contacts editContact(@Valid @RequestBody Contacts question) {
         return contactsRepository.save(question);
     }
 }

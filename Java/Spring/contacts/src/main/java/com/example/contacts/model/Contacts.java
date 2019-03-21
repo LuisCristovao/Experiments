@@ -11,19 +11,22 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "contacts")
 public class Contacts {
+	
+	/*@SequenceGenerator(
+    name = "contacts_generator",
+    sequenceName = "contacts_sequence",
+    initialValue = 1
+	)*/
+	
 	@Id
-    @GeneratedValue(generator = "contacts_generator")
-    @SequenceGenerator(
-            name = "contacts_generator",
-            sequenceName = "contacts_sequence",
-            initialValue = 1
-    )
+    @GeneratedValue(generator = "contacts_generator")//
     private Long id;
 
-    @NotBlank
+    //@NotBlank
     //@Size(min = 0, max = 100)
     private String name;
-
+    
+    
     //@Column(columnDefinition = "text")
     @Column(name="number")
     private String number;
