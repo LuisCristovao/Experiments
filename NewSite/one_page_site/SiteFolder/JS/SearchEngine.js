@@ -142,7 +142,7 @@ class SearchEngine {
         } else {
 
 
-            //if (suggestions.length >= 1 && suggestions[0] != "") {
+            if (suggestions.length >0) {
 
                 var body = document.body
                 var width = input.offsetWidth
@@ -164,7 +164,7 @@ class SearchEngine {
                 html += '</ul>'
                 div.innerHTML = html
                 body.appendChild(div)
-            //}
+            }
 
         }
     }
