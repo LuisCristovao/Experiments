@@ -178,17 +178,26 @@ class SearchEngine {
     }
     calculateSuggestions(search_query_tags){
         var suggestions=[]
+        var compare_index=0.5
         if(search_query_tags!=""){
             
             for(var i =0 ;i<search_query_tags.length;i++){
                 var search_query=search_query_tags[i]
                 var first_letter=search_query[0].toUpperCase()
-                for(var key in this.tagsdb[first_letter]){
-                    if(this.supercompare(search_query,key)>0.3){
-                        suggestions.push(key)
+                while(suggestions.length==0){
+                    
+                    for(var key in this.tagsdb[first_letter]){
+                        if(this.supercompare(search_query,key)>compare_index){
+                            suggestions.push(key)
+                        }
+                        //just test version
+                        //suggestions.push(key)
                     }
-                    //just test version
-                    //suggestions.push(key)
+                    if (suggestions.length<=3){
+                        compare_index-=0.1
+                    }else{
+                        compare_index+=0.1
+                    }
                 }
             }
         }
