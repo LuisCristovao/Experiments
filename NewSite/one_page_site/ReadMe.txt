@@ -339,8 +339,21 @@ On each character inserted in the search input, the program will test progressiv
 On search Engine I need to create function **onKeyPressSuggestion()** and need to have progression index..
 
 #### onKeyPressSuggestion()
-Gets tags.json 
-
+Get **tags.json** and make a global variable have the json. Then need to search progressively over all the query tags.
+	
+    var suggestions=[]
+    for(var i=0; i<=progress_step;i++){
+	    for(s in search_tags){
+		    var tag= tags[global_tag_index]
+		    ...select best suggestion with global acceptance index...
+		}
+		global_tag_index=(global_tag_index+1)%tags.length
+    }
+    if(suggestion.length==0){
+	    decrease global acceptance index...
+    }
+**More basic way**
+Suggestions are calculated based on filter, meaning if first later is an **a or A** then send all keys in **tags["A"]** if select **ab** then select all keys in **tags["A"]**  that begin with **ab**. Simple probably will try this one first. **Problem** any mistake on **typing** will consider error, but for first try may be it
  
 This might be done later.
 

@@ -170,10 +170,15 @@ class SearchEngine {
     }
 
     onKeyPressSuggestion(search_input) {
+        //calculate suggestion
+        //var suggestions=this.calculateSuggestions(search_input.value.split(" "))
+        //this.createSuggestionDiv(search_input, suggestions)
         this.createSuggestionDiv(search_input, search_input.value.split(" "))
-        console.log(search_input.value)
+        
     }
-
+    calculateSuggestions(search_query_tags){
+        
+    }
 
     supercompare(search_word, word) {
         //Second method

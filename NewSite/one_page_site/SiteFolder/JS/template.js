@@ -7,6 +7,7 @@ var search_engine;
 function Search(btn) {
     var parent = btn.parentElement
     var input = parent.children[0]
+    //In future detect top suggestion of suggestion box and send it to get
     window.location.search = "search=" + encodeSearchQuery(input.value)
 
 }
