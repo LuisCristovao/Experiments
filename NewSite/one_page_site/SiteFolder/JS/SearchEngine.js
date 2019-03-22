@@ -119,22 +119,58 @@ class SearchEngine {
     }
 
     createSuggestionDiv(input, suggestions) {
-        var div = input.parentElement
-        var html = div.innerHTML
-        var width = div.offsetWidth
-        html += '<div class="card" style="width:' + width + 'px">'
-        html += '<ul class="list-group list-group-flush">'
-        for (var i = 0; i < suggestions.length; i++) {
-            var val = suggestions[i]
-            html += '<li class="list-group-item">'+val+'</li>'
+
+
+
+        var html = ""
+        var div;
+        if (document.getElementById("suggestions") != null) {
+            if (suggestions.length == 1 && suggestions[0] == "") {
+                var el = document.getElementById("suggestions")
+                el.parentElement.removeChild(el)
+            } else {
+
+                div = document.getElementById("suggestions")
+                html += '<ul class="list-group list-group-flush">'
+                for (var i = 0; i < suggestions.length; i++) {
+                    var val = suggestions[i]
+                    html += '<li class="list-group-item">' + val + '</li>'
+                }
+                html += '</ul>'
+                div.innerHTML = html
+            }
+        } else {
+
+
+            if (suggestions.length == 1 && suggestions[0] != "") {
+
+                var body = document.body
+                var width = input.offsetWidth
+                var top = input.offsetTop
+                var left = input.offsetLeft
+                var height = input.offsetHeight
+                div = document.createElement("div")
+                div.setAttribute("id", "suggestions")
+                div.setAttribute("style", "position:absolute")
+                div.setAttribute("class", "card")
+                div.style.width = width + 'px'
+                div.style.top = top + height + 10 + 'px'
+                div.style.left = left + 'px'
+                html += '<ul class="list-group list-group-flush">'
+                for (var i = 0; i < suggestions.length; i++) {
+                    var val = suggestions[i]
+                    html += '<li class="list-group-item">' + val + '</li>'
+                }
+                html += '</ul>'
+                div.innerHTML = html
+                body.appendChild(div)
+            }
+
         }
-        html+='</ul>'
-        html += '</div>'
-        div.innerHTML=html
     }
 
     onKeyPressSuggestion(search_input) {
-        this.createSuggestionDiv(search_input,search_input.value.split(" "))
+        this.createSuggestionDiv(search_input, search_input.value.split(" "))
         console.log(search_input.value)
     }
 
