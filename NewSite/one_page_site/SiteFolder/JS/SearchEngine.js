@@ -184,11 +184,11 @@ class SearchEngine {
                 var search_query=search_query_tags[i]
                 var first_letter=search_query[0].toUpperCase()
                 for(var key in this.tagsdb[first_letter]){
-    //                if(this.compare(search_query,key)>0.5){
-    //                    suggestions.push(key)
-    //                }
+                    if(this.supercompare(search_query,key)>0.3){
+                        suggestions.push(key)
+                    }
                     //just test version
-                    suggestions.push(key)
+                    //suggestions.push(key)
                 }
             }
         }
@@ -201,8 +201,9 @@ class SearchEngine {
         //Second method
         var matches = 0;
         var missMatches = 0;
-        
-        for (i = 0; i < word.length; i++) {
+        var word_freq={}
+        var search_freq={}
+        for (var i = 0; i < word.length; i++) {
             //if not exists
             if (word_freq[word[i]] == null) {
                 word_freq[word[i]] = 1;
@@ -213,7 +214,7 @@ class SearchEngine {
                 word_freq[word[i]] = count;
             }
         }
-        for (i = 0; i < search_word.length; i++) {
+        for (var i = 0; i < search_word.length; i++) {
             //if not exists
             if (search_freq[search_word[i]] == null) {
                 search_freq[search_word[i]] = 1;
@@ -238,7 +239,7 @@ class SearchEngine {
                 } else {
                     //give the lowest value of matches
                     matches += (search_freq[key] < word_freq[key]) ? search_freq[key] : word_freq[key];
-                    difference = Math.abs(search_freq[key] - word_freq[key]);
+                    var difference = Math.abs(search_freq[key] - word_freq[key]);
                     missMatches += difference;
                 }
 
