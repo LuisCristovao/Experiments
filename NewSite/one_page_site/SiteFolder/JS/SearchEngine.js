@@ -125,7 +125,7 @@ class SearchEngine {
         var html = ""
         var div;
         if (document.getElementById("suggestions") != null) {
-            if (suggestions.length == 1 && suggestions[0] == "") {
+            if (suggestions.length == 0) {
                 var el = document.getElementById("suggestions")
                 el.parentElement.removeChild(el)
             } else {
@@ -142,7 +142,7 @@ class SearchEngine {
         } else {
 
 
-            if (suggestions.length == 1 && suggestions[0] != "") {
+            //if (suggestions.length >= 1 && suggestions[0] != "") {
 
                 var body = document.body
                 var width = input.offsetWidth
@@ -164,7 +164,7 @@ class SearchEngine {
                 html += '</ul>'
                 div.innerHTML = html
                 body.appendChild(div)
-            }
+            //}
 
         }
     }
@@ -178,16 +178,18 @@ class SearchEngine {
     }
     calculateSuggestions(search_query_tags){
         var suggestions=[]
-        
-        for(var i =0 ;i<search_query_tags.length;i++){
-            var search_query=search_query_tags[i]
-            var first_letter=search_query[0].toUpperCase()
-            for(var key in this.tagsdb[first_letter]){
-//                if(this.compare(search_query,key)>0.5){
-//                    suggestions.push(key)
-//                }
-                //just test version
-                suggestions.push(key)
+        if(search_query_tags!=""){
+            
+            for(var i =0 ;i<search_query_tags.length;i++){
+                var search_query=search_query_tags[i]
+                var first_letter=search_query[0].toUpperCase()
+                for(var key in this.tagsdb[first_letter]){
+    //                if(this.compare(search_query,key)>0.5){
+    //                    suggestions.push(key)
+    //                }
+                    //just test version
+                    suggestions.push(key)
+                }
             }
         }
         return suggestions
