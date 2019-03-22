@@ -1,16 +1,16 @@
 //Search Engine----------------------------
 class SearchEngine {
     //this.suggestions_index;
-    //this.tagsdb;
+    
 
 
     constructor() {
+        this.tagsdb;
         this.suggestions_index = 0
-        this.tagsdb = async () => {
-            return await this.getTags()
-        }
+        this.getTags()
         this.search_suggestions = []
     }
+    
     invertArrayOrder(array) {
         var new_arr = []
         for (var i = array.length - 1; i >= 0; i--) {
@@ -26,7 +26,7 @@ class SearchEngine {
     async getTags() {
         let response = await fetch('SiteFolder/DB/tags.json');
         let val = await response.json();
-        return val
+        this.tagsdb=val
     }
 
     getQuery() {
@@ -171,19 +171,35 @@ class SearchEngine {
 
     onKeyPressSuggestion(search_input) {
         //calculate suggestion
-        //var suggestions=this.calculateSuggestions(search_input.value.split(" "))
-        //this.createSuggestionDiv(search_input, suggestions)
-        this.createSuggestionDiv(search_input, search_input.value.split(" "))
+        var suggestions=this.calculateSuggestions(search_input.value.split(" "))
+        this.createSuggestionDiv(search_input, suggestions)
+        //this.createSuggestionDiv(search_input, search_input.value.split(" "))
         
     }
     calculateSuggestions(search_query_tags){
+        var suggestions=[]
+        
+        for(var i =0 ;i<search_query_tags.length;i++){
+            var search_query=search_query_tags[i]
+            var first_letter=search_query[0].toUpperCase()
+            for(var key in this.tagsdb[first_letter]){
+//                if(this.compare(search_query,key)>0.5){
+//                    suggestions.push(key)
+//                }
+                //just test version
+                suggestions.push(key)
+            }
+        }
+        return suggestions
+    }
+    compare(search_word,word){
         
     }
-
     supercompare(search_word, word) {
         //Second method
-        matches = 0;
-        missMatches = 0;
+        var matches = 0;
+        var missMatches = 0;
+        
         for (i = 0; i < word.length; i++) {
             //if not exists
             if (word_freq[word[i]] == null) {
