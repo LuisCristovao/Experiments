@@ -171,7 +171,8 @@ class SearchEngine {
 
     onKeyPressSuggestion(search_input) {
         //calculate suggestion
-        var suggestions=this.calculateSuggestions(search_input.value.split(" "))
+        var search_tag=search_input.value.split(" ")[search_input.value.split(" ").length-1]
+        var suggestions=this.calculateSuggestions(search_tag)
         this.createSuggestionDiv(search_input, suggestions)
         //this.createSuggestionDiv(search_input, search_input.value.split(" "))
         
