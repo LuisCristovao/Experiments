@@ -177,17 +177,18 @@ class SearchEngine {
         
     }
     calculateSuggestions(search_query_tags){
+        var final_suggestions=[]
         var suggestions=[]
         var compare_index=0.5
         if(search_query_tags!=""){
             
-            for(var i =0 ;i<search_query_tags.length;i++){
+            for(var i =0 ;i<search_query_tags.length;i++,compare_index=0.5){
                 var search_query=search_query_tags[i]
                 var first_letter=search_query[0].toUpperCase()
-                while(suggestions.length==0){
+                while(suggestions.length==0 && compare_index>=0){
                     
                     for(var key in this.tagsdb[first_letter]){
-                        if(this.supercompare(search_query,key)>compare_index){
+                        if(this.supercompare(search_query.toUpperCase(),key.toUpperCase())>compare_index){
                             suggestions.push(key)
                         }
                         //just test version
@@ -199,9 +200,11 @@ class SearchEngine {
                         compare_index+=0.1
                     }
                 }
+                final_suggestions=final_suggestions.concat(suggestions)
+                suggestions=[]
             }
         }
-        return suggestions
+        return final_suggestions
     }
     compare(search_word,word){
         
