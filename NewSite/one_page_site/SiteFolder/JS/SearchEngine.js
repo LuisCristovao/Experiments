@@ -125,12 +125,13 @@ class SearchEngine {
         var html = ""
         var div;
         if (document.getElementById("suggestions") != null) {
-            if (suggestions.length == 0) {
+            //if (suggestions.length == 0) {
                 var el = document.getElementById("suggestions")
                 el.parentElement.removeChild(el)
-            } else {
-
+            /*} else {
+                
                 div = document.getElementById("suggestions")
+                div.innerHTML=""
                 html += '<ul class="list-group list-group-flush">'
                 for (var i = 0; i < suggestions.length; i++) {
                     var val = suggestions[i]
@@ -142,8 +143,8 @@ class SearchEngine {
         } else {
 
 
-            if (suggestions.length >0) {
-
+            if (suggestions.length >0) {*/
+        }
                 var body = document.body
                 var width = input.offsetWidth
                 var top = input.offsetTop
@@ -159,14 +160,14 @@ class SearchEngine {
                 html += '<ul class="list-group list-group-flush">'
                 for (var i = 0; i < suggestions.length; i++) {
                     var val = suggestions[i]
-                    html += '<li class="list-group-item">' + val + '</li>'
+                    html += '<li onmouseover="" class="list-group-item">' + val + '</li>'
                 }
                 html += '</ul>'
                 div.innerHTML = html
                 body.appendChild(div)
-            }
+            //}
 
-        }
+        //}
     }
 
     onKeyPressSuggestion(search_input) {
@@ -177,14 +178,14 @@ class SearchEngine {
         //this.createSuggestionDiv(search_input, search_input.value.split(" "))
         
     }
-    calculateSuggestions(search_query_tags){
+    calculateSuggestions(search_query){
         var final_suggestions=[]
         var suggestions=[]
         var compare_index=0.5
-        if(search_query_tags!=""){
+        if(search_query!=""){
             
-            for(var i =0 ;i<search_query_tags.length;i++,compare_index=0.5){
-                var search_query=search_query_tags[i]
+            //for(var i =0 ;i<search_query_tags.length;i++,compare_index=0.5){
+                //var search_query=search_query_tags[i]
                 var first_letter=search_query[0].toUpperCase()
                 while(suggestions.length==0 && compare_index>=0){
                     
@@ -204,7 +205,7 @@ class SearchEngine {
                 final_suggestions=final_suggestions.concat(suggestions)
                 suggestions=[]
             }
-        }
+        //}
         return final_suggestions
     }
     compare(search_word,word){
