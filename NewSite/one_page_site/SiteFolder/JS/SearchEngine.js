@@ -195,6 +195,7 @@ class SearchEngine {
                         not_selected = false
                         suggestion.style = ""
                         this.highLight(suggestions.children[0].children[(i + 1) % (suggestions.children[0].children.length)])
+                        break
                     }
                 }
                 if (not_selected) {
@@ -223,6 +224,7 @@ class SearchEngine {
             
             this.createSuggestionDiv(search_input, suggestions)
         }
+        this.suggestionControl(event)
         //this.createSuggestionDiv(search_input, search_input.value.split(" "))
 
     }
