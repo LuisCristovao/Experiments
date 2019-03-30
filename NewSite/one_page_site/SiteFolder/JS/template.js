@@ -19,6 +19,8 @@ function SearchKeyPress(event, input) {
         var value = input.value
         window.location.search = "search=" + encodeSearchQuery(input.value)
 
+    }else{
+        search_engine.suggestionControl(event)
     }
 
 }

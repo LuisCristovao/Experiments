@@ -1,7 +1,7 @@
 //Search Engine----------------------------
 class SearchEngine {
     //this.suggestions_index;
-    
+
 
 
     constructor() {
@@ -10,7 +10,7 @@ class SearchEngine {
         this.getTags()
         this.search_suggestions = []
     }
-    
+
     invertArrayOrder(array) {
         var new_arr = []
         for (var i = array.length - 1; i >= 0; i--) {
@@ -26,7 +26,7 @@ class SearchEngine {
     async getTags() {
         let response = await fetch('SiteFolder/DB/tags.json');
         let val = await response.json();
-        this.tagsdb=val
+        this.tagsdb = val
     }
 
     getQuery() {
@@ -117,7 +117,19 @@ class SearchEngine {
         }
         return select_posts
     }
+    highLight(suggestion_div) {
+        console.log(suggestion_div)
+        suggestion_div.style = "background-color:rgba(50,100,200,0.7);color:rgb(255,255,255);"
 
+    }
+    stopHighLight(suggestion_div) {
+        suggestion_div.style = ""
+    }
+    clickSuggestion(suggestion_div) {
+        var suggestion = suggestion_div.innerText
+        var search_input = document.getElementById("search_input")
+        search_input.value = suggestion
+    }
     createSuggestionDiv(input, suggestions) {
 
 
@@ -126,8 +138,8 @@ class SearchEngine {
         var div;
         if (document.getElementById("suggestions") != null) {
             //if (suggestions.length == 0) {
-                var el = document.getElementById("suggestions")
-                el.parentElement.removeChild(el)
+            var el = document.getElementById("suggestions")
+            el.parentElement.removeChild(el)
             /*} else {
                 
                 div = document.getElementById("suggestions")
@@ -145,78 +157,110 @@ class SearchEngine {
 
             if (suggestions.length >0) {*/
         }
-                var body = document.body
-                var width = input.offsetWidth
-                var top = input.offsetTop
-                var left = input.offsetLeft
-                var height = input.offsetHeight
-                div = document.createElement("div")
-                div.setAttribute("id", "suggestions")
-                div.setAttribute("style", "position:absolute")
-                div.setAttribute("class", "card")
-                div.style.width = width + 'px'
-                div.style.top = top + height + 10 + 'px'
-                div.style.left = left + 'px'
-                html += '<ul class="list-group list-group-flush">'
-                for (var i = 0; i < suggestions.length; i++) {
-                    var val = suggestions[i]
-                    html += '<li onmouseover="" class="list-group-item">' + val + '</li>'
-                }
-                html += '</ul>'
-                div.innerHTML = html
-                body.appendChild(div)
-            //}
+        var body = document.body
+        var width = input.offsetWidth
+        var top = input.offsetTop
+        var left = input.offsetLeft
+        var height = input.offsetHeight
+        div = document.createElement("div")
+        div.setAttribute("id", "suggestions")
+        div.setAttribute("style", "position:absolute")
+        div.setAttribute("class", "card")
+        div.style.width = width + 'px'
+        div.style.top = top + height + 10 + 'px'
+        div.style.left = left + 'px'
+        html += '<ul class="list-group list-group-flush">'
+        for (var i = 0; i < suggestions.length; i++) {
+            var val = suggestions[i]
+            html += '<li onmouseover="search_engine.highLight(this)" onmouseout="search_engine.stopHighLight(this)" onclick="search_engine.clickSuggestion(this)" class="list-group-item">' + val + '</li>'
+        }
+        html += '</ul>'
+        div.innerHTML = html
+        body.appendChild(div)
+        //}
 
         //}
     }
 
-    onKeyPressSuggestion(search_input) {
-        //calculate suggestion
-        var search_tag=search_input.value.split(" ")[search_input.value.split(" ").length-1]
-        var suggestions=this.calculateSuggestions(search_tag)
-        this.createSuggestionDiv(search_input, suggestions)
-        //this.createSuggestionDiv(search_input, search_input.value.split(" "))
-        
-    }
-    calculateSuggestions(search_query){
-        var final_suggestions=[]
-        var suggestions=[]
-        var compare_index=0.5
-        if(search_query!=""){
-            
-            //for(var i =0 ;i<search_query_tags.length;i++,compare_index=0.5){
-                //var search_query=search_query_tags[i]
-                var first_letter=search_query[0].toUpperCase()
-                while(suggestions.length==0 && compare_index>=0){
-                    
-                    for(var key in this.tagsdb[first_letter]){
-                        if(this.supercompare(search_query.toUpperCase(),key.toUpperCase())>compare_index){
-                            suggestions.push(key)
-                        }
-                        //just test version
-                        //suggestions.push(key)
-                    }
-                    if (suggestions.length<=3){
-                        compare_index-=0.1
-                    }else{
-                        compare_index+=0.1
+    selectSuggestionWithArrows(up) {
+        var suggestions = document.getElementById("suggestions")
+        if (suggestions != null) {
+            if (up) {
+
+            } else {
+                var not_selected=true
+                for(var i=0;i<suggestions.children[0].children.length;i++){
+                    var suggestion=suggestions.children[0].children[i]
+                    if(suggestion.getAttribute("style")!=null){
+                        not_selected=false
+                        suggestion.style=""
+                        this.highLight(suggestions.children[0].children[(i+1)%(suggestions.children[0].children.length)])
                     }
                 }
-                final_suggestions=final_suggestions.concat(suggestions)
-                suggestions=[]
+                if(not_selected){
+                    this.highLight(suggestions.children[0].children[0])
+                }
+                    
             }
+        }
+    }
+    suggestionControl(event) {
+        //up key
+        if (event.keyCode == 38) {
+            this.selectSuggestionWithArrows(true)
+        }
+        //down key
+        if (event.keyCode == 40) {
+            this.selectSuggestionWithArrows(false)
+        }
+    }
+    onKeyPressSuggestion(search_input) {
+        //calculate suggestion
+        var search_tag = search_input.value.split(" ")[search_input.value.split(" ").length - 1]
+        var suggestions = this.calculateSuggestions(search_tag)
+        this.createSuggestionDiv(search_input, suggestions)
+        //this.createSuggestionDiv(search_input, search_input.value.split(" "))
+
+    }
+    calculateSuggestions(search_query) {
+        var final_suggestions = []
+        var suggestions = []
+        var compare_index = 0.5
+        if (search_query != "") {
+
+            //for(var i =0 ;i<search_query_tags.length;i++,compare_index=0.5){
+            //var search_query=search_query_tags[i]
+            var first_letter = search_query[0].toUpperCase()
+            while (suggestions.length == 0 && compare_index >= 0) {
+
+                for (var key in this.tagsdb[first_letter]) {
+                    if (this.supercompare(search_query.toUpperCase(), key.toUpperCase()) > compare_index) {
+                        suggestions.push(key)
+                    }
+                    //just test version
+                    //suggestions.push(key)
+                }
+                if (suggestions.length <= 3) {
+                    compare_index -= 0.1
+                } else {
+                    compare_index += 0.1
+                }
+            }
+            final_suggestions = final_suggestions.concat(suggestions)
+            suggestions = []
+        }
         //}
         return final_suggestions
     }
-    compare(search_word,word){
-        
+    compare(search_word, word) {
+
     }
     supercompare(search_word, word) {
         //Second method
         var matches = 0;
         var missMatches = 0;
-        var word_freq={}
-        var search_freq={}
+        var word_freq = {}
+        var search_freq = {}
         for (var i = 0; i < word.length; i++) {
             //if not exists
             if (word_freq[word[i]] == null) {
