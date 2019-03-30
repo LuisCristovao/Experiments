@@ -118,7 +118,7 @@ class SearchEngine {
         return select_posts
     }
     highLight(suggestion_div) {
-        console.log(suggestion_div)
+        //console.log(suggestion_div)
         suggestion_div.style = "background-color:rgba(50,100,200,0.7);color:rgb(255,255,255);"
 
     }
@@ -130,54 +130,54 @@ class SearchEngine {
         var search_input = document.getElementById("search_input")
         search_input.value = suggestion
     }
-    createSuggestionDiv(input, suggestions) {
-
-
-
+    fillSuggestions(suggestions) {
         var html = ""
-        var div;
-        if (document.getElementById("suggestions") != null) {
-            //if (suggestions.length == 0) {
-            var el = document.getElementById("suggestions")
-            el.parentElement.removeChild(el)
-            /*} else {
-                
-                div = document.getElementById("suggestions")
-                div.innerHTML=""
-                html += '<ul class="list-group list-group-flush">'
-                for (var i = 0; i < suggestions.length; i++) {
-                    var val = suggestions[i]
-                    html += '<li class="list-group-item">' + val + '</li>'
-                }
-                html += '</ul>'
-                div.innerHTML = html
-            }
-        } else {
-
-
-            if (suggestions.length >0) {*/
-        }
-        var body = document.body
-        var width = input.offsetWidth
-        var top = input.offsetTop
-        var left = input.offsetLeft
-        var height = input.offsetHeight
-        div = document.createElement("div")
-        div.setAttribute("id", "suggestions")
-        div.setAttribute("style", "position:absolute")
-        div.setAttribute("class", "card")
-        div.style.width = width + 'px'
-        div.style.top = top + height + 10 + 'px'
-        div.style.left = left + 'px'
         html += '<ul class="list-group list-group-flush">'
         for (var i = 0; i < suggestions.length; i++) {
             var val = suggestions[i]
             html += '<li onmouseover="search_engine.highLight(this)" onmouseout="search_engine.stopHighLight(this)" onclick="search_engine.clickSuggestion(this)" class="list-group-item">' + val + '</li>'
         }
         html += '</ul>'
-        div.innerHTML = html
-        body.appendChild(div)
-        //}
+        return html
+    }
+    createSuggestionDiv(input, suggestions) {
+
+
+        
+        var html = ""
+        var div;
+        if (document.getElementById("suggestions") != null) {
+            if (suggestions.length == 0) {
+                var el = document.getElementById("suggestions")
+                el.parentElement.removeChild(el)
+            } else {
+
+                div = document.getElementById("suggestions")
+                div.innerHTML = ""
+                html+=this.fillSuggestions(suggestions)
+                div.innerHTML = html
+            }
+        } else {
+
+
+            if (suggestions.length > 0) {
+                var body = document.body
+                var width = input.offsetWidth
+                var top = input.offsetTop
+                var left = input.offsetLeft
+                var height = input.offsetHeight
+                div = document.createElement("div")
+                div.setAttribute("id", "suggestions")
+                div.setAttribute("style", "position:absolute")
+                div.setAttribute("class", "card")
+                div.style.width = width + 'px'
+                div.style.top = top + height + 10 + 'px'
+                div.style.left = left + 'px'
+                html+=this.fillSuggestions(suggestions)
+                div.innerHTML = html
+                body.appendChild(div)
+            }
+        }
 
         //}
     }
@@ -188,19 +188,19 @@ class SearchEngine {
             if (up) {
 
             } else {
-                var not_selected=true
-                for(var i=0;i<suggestions.children[0].children.length;i++){
-                    var suggestion=suggestions.children[0].children[i]
-                    if(suggestion.getAttribute("style")!=null){
-                        not_selected=false
-                        suggestion.style=""
-                        this.highLight(suggestions.children[0].children[(i+1)%(suggestions.children[0].children.length)])
+                var not_selected = true
+                for (var i = 0; i < suggestions.children[0].children.length; i++) {
+                    var suggestion = suggestions.children[0].children[i]
+                    if (suggestion.getAttribute("style") != null) {
+                        not_selected = false
+                        suggestion.style = ""
+                        this.highLight(suggestions.children[0].children[(i + 1) % (suggestions.children[0].children.length)])
                     }
                 }
-                if(not_selected){
+                if (not_selected) {
                     this.highLight(suggestions.children[0].children[0])
                 }
-                    
+
             }
         }
     }
@@ -214,11 +214,15 @@ class SearchEngine {
             this.selectSuggestionWithArrows(false)
         }
     }
-    onKeyPressSuggestion(search_input) {
+    onKeyPressSuggestion(search_input,event) {
         //calculate suggestion
         var search_tag = search_input.value.split(" ")[search_input.value.split(" ").length - 1]
         var suggestions = this.calculateSuggestions(search_tag)
-        this.createSuggestionDiv(search_input, suggestions)
+        //if keys different from up and down arrow
+        if(event.keyCode!=38 && event.keyCode!=40){
+            
+            this.createSuggestionDiv(search_input, suggestions)
+        }
         //this.createSuggestionDiv(search_input, search_input.value.split(" "))
 
     }
