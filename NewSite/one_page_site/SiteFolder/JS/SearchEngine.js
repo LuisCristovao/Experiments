@@ -143,7 +143,7 @@ class SearchEngine {
     createSuggestionDiv(input, suggestions) {
 
 
-        
+
         var html = ""
         var div;
         if (document.getElementById("suggestions") != null) {
@@ -154,7 +154,7 @@ class SearchEngine {
 
                 div = document.getElementById("suggestions")
                 div.innerHTML = ""
-                html+=this.fillSuggestions(suggestions)
+                html += this.fillSuggestions(suggestions)
                 div.innerHTML = html
             }
         } else {
@@ -173,7 +173,7 @@ class SearchEngine {
                 div.style.width = width + 'px'
                 div.style.top = top + height + 10 + 'px'
                 div.style.left = left + 'px'
-                html+=this.fillSuggestions(suggestions)
+                html += this.fillSuggestions(suggestions)
                 div.innerHTML = html
                 body.appendChild(div)
             }
@@ -181,26 +181,48 @@ class SearchEngine {
 
         //}
     }
-
+    circularIndexCalc(index, length) {
+        if (index < 0) {
+            //assuming the behavior described by Schism (-1 % 3 = -1)
+            return length + (index % length);
+        }
+        return index % length;
+    }
+    selectSuggestion(suggestions, up) {
+        var not_selected = true
+        var Length = suggestions.children[0].children.length
+        for (var i = 0; i < Length; i++) {
+            var suggestion = suggestions.children[0].children[i]
+            if (suggestion.getAttribute("style") != null && suggestion.getAttribute("style") != "") {
+                not_selected = false
+                suggestion.style = ""
+                //down
+                if (!up) {
+                    this.highLight(suggestions.children[0].children[this.circularIndexCalc(i+1,Length)])
+                } else {
+                    //up
+                    this.highLight(suggestions.children[0].children[this.circularIndexCalc(i-1,Length)])
+                }
+                break
+            }
+        }
+        if (not_selected) {
+            if (!up) {
+                //down
+                this.highLight(suggestions.children[0].children[0])
+            } else {
+                //up
+                this.highLight(suggestions.children[0].children[Length - 1])
+            }
+        }
+    }
     selectSuggestionWithArrows(up) {
         var suggestions = document.getElementById("suggestions")
         if (suggestions != null) {
             if (up) {
-
+                this.selectSuggestion(suggestions, true)
             } else {
-                var not_selected = true
-                for (var i = 0; i < suggestions.children[0].children.length; i++) {
-                    var suggestion = suggestions.children[0].children[i]
-                    if (suggestion.getAttribute("style") != null) {
-                        not_selected = false
-                        suggestion.style = ""
-                        this.highLight(suggestions.children[0].children[(i + 1) % (suggestions.children[0].children.length)])
-                        break
-                    }
-                }
-                if (not_selected) {
-                    this.highLight(suggestions.children[0].children[0])
-                }
+                this.selectSuggestion(suggestions, false)
 
             }
         }
@@ -215,13 +237,13 @@ class SearchEngine {
             this.selectSuggestionWithArrows(false)
         }
     }
-    onKeyPressSuggestion(search_input,event) {
+    onKeyPressSuggestion(search_input, event) {
         //calculate suggestion
         var search_tag = search_input.value.split(" ")[search_input.value.split(" ").length - 1]
         var suggestions = this.calculateSuggestions(search_tag)
         //if keys different from up and down arrow
-        if(event.keyCode!=38 && event.keyCode!=40){
-            
+        if (event.keyCode != 38 && event.keyCode != 40) {
+
             this.createSuggestionDiv(search_input, suggestions)
         }
         this.suggestionControl(event)
