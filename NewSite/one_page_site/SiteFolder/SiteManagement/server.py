@@ -102,11 +102,16 @@ def migrate():
     #return fl.render_template('gen_tags.html')
     return 'migration WIP'
 
-@app.route('/generate_tags')
-def gen_tags():
+@app.route('/generate_tags_page')
+def gen_tags_page():
     #return fl.render_template('gen_tags.html')
     return 'gen tags WIP'
 
+
+#@app.route('/generate_tags',methods=["POST"])
+#def gen_tags():
+    #WIP
+    #text=fl.request.data.decode("ascii").split('=')[1]
 
 
 if __name__ == '__main__':

@@ -17,7 +17,7 @@ menu={
          "Delete":"/delete",
          "Search":"/search",
          "Migrate Old DB":"/migrate",
-         "Generate Tags from HTML":"/generate_tags"
+         "Generate Tags from HTML":"/generate_tags_page"
          
       }
 def Menu():
