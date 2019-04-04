@@ -192,13 +192,21 @@ class SearchEngine {
         let search_input=document.getElementById("search_input")
         let val=search_input.value
         let actual_tags=val.split(" ")
+        
         this.highLight(suggestion)
+        
         if(val.split(" ").length>1){
             actual_tags[actual_tags.length-1]=suggestion.innerText
             let input_val=""
-            actual_tags.filter(el=>el!=" " && el!="").forEach(el=>{
-                input_val+=" "+el
-            })
+            actual_tags=actual_tags.filter(el=>el!=" " && el!="")
+            for(let i=0;i<actual_tags.length;i++){
+                let el=actual_tags[i]
+                if(i==0){
+                    input_val+=el
+                }else{
+                    input_val+=" "+el
+                }
+            }
             search_input.value=input_val
         }else{
             search_input.value=suggestion.innerText
