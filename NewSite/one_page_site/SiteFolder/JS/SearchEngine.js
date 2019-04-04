@@ -189,9 +189,20 @@ class SearchEngine {
         return index % length;
     }
     selectSuggestionAction(suggestion){
-        var search_input=document.getElementById("search_input")
+        let search_input=document.getElementById("search_input")
+        let val=search_input.value
+        let actual_tags=val.split(" ")
         this.highLight(suggestion)
-        search_input.value=suggestion.innerText
+        if(val.split(" ").length>1){
+            actual_tags[actual_tags.length-1]=suggestion.innerText
+            let input_val=""
+            actual_tags.filter(el=>el!=" " && el!="").forEach(el=>{
+                input_val+=" "+el
+            })
+            search_input.value=input_val
+        }else{
+            search_input.value=suggestion.innerText
+        }
     }
     selectSuggestion(suggestions, up) {
         var not_selected = true
