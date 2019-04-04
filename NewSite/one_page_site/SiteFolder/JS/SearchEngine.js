@@ -188,6 +188,11 @@ class SearchEngine {
         }
         return index % length;
     }
+    selectSuggestionAction(suggestion){
+        var search_input=document.getElementById("search_input")
+        this.highLight(suggestion)
+        search_input.value=suggestion.innerText
+    }
     selectSuggestion(suggestions, up) {
         var not_selected = true
         var Length = suggestions.children[0].children.length
@@ -198,10 +203,10 @@ class SearchEngine {
                 suggestion.style = ""
                 //down
                 if (!up) {
-                    this.highLight(suggestions.children[0].children[this.circularIndexCalc(i+1,Length)])
+                    this.selectSuggestionAction(suggestions.children[0].children[this.circularIndexCalc(i+1,Length)])
                 } else {
                     //up
-                    this.highLight(suggestions.children[0].children[this.circularIndexCalc(i-1,Length)])
+                    this.selectSuggestionAction(suggestions.children[0].children[this.circularIndexCalc(i-1,Length)])
                 }
                 break
             }
@@ -209,10 +214,10 @@ class SearchEngine {
         if (not_selected) {
             if (!up) {
                 //down
-                this.highLight(suggestions.children[0].children[0])
+                this.selectSuggestionAction(suggestions.children[0].children[0])
             } else {
                 //up
-                this.highLight(suggestions.children[0].children[Length - 1])
+                this.selectSuggestionAction(suggestions.children[0].children[Length - 1])
             }
         }
     }
