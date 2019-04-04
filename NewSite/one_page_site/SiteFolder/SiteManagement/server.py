@@ -98,9 +98,16 @@ def search():
     return 'get search WIP'
 
 @app.route('/migrate')
+def migrate():
+    #return fl.render_template('gen_tags.html')
+    return 'migration WIP'
+
+@app.route('/generate_tags')
 def gen_tags():
     #return fl.render_template('gen_tags.html')
-    return 'get tags WIP'
+    return 'gen tags WIP'
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

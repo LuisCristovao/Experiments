@@ -10,7 +10,7 @@ import json
 import os
 
 
-def get_dirpath_less(less):
+def get_dirpath_less(less=0):
     '''
     goal: get current directory or a parent directory
     inputs:

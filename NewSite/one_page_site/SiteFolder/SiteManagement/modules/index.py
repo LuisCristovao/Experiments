@@ -16,7 +16,9 @@ menu={
          "Edit":"/edit",
          "Delete":"/delete",
          "Search":"/search",
-         "Migrate Old DB":"/migrate"
+         "Migrate Old DB":"/migrate",
+         "Generate Tags from HTML":"/generate_tags"
+         
       }
 def Menu():
     global menu
