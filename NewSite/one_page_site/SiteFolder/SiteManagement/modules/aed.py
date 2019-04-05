@@ -205,20 +205,21 @@ def delete_posts_row(id_):
     try:
         db=get_all_posts()
         print("delete id:",id_)
+        
         #get url from db row
-        #url=db[id_]["link"]
-        #print(url)
+        url=db[id_]["link"]
+        
         #get search tags from row
         all_tags=[]
         secondary_tags=[]
-        all_tags=db[id_]["search tags"]
-        secondary_tags=db[id_]["secondary search tags"]
+        all_tags=db[id_]["search tags"].split(",")
+        secondary_tags=db[id_]["secondary search tags"].split(",")
         
         for val in secondary_tags:
             all_tags.append(val)
-        print(all_tags)
+        
         #Delete row in pages DB if exists
-        #pages.deleteRowDB(url)
+        pages.deleteRowDB(url)
         
         #Delete tags in tags DB
         tags.deleteTags(all_tags)
