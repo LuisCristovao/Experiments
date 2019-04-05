@@ -204,10 +204,27 @@ def delete_posts_row(id_):
     
     try:
         db=get_all_posts()
-        print(id_)
-        url=db[id_]["link"]
+        print("delete id:",id_)
+        #get url from db row
+        #url=db[id_]["link"]
+        #print(url)
+        #get search tags from row
+        all_tags=[]
+        secondary_tags=[]
+        all_tags=db[id_]["search tags"]
+        secondary_tags=db[id_]["secondary search tags"]
+        
+        for val in secondary_tags:
+            all_tags.append(val)
+        print(all_tags)
+        #Delete row in pages DB if exists
+        #pages.deleteRowDB(url)
+        
+        #Delete tags in tags DB
+        tags.deleteTags(all_tags)
+        #Delete row in posts db
         del db[id_]
-        pages.deleteRowDB(url)
+        
         #dump json object in db all_post.json
         dirpath=json_files.get_dirpath_less(1)# to work as a module of server
         json_files.dump_json_in_file(dirpath + "DB/all_posts.json",db)

@@ -107,6 +107,7 @@ def deleteRowDB(tag_name):
 def deleteTags(tags):
     try:
         for tag in tags:
+            print(tag)
             deleteRowDB(tag)
         return True
     except:
