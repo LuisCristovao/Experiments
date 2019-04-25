@@ -142,8 +142,8 @@ def add_posts_row(data):
             new_db=insertByDate(db,data)
             
             #add tags to tags db
-            tags.writeEditTags(data["search tags"])
-            tags.writeEditTags(data["secondary search tags"])
+            tags.writeTags(data["search tags"])
+            tags.writeTags(data["secondary search tags"])
             
             #db.append(data)
             #dump json object in db all_post.json
@@ -174,15 +174,22 @@ def edit_posts_row(data):
         del data["id"]
         
         if detect_if_unique(db,data["title"]) or data["title"]==db[id_]["title"]:
+            
+            
+            #delete old tags
+            tags.deleteTags(db[id_]["search tags"])
+            tags.deleteTags(db[id_]["secondary search tags"])
+            
             del db[id_]
+            
             if page!="":
                 data["link"]=url
                 pages.editRowDB(old_url,url,page)
             new_db=insertByDate(db,data)
             
             #add tags to tags db
-            tags.writeEditTags(data["search tags"])
-            tags.writeEditTags(data["secondary search tags"])
+            tags.writeTags(data["search tags"])
+            tags.writeTags(data["secondary search tags"])
             
             #dump json object in db all_post.json
             dirpath=json_files.get_dirpath_less(1)# to work as a module of server
@@ -210,13 +217,10 @@ def delete_posts_row(id_):
         url=db[id_]["link"]
         
         #get search tags from row
-        all_tags=[]
-        secondary_tags=[]
-        all_tags=db[id_]["search tags"].split(",")
-        secondary_tags=db[id_]["secondary search tags"].split(",")
+        all_tags=db[id_]["search tags"]
+        all_tags+=db[id_]["secondary search tags"]
         
-        for val in secondary_tags:
-            all_tags.append(val)
+        
         
         #Delete row in pages DB if exists
         pages.deleteRowDB(url)

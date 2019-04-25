@@ -52,7 +52,7 @@ def dumpInDB(new_db):
 #        
 #    return unique
 
-def writeEditRowDB(tag_name):
+def writeRowDB(tag_name):
     try:
         db=getDB()
         if tag_name[0].upper() in db:
@@ -67,15 +67,14 @@ def writeEditRowDB(tag_name):
     except:
         return False
 
-def writeEditTags(tags):
+def writeTags(tags):
     try:
         
-        for tag in tags.split(","):
-            writeEditRowDB(tag)
+        for tag in tags.split(",").strip():
+            writeRowDB(tag)
         return True
     except:
         return False
-
 
 
 
@@ -106,7 +105,7 @@ def deleteRowDB(tag_name):
     
 def deleteTags(tags):
     try:
-        for tag in tags:
+        for tag in tags.split(",").strip():
             print(tag)
             deleteRowDB(tag)
         return True
