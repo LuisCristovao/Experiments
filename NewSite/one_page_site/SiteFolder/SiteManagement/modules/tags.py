@@ -70,7 +70,8 @@ def writeRowDB(tag_name):
 def writeTags(tags):
     try:
         
-        for tag in tags.split(",").strip():
+        for tag in list(map(lambda x: x.strip(),tags.split(","))):
+            print(tag)
             writeRowDB(tag)
         return True
     except:
@@ -105,7 +106,7 @@ def deleteRowDB(tag_name):
     
 def deleteTags(tags):
     try:
-        for tag in tags.split(",").strip():
+        for tag in list(map(lambda x: x.strip(),tags.split(","))):
             print(tag)
             deleteRowDB(tag)
         return True
