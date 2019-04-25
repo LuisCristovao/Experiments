@@ -47,12 +47,8 @@ def detect_if_unique(db,url):
         new_title
             
     '''
-    unique= True
-    for key in db:
-        if key==url:
-            return False
         
-    return unique
+    return not(url in db.keys())
 
 def writeRowDB(url,page_site):
     try:
@@ -71,7 +67,11 @@ def editRowDB(old_url,new_url,new_page_site):
     try:
         db=getDB()
         if detect_if_unique(db,new_url):
-            del db[old_url]
+            try:
+                del db[old_url]
+            except:
+                # there is not old url in the dbso create new one
+                print("old url does not exists! Just creating the new one!")
             db[new_url]=new_page_site
             dumpInDB(db)
             return True
