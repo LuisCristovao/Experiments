@@ -66,7 +66,7 @@ def writeRowDB(url,page_site):
 def editRowDB(old_url,new_url,new_page_site):
     try:
         db=getDB()
-        if detect_if_unique(db,new_url):
+        if detect_if_unique(db,new_url) or new_url==old_url:
             try:
                 del db[old_url]
             except:
