@@ -1,1 +1,11 @@
-{"": "SiteFolder/Pages/home.html", "?Projects": "SiteFolder/Pages/ShowOffTemplate.html", "?Blog": "SiteFolder/Pages/ShowOffTemplate.html", "?search": "SiteFolder/Pages/ShowOffTemplate.html", "?tags_page": "SiteFolder/Pages/tags.html", "?Game-X": "SiteFolder/Pages/x.html", "?recent-project": "SiteFolder/Pages/y.html", "?x3": "/SiteFolder/Pages/x.html"}
+{
+    "": "SiteFolder/Pages/home.html",
+    "?Projects": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?Blog": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?search": "SiteFolder/Pages/ShowOffTemplate.html",
+    "?tags_page": "SiteFolder/Pages/tags.html",
+    "?Game-X": "SiteFolder/Pages/x.html",
+    "?recent-project": "SiteFolder/Pages/y.html",
+    "?x3": "/SiteFolder/Pages/x.html",
+    "?x2.5": "SiteFolder/Pages/x.html"
+}
