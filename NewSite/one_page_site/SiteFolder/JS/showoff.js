@@ -2,60 +2,75 @@
 var prev_scrollTop = 0
 var db;
 var loaded_projects = 0
-var search_engine=new SearchEngine()
+var search_engine = new SearchEngine()
 //global functions
 async function getDBPosts() {
     let response = await fetch('SiteFolder/DB/all_posts.json');
     let val = await response.json();
     return val
 }
+
+function detectIfMorePostsToLoadAction(db) {
+    if (db.length > 0) {
+
+        $("#showOffFooter").html('<h2 style="cursor:pointer" onclick="document.body.scrollTo(0,document.body.scrollHeight)">&#8595;  Load More Posts &#8595;</h2>')
+    } else {
+        $("#showOffFooter").html('<h2>No Posts To Show!</h2>')
+    }
+}
 async function searchBlogPosts() {
     $("#showOffTitle").html("Blog Posts")
+
     db = await getDBPosts()
     //filter only blog posts type
-    var blog_posts=[]
-    for(var i in db){
-        if(db[i]["type"]=="blog post"){
+    var blog_posts = []
+    for (var i in db) {
+        if (db[i]["type"] == "blog post") {
             blog_posts.push(db[i])
         }
     }
-    db=blog_posts
+    db = blog_posts
     //invert array so to show more recent at front
     //db=search_engine.invertArrayOrder(db)
     loaded_projects = 0
+    detectIfMorePostsToLoadAction(db)
     requestAnimationFrame(detectScrollBottom)
 }
 async function searchProjects() {
     $("#showOffTitle").html("Project Posts")
+    $("#showOffFooter").html("<h2>&#8595;Load more Posts&#8595;</h2>")
     db = await getDBPosts()
     //filter posts by projects posts
-    var project_posts=[]
-    for(var i in db){
-        if(db[i]["type"]=="project"){
+    var project_posts = []
+    for (var i in db) {
+        if (db[i]["type"] == "project") {
             project_posts.push(db[i])
         }
     }
-    db=project_posts
+    db = project_posts
     //invert array so to show more recent at front
     //db=search_engine.invertArrayOrder(db)
     loaded_projects = 0
+    detectIfMorePostsToLoadAction(db)
     requestAnimationFrame(detectScrollBottom)
 }
-async function searchPostsByTags(){
+async function searchPostsByTags() {
     $("#showOffTitle").html("Search Results")
-    
-    db=await search_engine.findPosts()
-    
+
+    db = await search_engine.findPosts()
+
     loaded_projects = 0
+    detectIfMorePostsToLoadAction(db)
     requestAnimationFrame(detectScrollBottom)
 }
+
 function AddMoreInfoToCards(data) {
     var html = ""
     var vals = data
     html += '<ul class="list-group list-group-flush">'
     html += '<li class="list-group-item"><strong>Last Update:</strong><br>' + vals["last update date"] + '</li>'
     html += '<li class="list-group-item"><strong>Creation Date:</strong><br>' + vals["creation date"] + '</li>'
-    var search_tags = vals["search tags"].split(",")
+    var search_tags = vals["search tags"].split(",").map(el=>el.trim())
     html += '<li class="list-group-item">'
     html += '<strong>Search Tags:</strong><br>'
     for (var i in search_tags) {
@@ -92,11 +107,20 @@ function jsonToHml(data) {
 function loadMoreProjects() {
     var grid = document.getElementById("showOffGrid")
     var html = grid.innerHTML
-    for (index in [0, 1, 2]) {//load 3 posts each time this is triggered
+    for (index in [0, 1, 2]) { //load 3 posts each time this is triggered
         if (db[loaded_projects] != undefined) {
 
             html += jsonToHml(db[loaded_projects])
             loaded_projects++
+        } else {
+            //Loaded everything
+            if (loaded_projects != 0) {
+
+                $("#showOffFooter").html("<h2>Loaded EveryThing!</h2>")
+            } else {
+                $("#showOffFooter").html("<h2>No Posts To Show!</h2>")
+            }
+            break;
         }
     }
     grid.innerHTML = html
@@ -104,7 +128,7 @@ function loadMoreProjects() {
 
 function detectScrollBottom() {
     //Just to load projects in the begining (just loaded the page)
-    if (window.innerHeight == document.body.scrollHeight && loaded_projects<db.length) {
+    if (loaded_projects == 0 && loaded_projects < db.length) {
         loadMoreProjects()
     }
     if (Math.round(prev_scrollTop) != Math.round(document.body.scrollTop)) {

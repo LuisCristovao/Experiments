@@ -4,8 +4,13 @@
     "?Blog": "SiteFolder/Pages/ShowOffTemplate.html",
     "?search": "SiteFolder/Pages/ShowOffTemplate.html",
     "?tags_page": "SiteFolder/Pages/tags.html",
-    "?Game-X": "SiteFolder/Pages/x.html",
-    "?recent-project": "SiteFolder/Pages/y.html",
-    "?x3": "/SiteFolder/Pages/x.html",
-    "?x2.5": "SiteFolder/Pages/x.html"
+    "?contact": "SiteFolder/Pages/contact.html",
+    "?Purpose-Calendar-Manager": "SiteFolder/Pages/PurposeCalendarPage.html",
+    "?Volley-Game": "SiteFolder/Pages/VolleyGamePage.html",
+    "?Chat-Rooms-App": "SiteFolder/Pages/ChatRoomsPage.html",
+    "?Basic-Machine-Learning-Server": "SiteFolder/Pages/MLServerPage.html",
+    "?File-Upload-Server.": "SiteFolder/Pages/FileUploadPage.html",
+    "?Dash-Game": "SiteFolder/Pages/DashGamePage.html",
+    "?Pages-Template": "SiteFolder/Pages/Templates/BlogTemplate.html",
+    "?Project-Template": "SiteFolder/Pages/Templates/ProjectTemplate.html"
 }

@@ -1,0 +1,77 @@
+<!--<link rel="stylesheet" type="text/css" href="SiteFolder/Css/ContactPage.css">-->
+<style>
+.mytooltip {
+    position: relative;
+    
+}
+
+.mytooltip .mytooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 150%;
+    left: 50%;
+    margin-left: -60px;
+    
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
+    
+   
+}
+.mytooltip .mytooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+.main{
+    position: relative;
+    top:30%;
+}
+</style>
+<div class="main">
+    <h1 align="center" style="font-size: 6vmin">Email: luis.cristovao92@gmail.com</h1>
+    <br>
+    <div align="center">
+        <button type="button" class="btn btn-outline-dark btn-lg" style="font-size: 4vmin" onclick="copyToClipboard('luis.cristovao92@gmail.com')">Copy email to clip board</button>
+        <div class="mytooltip">
+            <span id="copy-msg" style="font-size: 3vmin" class="mytooltiptext">Copied Email!</span>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const copyToClipboard = str => {
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        $("#copy-msg").css("visibility", "visible");
+        $("#copy-msg").css("opacity", 1);
+        setTimeout(function() {
+            $("#copy-msg").css("opacity", 0);
+            //$("#copy-msg").css("visibility","hidden"); 
+        }, 1000);
+
+    };
+    
+
+</script>
