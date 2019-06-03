@@ -40,8 +40,8 @@
         "visibility": "visible"
     },
     "page location": {
-        "type": "text",
-        "placeholder": "html filename (x.html)",
+        "type": "textarea",
+        "value": "page template:SiteFolder/",
         "visibility": "visible"
     }
 }

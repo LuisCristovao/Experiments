@@ -1,0 +1,50 @@
+<html>
+
+<head>
+    <title>{{add_edit_delete}}</title>
+</head>
+
+<body>
+    <div id="form">
+    </div>
+</body>
+<script>
+    let page_info = {
+        "form json":"path/all_posts_table_columns.json",
+        "add": {
+            "server url": "add_db"
+        },
+        "edit": {
+            "server url":"edit_db"
+        },
+        "delete": {
+            "server url":"delete_db"
+        }
+    }
+    let add_edit_delete = document.title
+    
+    //alert(add_edit_delete)
+    async function sendToServer(url, data="", type="application/x-www-form-urlencoded", get_post="GET") {
+        //"application/x-www-form-urlencoded"
+        var response;
+        if(get_post=="post" ||get_post=="POST"){
+            
+            response = await fetch(url, {
+                method: get_post,
+                "Content-Type": type,
+                body: data
+            });
+        }
+        else{
+             response=await fetch(url)
+        }
+        //let val = await response.json();
+        let val = await response.text();
+        return alert(val)
+    }
+    sendToServer(page_info["form json"])
+    
+    
+</script>
+
+</html>

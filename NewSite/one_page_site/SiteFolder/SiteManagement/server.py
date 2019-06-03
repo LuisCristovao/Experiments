@@ -8,6 +8,7 @@ Created on Mon Feb 25 18:12:02 2019
 import flask as fl
 from importlib.machinery import SourceFileLoader
 import json
+import os
 #import module aed.py from folder modules
 aed = SourceFileLoader("aed.py", "modules/aed.py").load_module()
 #aed.get_all_posts()
@@ -16,8 +17,15 @@ index=SourceFileLoader("index.py", "modules/index.py").load_module()
 json_files=SourceFileLoader("json_files.py", "modules/json_files.py").load_module()
 #print(json.dumps(index.Menu()))
 #Start server-----------------------------
-app = fl.Flask(__name__)
+app = fl.Flask(__name__, static_url_path='')
 
+
+
+#static
+@app.route('/path/<path:path>')
+def send_js(path):
+    os.defpath
+    return fl.send_from_directory(os.getcwd()+'/modules/settings/', path)
 
 
 @app.route('/')
@@ -28,8 +36,8 @@ def index_route():
 @app.route('/add')
 def add():
     global aed
-    form_inputs=aed.send_all_posts_form()
-    return fl.render_template('add.html',menu=form_inputs)
+    #form_inputs=aed.send_all_posts_form()
+    return fl.render_template('add_edit_delete.html',add_edit_delete='add')
     #return 'get add'
 
 @app.route('/add_db',methods=["POST"])
