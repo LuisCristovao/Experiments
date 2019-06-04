@@ -6,10 +6,16 @@
 
 <body>
     <div id="form">
+    </div><br><br>
+    <div>
+        <button style="position: relative;left: 20%;font-size:2em;" onclick="submit()">Submit</button>
+    </div>
+    <div id="ans">
     </div>
 </body>
 <script>
     let page_info = {
+        
         "form json": "path/all_posts_table_columns.json",
         "add": {
             "server url": "add_db"
@@ -23,13 +29,13 @@
         "create question": {
             "text": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]}</h2>`
-                html += `<input id="${obj["name"]}" type="text" placeholder="${obj["placeholder"]}">`
+                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<input id="${obj["name"]}" type="text" value="${obj["value"]}" placeholder="${obj["placeholder"]}">`
                 return html
             },
             "option": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]}</h2>`
+                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
                 html += `<select id="${obj["name"]}" value="${obj["value"]}">`
                 let suggestions=Array.from(obj["suggestions"])
                 suggestions.forEach(el => {
@@ -40,13 +46,13 @@
             },
             "textarea": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]}</h2>`
-                html += `<textarea id="${obj["name"]}" >${obj["value"]}</textarea>`
+                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<textarea style="width:430px;height:100px;" id="${obj["name"]}" >${obj["value"]}</textarea>`
                 return html
             },
             "date": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]}</h2>`
+                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
                 html += `<input id="${obj["name"]}" type="date">`
                 return html
             },
@@ -76,7 +82,7 @@
 
     }
     //alert(add_edit_delete)
-    async function sendToServer(url, data = "", type = "application/x-www-form-urlencoded", get_post = "GET") {
+    async function sendToServer(url, data = "", get_post = "GET", type = "application/x-www-form-urlencoded") {
         //"application/x-www-form-urlencoded"
         var response;
         if (get_post == "post" || get_post == "POST") {
@@ -92,6 +98,32 @@
         //let val = await response.json();
         let val = await response.text();
         return val
+    }
+    function toUrlEncoded(columns_info){
+        var url=""
+        columns_info.forEach((col,index) => {
+            var val=document.getElementById(col["name"]).value
+            if(index<columns_info.length){
+                
+                url+=`${col["name"]}=${val}&`
+            }else{
+                url+=`${col["name"]}=${val}`
+            }
+        })
+        return url
+    }
+    async function getData(){
+        let columns_text = await sendToServer(page_info["form json"])
+        let columns_json = await JSON.parse(columns_text)
+        let columns=await Array.from(columns_json)
+        return toUrlEncoded(columns)    
+        
+    }
+    async function submit(){
+        let div=document.getElementById("ans")
+        let data=getData()
+        let ans=await sendToServer(page_info[add_edit_delete]["server url"],data,"post")
+        div.innerHTML=ans
     }
     //sendToServer(page_info["form json"])
     function init() {

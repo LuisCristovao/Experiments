@@ -37,7 +37,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "true"
+        "optional": true
     },
     {
         "name": "last update date",
@@ -46,7 +46,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "false"
+        "optional": false
     },
     {
         "name": "link",
@@ -55,7 +55,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "false"
+        "optional": false
     },
 
     {
@@ -65,7 +65,7 @@
         "value": "SiteFolde/Images/...",
         "suggestions": [],
         "tutorial": "",
-        "optional": "true"
+        "optional": true
     },
 
     {
@@ -75,7 +75,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "true"
+        "optional": true
     },
 
     {
@@ -85,7 +85,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "true"
+        "optional": true
     },
 
     {
@@ -95,7 +95,7 @@
         "value": "{\n\t\"page template\":\"SiteFolder/Pages/templates/..\",\n\t\"page content\":\"SiteFolder/Pages/templates/..\"\n}",
         "suggestions": [],
         "tutorial": "",
-        "optional": "false"
+        "optional": false
     }
     
 ]
