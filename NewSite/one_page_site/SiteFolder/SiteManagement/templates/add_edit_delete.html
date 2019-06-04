@@ -19,22 +19,60 @@
         },
         "delete": {
             "server url": "delete_db"
+        },
+        "create question": {
+            "text": (obj) => {
+                var html = ""
+                html += `<h2>${obj["name"]}</h2>`
+                html += `<input id="${obj["name"]}" type="text" placeholder="${obj["placeholder"]}">`
+                return html
+            },
+            "option": (obj) => {
+                var html = ""
+                html += `<h2>${obj["name"]}</h2>`
+                html += `<select id="${obj["name"]}" value="${obj["value"]}">`
+                let suggestions=Array.from(obj["suggestions"])
+                suggestions.forEach(el => {
+                    html += `<option>${el}</option>`
+                })
+                html += `</select>`
+                return html
+            },
+            "textarea": (obj) => {
+                var html = ""
+                html += `<h2>${obj["name"]}</h2>`
+                html += `<textarea id="${obj["name"]}" >${obj["value"]}</textarea>`
+                return html
+            },
+            "date": (obj) => {
+                var html = ""
+                html += `<h2>${obj["name"]}</h2>`
+                html += `<input id="${obj["name"]}" type="date">`
+                return html
+            },
+
         }
     }
     let add_edit_delete = document.title
-    
-    function createQuestion(obj){
-        var html=""
-        html+=`<h2>${}</h2>`
+
+    function createQuestion(obj) {
         
+        var html = ""
+        html += page_info["create question"][obj["type"]](obj)
+        return html
     }
-    
+
     async function createPage() {
+        let form = document.getElementById("form")
         let columns_text = await sendToServer(page_info["form json"])
-        let columns = JSON.parse(columns_text)
+        let columns_json = await JSON.parse(columns_text)
+        let columns=await Array.from(columns_json)
+        var html=""
+        
         columns.forEach(col => {
-            console.log(col["name"])
+            html+=createQuestion(col)
         })
+        form.innerHTML=html
 
     }
     //alert(add_edit_delete)

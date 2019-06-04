@@ -1,101 +1,101 @@
 [
     {
         "name": "title",
-        "type":"text",
-        "placeholder":"post title",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"false"
-        
-    },
+        "type": "text",
+        "placeholder": "post title",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "false"
 
+    },
     {
 
         "name": "type",
-        "type":"option",
-        "placeholder":"",
-        "value":"",
-        "suggestions":["project","blog"],
-        "tutorial":"",
-        "optional":"false"
+        "type": "option",
+        "placeholder": "",
+        "value": "project",
+        "suggestions": ["project", "blog"],
+        "tutorial": "",
+        "optional": "false"
     },
 
     {
         "name": "short description",
-        "type":"textarea",
-        "placeholder":"",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"true"
+        "type": "textarea",
+        "placeholder": "",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "true"
     },
 
     {
         "name": "creation date",
-        "type":"date",
-        "placeholder":"",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"true"
+        "type": "date",
+        "placeholder": "",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "true"
     },
     {
         "name": "last update date",
-        "type":"date",
-        "placeholder":"",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"false"
+        "type": "date",
+        "placeholder": "",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "false"
     },
     {
         "name": "link",
-        "type":"text",
-        "placeholder":"post url/link",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"false"
+        "type": "text",
+        "placeholder": "post url/link",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "false"
     },
 
     {
         "name": "image url",
-        "type":"text",
-        "placeholder":"path to img",
-        "value":"SiteFolde/Images/...",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"true"
+        "type": "text",
+        "placeholder": "path to img",
+        "value": "SiteFolde/Images/...",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "true"
     },
 
     {
         "name": "search tags",
-        "type":"text",
-        "placeholder":"tag1,tag2,..",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"true"
+        "type": "text",
+        "placeholder": "tag1,tag2,..",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "true"
     },
 
     {
         "name": "secondary search tags",
-        "type":"text",
-        "placeholder":"tag1,tag2,..",
-        "value":"",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"true"
+        "type": "text",
+        "placeholder": "tag1,tag2,..",
+        "value": "",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "true"
     },
 
     {
         "name": "page location",
-        "type":"textarea",
-        "placeholder":"page.html path",
-        "value":"{\"page template\":\"SiteFolder/Pages/templates/..\",\"page content\":\"SiteFolder/Pages/templates/..\"}",
-        "suggestions":[],
-        "tutorial":"",
-        "optional":"false"
+        "type": "textarea",
+        "placeholder": "page.html path",
+        "value": "{\n\t\"page template\":\"SiteFolder/Pages/templates/..\",\n\t\"page content\":\"SiteFolder/Pages/templates/..\"\n}",
+        "suggestions": [],
+        "tutorial": "",
+        "optional": "false"
     }
+    
 ]
