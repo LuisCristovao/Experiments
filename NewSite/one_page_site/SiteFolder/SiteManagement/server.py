@@ -43,9 +43,11 @@ def add():
 @app.route('/add_db',methods=["POST"])
 def add_db():
     global aed
+    print("Hi!!!")
     received_values={}
-    for key in fl.request.form:
-        received_values[key]=fl.request.form[key]
+    received_values=json.loads(fl.request.data.decode("ascii"))
+    #for key in fl.request.form:
+    #    received_values[key]=fl.request.form[key]
     if aed.add_posts_row(received_values):
         return 'Added:<br><br>'+json.dumps(received_values)
     else:

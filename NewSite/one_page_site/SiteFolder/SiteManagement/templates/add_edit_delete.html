@@ -29,13 +29,13 @@
         "create question": {
             "text": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<h2>${obj["name"]} ${(!obj["optional"])?`<font color="red">*</font>`:""}</h2>`
                 html += `<input id="${obj["name"]}" type="text" value="${obj["value"]}" placeholder="${obj["placeholder"]}">`
                 return html
             },
             "option": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<h2>${obj["name"]} ${(!obj["optional"])?`<font color="red">*</font>`:""}</h2>`
                 html += `<select id="${obj["name"]}" value="${obj["value"]}">`
                 let suggestions=Array.from(obj["suggestions"])
                 suggestions.forEach(el => {
@@ -46,13 +46,13 @@
             },
             "textarea": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<h2>${obj["name"]} ${(!obj["optional"])?`<font color="red">*</font>`:""}</h2>`
                 html += `<textarea style="width:430px;height:100px;" id="${obj["name"]}" >${obj["value"]}</textarea>`
                 return html
             },
             "date": (obj) => {
                 var html = ""
-                html += `<h2>${obj["name"]} ${(obj["optional"]=="false")?`<font color="red">*</font>`:""}</h2>`
+                html += `<h2>${obj["name"]} ${(!obj["optional"])?`<font color="red">*</font>`:""}</h2>`
                 html += `<input id="${obj["name"]}" type="date">`
                 return html
             },
@@ -82,7 +82,7 @@
 
     }
     //alert(add_edit_delete)
-    async function sendToServer(url, data = "", get_post = "GET", type = "application/x-www-form-urlencoded") {
+    async function sendToServer(url, data = "", get_post = "GET", type = "application/json") {
         //"application/x-www-form-urlencoded"
         var response;
         if (get_post == "post" || get_post == "POST") {
@@ -103,7 +103,7 @@
         var url=""
         columns_info.forEach((col,index) => {
             var val=document.getElementById(col["name"]).value
-            if(index<columns_info.length){
+            if(index<columns_info.length-1){
                 
                 url+=`${col["name"]}=${val}&`
             }else{
@@ -112,17 +112,25 @@
         })
         return url
     }
+    function jsonData(columns){
+        var data={}
+        columns.forEach((col) => {
+            var val=document.getElementById(col["name"]).value
+            data[col["name"]]=val
+        })
+        return data
+    }
     async function getData(){
         let columns_text = await sendToServer(page_info["form json"])
         let columns_json = await JSON.parse(columns_text)
         let columns=await Array.from(columns_json)
-        return toUrlEncoded(columns)    
+        return  jsonData(columns)    
         
     }
     async function submit(){
         let div=document.getElementById("ans")
-        let data=getData()
-        let ans=await sendToServer(page_info[add_edit_delete]["server url"],data,"post")
+        let data=await getData()
+        let ans=await sendToServer(page_info[add_edit_delete]["server url"],JSON.stringify(data),"post")
         div.innerHTML=ans
     }
     //sendToServer(page_info["form json"])

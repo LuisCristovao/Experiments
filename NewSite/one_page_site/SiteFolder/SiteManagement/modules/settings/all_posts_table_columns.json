@@ -6,7 +6,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "false"
+        "optional": false
 
     },
     {
@@ -17,7 +17,7 @@
         "value": "project",
         "suggestions": ["project", "blog"],
         "tutorial": "",
-        "optional": "false"
+        "optional": false
     },
 
     {
@@ -27,7 +27,7 @@
         "value": "",
         "suggestions": [],
         "tutorial": "",
-        "optional": "true"
+        "optional": true
     },
 
     {
@@ -62,7 +62,7 @@
         "name": "image url",
         "type": "text",
         "placeholder": "path to img",
-        "value": "SiteFolde/Images/...",
+        "value": "",
         "suggestions": [],
         "tutorial": "",
         "optional": true
@@ -92,7 +92,7 @@
         "name": "page location",
         "type": "textarea",
         "placeholder": "page.html path",
-        "value": "{\n\t\"page template\":\"SiteFolder/Pages/templates/..\",\n\t\"page content\":\"SiteFolder/Pages/templates/..\"\n}",
+        "value": "{\n\t\"page template\":\"SiteFolder/Pages/Templates/BlogTemplate.html\",\n\t\"page content\":\"SiteFolder/Pages/x.html\"\n}",
         "suggestions": [],
         "tutorial": "",
         "optional": false
