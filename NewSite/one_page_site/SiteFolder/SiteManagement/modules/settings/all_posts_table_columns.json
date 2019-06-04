@@ -1,47 +1,101 @@
-{
-    "title": {
-        "type": "text",
-        "placeholder": "title name",
-        "visibility": "visible"
+[
+    {
+        "name": "title",
+        "type":"text",
+        "placeholder":"post title",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"false"
+        
     },
-    "type": {
-        "type": "option",
-        "options": ["project", "blog post"],
-        "visibility": "visible"
+
+    {
+
+        "name": "type",
+        "type":"option",
+        "placeholder":"",
+        "value":"",
+        "suggestions":["project","blog"],
+        "tutorial":"",
+        "optional":"false"
     },
-    "short description": {
-        "type": "textarea",
-        "visibility": "visible"
+
+    {
+        "name": "short description",
+        "type":"textarea",
+        "placeholder":"",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"true"
     },
-    "creation date": {
-        "type": "date",
-        "visibility": "visible"
+
+    {
+        "name": "creation date",
+        "type":"date",
+        "placeholder":"",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"true"
     },
-    "last update date": {
-        "type": "date",
-        "visibility": "visible"
+    {
+        "name": "last update date",
+        "type":"date",
+        "placeholder":"",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"false"
     },
-    "link": {
-        "type": "text",
-        "placeholder": "link to find page",
-        "visibility": "visible"
+    {
+        "name": "link",
+        "type":"text",
+        "placeholder":"post url/link",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"false"
     },
-    "image url": {
-        "type": "text",
-        "placeholder": "image file name (x.png)",
-        "visibility": "visible"
+
+    {
+        "name": "image url",
+        "type":"text",
+        "placeholder":"path to img",
+        "value":"SiteFolde/Images/...",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"true"
     },
-    "search tags": {
-        "type": "search",
-        "visibility": "visible"
+
+    {
+        "name": "search tags",
+        "type":"text",
+        "placeholder":"tag1,tag2,..",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"true"
     },
-    "secondary search tags": {
-        "type": "search",
-        "visibility": "visible"
+
+    {
+        "name": "secondary search tags",
+        "type":"text",
+        "placeholder":"tag1,tag2,..",
+        "value":"",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"true"
     },
-    "page location": {
-        "type": "textarea",
-        "value": "page template:SiteFolder/",
-        "visibility": "visible"
+
+    {
+        "name": "page location",
+        "type":"textarea",
+        "placeholder":"page.html path",
+        "value":"{\"page template\":\"SiteFolder/Pages/templates/..\",\"page content\":\"SiteFolder/Pages/templates/..\"}",
+        "suggestions":[],
+        "tutorial":"",
+        "optional":"false"
     }
-}
+]
