@@ -46,7 +46,16 @@ def detect_if_unique(db,new_title):
             return False
         
     return unique
-               
+
+def get_data_columns():
+    '''
+    goal:
+        return json object with columns of main db table
+    '''
+    #dirpath=get_dirpath_less(2) #to work locally
+    dirpath=json_files.get_dirpath_less(1)# to work as a module of server
+    return json_files.get_json_file(dirpath + "SiteManagement/modules/settings/all_posts_table_columns.json")
+                   
 
 def get_all_posts():
     '''
@@ -59,7 +68,7 @@ def get_all_posts():
     return json_files.get_json_file(dirpath + "DB/all_posts.json")
     
 def update_position_index(db_array):
-    for i in range(len(db_array)):
+    for i in range(0,len(db_array)):
         db_array[i]["array_position"]=i
         
 def insertByDate(db,new_data):

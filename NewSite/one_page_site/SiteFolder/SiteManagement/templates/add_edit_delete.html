@@ -6,7 +6,7 @@
 
 <body>
     <div id="form">
-        <select id="select_id" style="visibility: collapse" onchange="fillFormValues"></select>
+        <select id="select_id" style="visibility: collapse" onchange="fillFormValues()"></select>
     </div><br><br>
     <div>
         <button id="submit" style="position: relative;left: 20%;font-size:2em;" onclick="submit()">Submit</button>
@@ -269,9 +269,10 @@
         var select = document.getElementById("select_id")
         var row = await sendToServer("select_row",JSON.stringify({"id":select.value}),"post")
         //alert(row)
+        row=JSON.parse(row)
         columns.forEach(col=>{
-            var input = document.getElementById(col)
-            input.value = row[col]
+            var input = document.getElementById(col["name"])
+            input.value = row[col["name"]]
         })
     }
     //sendToServer(page_info["form json"])
