@@ -66,7 +66,6 @@ def edit_db():
     global aed
     received_values={}
     received_values=json.loads(fl.request.data.decode("ascii"))
-    print("Hi:",received_values)
     #for key in fl.request.form:
     #    received_values[key]=fl.request.form[key]
     if aed.edit_posts_row(received_values):
@@ -93,14 +92,15 @@ def select_row():
 @app.route('/delete')
 def delete():
     global aed
-    form_inputs=aed.send_all_posts_form()
-    return fl.render_template('delete.html',menu=form_inputs)
+    return fl.render_template('add_edit_delete.html',add_edit_delete='delete')
+    #form_inputs=aed.send_all_posts_form()
+    #return fl.render_template('delete.html',menu=form_inputs)
 #    return 'get delete'
     
 @app.route('/delete_db',methods=["POST"])
 def delete_db():
     global aed
-    id_=int(fl.request.data.decode("ascii").split("=")[1])
+    id_=int(json.loads(fl.request.data.decode("ascii"))["id"])
     if aed.delete_posts_row(id_):
         return 'Deleted with Success!'
     else:

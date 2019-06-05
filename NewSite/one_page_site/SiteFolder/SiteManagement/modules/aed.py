@@ -18,6 +18,21 @@ pages=SourceFileLoader("urls.py", "modules/urls.py").load_module()
 #to import module in tags.py when using server
 tags=SourceFileLoader("tags.py", "modules/tags.py").load_module() 
 
+
+#config constants
+config_constants={
+                   "title":"title",
+                   "type":"type",
+                   "short description":"short description",
+                   "creation date":"creation date",
+                   "last update date":"last update date",
+                   "link":"link",
+                   "image url":"image url",
+                   "search tags":"search tags",
+                   "secondary search tags":"secondary search tags",
+                   "page location":"page location"
+                  }
+
 def strToDate(date_str):
     '''
     goal: 
@@ -143,6 +158,7 @@ def add_posts_row(data):
     '''
     
     try:
+        
         db=get_all_posts()
         url="?"+data["title"].replace(" ","-")
         page=data["page location"]
