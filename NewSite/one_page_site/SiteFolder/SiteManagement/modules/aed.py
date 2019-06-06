@@ -258,7 +258,8 @@ def delete_posts_row(id_):
         tags.deleteTags(all_tags)
         #Delete row in posts db
         del db[id_]
-        
+        #Update array_position column on every row
+        update_position_index(db)
         #dump json object in db all_post.json
         dirpath=json_files.get_dirpath_less(1)# to work as a module of server
         json_files.dump_json_in_file(dirpath + "DB/all_posts.json",db)
