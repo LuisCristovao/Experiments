@@ -161,7 +161,8 @@ def add_posts_row(data):
         
         db=get_all_posts()
         url="?"+data["title"].replace(" ","-")
-        page=data["page location"]
+        page=json_files.parse(data["page location"])
+        data["page location"]=json_files.parse(data["page location"])
         #data["id"]=len(db)
         if detect_if_unique(db,data["title"]):
             if data["page location"]!="":
@@ -199,7 +200,8 @@ def edit_posts_row(data):
         id_=int(data["id"])
         url="?"+data["title"].replace(" ","-")
         old_url=db[id_]["link"]
-        page=data["page location"]
+        page=json_files.parse(data["page location"])
+        data["page location"]=json_files.parse(data["page location"])
         del data["id"]
         
         if detect_if_unique(db,data["title"]) or data["title"]==db[id_]["title"]:

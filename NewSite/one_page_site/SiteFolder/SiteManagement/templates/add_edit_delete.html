@@ -274,7 +274,11 @@
         row = JSON.parse(row)
         columns.forEach(col => {
             var input = document.getElementById(col["name"])
-            input.value = row[col["name"]]
+            if(col["name"]!="page location"){
+                input.value = row[col["name"]]
+            }else{
+                input.value = JSON.stringify(row[col["name"]])
+            }
         })
     }
     //sendToServer(page_info["form json"])
