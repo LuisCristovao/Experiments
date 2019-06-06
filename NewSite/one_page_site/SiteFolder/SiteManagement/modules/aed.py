@@ -242,7 +242,7 @@ def delete_posts_row(id_):
     
     try:
         db=get_all_posts()
-        print("delete id:",id_)
+        #print("delete id:",id_)
         
         #get url from db row
         url=db[id_]["link"]
