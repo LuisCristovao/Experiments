@@ -247,7 +247,7 @@ def delete_posts_row(id_):
         
         #get search tags from row
         all_tags=db[id_]["search tags"]
-        all_tags+=db[id_]["secondary search tags"]
+        all_tags+=','+db[id_]["secondary search tags"]
         
         
         
