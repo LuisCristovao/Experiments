@@ -291,7 +291,7 @@ class ServePages {
                 this.updatePreviousPage()
 
                 var page_url = window.location.search.split("=")[0] // the .split is to detect when is search 
-                var page = this.pages[page_url]
+                var page = this.pages[page_url]["page template"]
                 this.getHtml(page)
 
             }
