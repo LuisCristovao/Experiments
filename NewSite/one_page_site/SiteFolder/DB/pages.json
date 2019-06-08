@@ -30,7 +30,10 @@
     "?File-Upload-Server.": "SiteFolder/Pages/FileUploadPage.html",
     "?Dash-Game": "SiteFolder/Pages/DashGamePage.html",
     "?Pages-Template": "SiteFolder/Pages/Templates/BlogTemplate.html",
-    "?Project-Template": "SiteFolder/Pages/Templates/ProjectTemplate.html",
+    "?Project-Template": {
+        "page template":"SiteFolder/Pages/Templates/ProjectTemplate.html",
+        "page content":"SiteFolder/Pages/y.html"
+    },
     "?TESTT": {
         "page template": "SiteFolder/Pages/Templates/BlogTemplate.html",
         "page content": "SiteFolder/Pages/x.html"
