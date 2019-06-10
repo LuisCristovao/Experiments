@@ -39,35 +39,10 @@ async function getPages() {
     let val = await response.json();
     return val
 }
-
-function getHeaderNumber(header) {
-    return header.nodeName.split("H")[1]
+function myScrollTo(element_id){
+    let el=document.getElementById(element_id)
+    scrollTo(0,el.offsetTop-100)
 }
-
-function structHeaders(element, index, struct_array) {
-    if (struct_array.length != 0) {
-        if (getHeaderNumber(element.nodeName) > getHeaderNumber(struct_array[index - 1]["element"].nodeName)) {
-            struct_array[index - 1]["sub"].push({
-                "element": element,
-                "sub": []
-            })
-        } else {
-            struct_array.push({
-                "element": element,
-                "sub": []
-            })
-        }
-    } else {
-        if (getHeaderNumber(element.nodeName) == 1) {
-            struct_array.push({
-                "element": element,
-                "sub": []
-            })
-        }
-    }
-
-}
-
 function createIndex() {
     let elements = Array.from(page_body.children)
     let headers = elements.filter(el => hs[el.nodeName] != null)
@@ -84,12 +59,12 @@ function createIndex() {
         if (el.nodeName == "H1") {
             if (first_h1) {
 
-                html += `<li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a>`
+                html += `<li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}`
                 first_h1 = false
             } else {
                 if(headers[i-1].nodeName!="H1"){
                     //close all
-                    html += `</ul></li><li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a>`
+                    html += `</ul></li><li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}`
                     first_h1 = false
                     first_h2 = true
                 }
@@ -104,10 +79,10 @@ function createIndex() {
         } else {
             if (el.nodeName == "H2" && !first_h1) {
                 if (first_h2) {
-                    html += `<ul><li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
+                    html += `<ul><li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}</li>`
                     first_h2 = !first_h2
                 } else {
-                    html += `<li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
+                    html += `<li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}</li>`
                 }
             } 
         }
