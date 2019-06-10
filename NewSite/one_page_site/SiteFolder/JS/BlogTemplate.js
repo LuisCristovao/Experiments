@@ -9,36 +9,63 @@ var hs = {
     "H5": "H5",
     "H6": "H6"
 }
-let titels_subtitles_order = [{
-    "type": "h1",
-    "value": "sssas",
-    "sub": [{
-        "type": "h2",
-        "value": "asjsa",
+let titels_subtitles_order = [
+    {
+        "element": "h1",
         "sub": [{
-            "type": "h3",
-            "value": "sssas",
+            "element": "h2",
             "sub": []
-            }]
+        }, {
+            "element": "h2",
+            "sub": []
         }]
     }, {
-    "type": "h1",
-    "value": "sssas",
-    "sub": [{
-        "type": "h2",
-        "value": "asjsa",
+        "element": "h1",
         "sub": [{
-            "type": "h3",
-            "value": "sssas",
+            "element": "h2",
             "sub": []
+        }, {
+            "element": "h2",
+            "sub": [
+                {
+                    "element": "h3",
+                    "sub": []
+                    }]
             }]
-        }]
     }]
 //functions-----------------------------------------------------
 async function getPages() {
     let response = await fetch('SiteFolder/DB/pages.json');
     let val = await response.json();
     return val
+}
+
+function getHeaderNumber(header) {
+    return header.nodeName.split("H")[1]
+}
+
+function structHeaders(element, index, struct_array) {
+    if (struct_array.length != 0) {
+        if (getHeaderNumber(element.nodeName) > getHeaderNumber(struct_array[index - 1]["element"].nodeName)) {
+            struct_array[index - 1]["sub"].push({
+                "element": element,
+                "sub": []
+            })
+        } else {
+            struct_array.push({
+                "element": element,
+                "sub": []
+            })
+        }
+    } else {
+        if (getHeaderNumber(element.nodeName) == 1) {
+            struct_array.push({
+                "element": element,
+                "sub": []
+            })
+        }
+    }
+
 }
 
 function createIndex() {
@@ -49,14 +76,45 @@ function createIndex() {
         el.setAttribute("id", el.innerText.replaceAll(" ", "-"))
     })
 
-
+    
     var html = "<ul>"
-    headers.filter(el => el.nodeName == "H1").forEach((el, index) => {
-        html += `<li class="blog_li"><a href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
+    var first_h1 = true
+    var first_h2 = true
+    headers.forEach((el,i) => {
+        if (el.nodeName == "H1") {
+            if (first_h1) {
+
+                html += `<li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a>`
+                first_h1 = false
+            } else {
+                if(headers[i-1].nodeName!="H1"){
+                    //close all
+                    html += `</ul></li><li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a>`
+                    first_h1 = false
+                    first_h2 = true
+                }
+                else{
+                    
+                    //close all
+                    html += `</li>`
+                    first_h1 = false
+                    first_h2 = true
+                }
+            }
+        } else {
+            if (el.nodeName == "H2" && !first_h1) {
+                if (first_h2) {
+                    html += `<ul><li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
+                    first_h2 = !first_h2
+                } else {
+                    html += `<li style="padding-top:1%"><a style="font-size:1.5em" href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
+                }
+            } 
+        }
+        //html += `<li class="blog_li"><a href="#${el.innerText.replaceAll(" ","-")}">${el.innerText}</a></li>`
     })
     html += "</ul>"
     index.innerHTML = html
-
 }
 async function getHtml(filename) {
     let response = await fetch(filename);
@@ -74,11 +132,11 @@ function init() {
     $("#hide_show_index_btn").click(() => {
         $("#blog_index").toggle("fast")
     })
-    
+
     loadPageContent()
-    
+
 }
 //main---------------------
 
 init()
-setTimeout(createIndex,500)
+setTimeout(createIndex, 500)
