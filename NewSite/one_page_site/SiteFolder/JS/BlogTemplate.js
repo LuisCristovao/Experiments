@@ -59,19 +59,19 @@ function createIndex() {
         if (el.nodeName == "H1") {
             if (first_h1) {
 
-                html += `<li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}`
+                html += `<li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}</li>`
                 first_h1 = false
             } else {
                 if(headers[i-1].nodeName!="H1"){
                     //close all
-                    html += `</ul></li><li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}`
+                    html += `</ul><li class="blog_li" onclick="myScrollTo('${el.innerText.replaceAll(" ","-")}')">${el.innerText}</li>`
                     first_h1 = false
                     first_h2 = true
                 }
                 else{
                     
                     //close all
-                    html += `</li>`
+                    //html += `</li>`
                     first_h1 = false
                     first_h2 = true
                 }
