@@ -1,17 +1,3 @@
-Method<br>
-<input type="text" id="method">
-<br>
-To what Page?<br>
-<input type="text" id="url">
-<br>
-msg Body:<br>
-<input type="text" id="msg-body">
-<br><br>
-<input type="submit" value="Submit" onclick="Send()"><br><br>
-<textarea id="output"></textarea>
-<script >
-
-
 function getElement(id){
     return document.getElementById(id)
 }
@@ -46,14 +32,14 @@ async function Send(){
             alert(`request fail with error ${err}`)
         }
     }else{
-        alert
         if(method.value in options.post){
             try{
 
                 var response=await fetch(url,{
                     method: 'POST',
                     "Content-Type":"text/html",
-                    body: msg_body.value
+                    "withCredentials":true,
+                    body:msg_body.value
                 })
                 output.value=await response.text()  
             }catch(err){
@@ -63,5 +49,3 @@ async function Send(){
     }
 }
 
-
-</script>
