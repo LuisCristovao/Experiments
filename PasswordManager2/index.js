@@ -2,21 +2,26 @@
 const body = getElement("body")
 const pages = {
     "": createHomePage,
-    "?manage": createManagePasswordsPage,
-    "?import": createImportPasswordsPage,
-    "?change": createChangeMasterPassPage
+    "?Manage-Passwords": createManagePasswordsPage,
+    "?Import-Text-Passwords": createImportPasswordsPage,
+    "?Change-Master-Password": createChangeMasterPassPage,
+    "?Export-Passwords":createExportPassPage
 }
 
 function createManagePasswordsPage() {
-
+    getHtml("managePasswords.html")
+    
 }
-
+function createExportPassPage(){
+    
+}
 function createImportPasswordsPage() {
-
+    getHtml("importPasswords.html")
+    
 }
 
 function createChangeMasterPassPage() {
-
+    getHtml("home.html")
 }
 
 function PageWithHeightRatio() {
@@ -36,16 +41,7 @@ function createHomePage() {
         script_el.src = 'home.js'
         document.body.appendChild(script_el)
     }, 500)
-    //    body.innerHTML=getHtml()
-    //    var page = ""
-    //    page+=`<div align="center" style="width:100%;height:100%;">`
-    //    page += `<ul style="list-style-type:none;padding:10%;">`
-    //    page += `<li style="padding:5%;font-size:2em">Manage Passwords</li>`
-    //    page += `<li>Change Master Password</li>`
-    //    page += `<li>Import Passwords from Text</li>`
-    //    page += `</ul>`
-    //    page+=`</div>`
-    //    body.innerHTML = page
+    
 }
 //functions----
 function getElement(id) {
