@@ -1,28 +1,13 @@
 //constants----
 const body = getElement("body")
 const pages = {
-    "": createHomePage,
-    "?Manage-Passwords": createManagePasswordsPage,
-    "?Import-Text-Passwords": createImportPasswordsPage,
-    "?Change-Master-Password": createChangeMasterPassPage,
-    "?Export-Passwords":createExportPassPage
+    "?Manage-Passwords": () => getHtml("managePasswords.html"),
+    "?Import-Text-Passwords": () => getHtml("importPasswords.html"),
+    "?Change-Master-Password": () => getHtml("changeMasterPass.html"),
+    "?Export-Passwords": () => getHtml("exportPasswords.html")
 }
 
-function createManagePasswordsPage() {
-    getHtml("managePasswords.html")
-    
-}
-function createExportPassPage(){
-    
-}
-function createImportPasswordsPage() {
-    getHtml("importPasswords.html")
-    
-}
 
-function createChangeMasterPassPage() {
-    getHtml("home.html")
-}
 
 function PageWithHeightRatio() {
     // 1 is equal size; >1 bigger width else the contrary
@@ -31,18 +16,16 @@ function PageWithHeightRatio() {
 async function getHtml(filename) {
     let response = await fetch(filename);
     let val = await response.text();
-    body.innerHTML = val
+    var el = document.createElement( 'DIV' );
+    el.innerHTML=val
+    body.appendChild(el)
+    Array.from(el.getElementsByTagName( 'script' )).forEach(s => {
+        const scriptEl = document.createElement("script")
+        scriptEl.src = s.src
+        document.body.appendChild(scriptEl)
+    })
 }
 
-function createHomePage() {
-    getHtml("home.html")
-    setTimeout(() => {
-        var script_el = document.createElement("script")
-        script_el.src = 'home.js'
-        document.body.appendChild(script_el)
-    }, 500)
-    
-}
 //functions----
 function getElement(id) {
     return document.getElementById(id)
@@ -50,13 +33,12 @@ function getElement(id) {
 
 function init() {
     const url = window.location.search
+    const defaultPage = () => getHtml("home.html")
     if (url in pages) {
         pages[url]()
     } else {
-        //go to homepage
-        pages[""]()
+        defaultPage()
     }
-
 }
 //main----
 

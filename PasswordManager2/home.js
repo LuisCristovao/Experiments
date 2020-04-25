@@ -56,11 +56,11 @@ function sin(x){
     return Math.sin(x)
 }
 function liAnimation(){
-    time+=0.05
-    const list_elements=Array.from(body.children[1].children[0].children)
+    time+=0.1
+    const list_elements=Array.from(document.getElementsByTagName('li'))
     var li=list_elements[0]
     var font_size=parseFloat(li.style["font-size"])
-    const font_size_max_increase = 0.002
+    const font_size_max_increase = 0.005
 
     font_size = font_size + font_size_max_increase * sin(time)
     //console.log(font_size)
