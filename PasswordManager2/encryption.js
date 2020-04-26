@@ -15,33 +15,33 @@ var Aes = {}; // Aes namespace
  * @returns {Number[]}     Encrypted output state array
  */
 Aes.cipher = function (input, w) { // main Cipher function [§5.1]
-  var Nb = 4; // block size (in words): no of columns in state (fixed at 4 for AES)
-  var Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
-  var state = [
+    var Nb = 4; // block size (in words): no of columns in state (fixed at 4 for AES)
+    var Nr = w.length / Nb - 1; // no of rounds: 10/12/14 for 128/192/256-bit keys
+    var state = [
     [],
     [],
     [],
     []
   ]; // initialise 4xNb byte-array 'state' with input [§3.4]
-  for (var i = 0; i < 4 * Nb; i++) state[i % 4][Math.floor(i / 4)] = input[i];
+    for (var i = 0; i < 4 * Nb; i++) state[i % 4][Math.floor(i / 4)] = input[i];
 
-  state = Aes.addRoundKey(state, w, 0, Nb);
+    state = Aes.addRoundKey(state, w, 0, Nb);
 
-  for (var round = 1; round < Nr; round++) {
+    for (var round = 1; round < Nr; round++) {
+        state = Aes.subBytes(state, Nb);
+        state = Aes.shiftRows(state, Nb);
+        state = Aes.mixColumns(state, Nb);
+        state = Aes.addRoundKey(state, w, round, Nb);
+    }
+
     state = Aes.subBytes(state, Nb);
     state = Aes.shiftRows(state, Nb);
-    state = Aes.mixColumns(state, Nb);
-    state = Aes.addRoundKey(state, w, round, Nb);
-  }
+    state = Aes.addRoundKey(state, w, Nr, Nb);
 
-  state = Aes.subBytes(state, Nb);
-  state = Aes.shiftRows(state, Nb);
-  state = Aes.addRoundKey(state, w, Nr, Nb);
+    var output = new Array(4 * Nb); // convert state to 1-d array before returning [§3.4]
+    for (var i = 0; i < 4 * Nb; i++) output[i] = state[i % 4][Math.floor(i / 4)];
 
-  var output = new Array(4 * Nb); // convert state to 1-d array before returning [§3.4]
-  for (var i = 0; i < 4 * Nb; i++) output[i] = state[i % 4][Math.floor(i / 4)];
-
-  return output;
+    return output;
 };
 
 /**
@@ -51,30 +51,30 @@ Aes.cipher = function (input, w) { // main Cipher function [§5.1]
  * @returns {Number[][]} Expanded key schedule as 2D byte-array (Nr+1 x Nb bytes)
  */
 Aes.keyExpansion = function (key) { // generate Key Schedule (byte-array Nr+1 x Nb) from Key [§5.2]
-  var Nb = 4; // block size (in words): no of columns in state (fixed at 4 for AES)
-  var Nk = key.length / 4 // key length (in words): 4/6/8 for 128/192/256-bit keys
-  var Nr = Nk + 6; // no of rounds: 10/12/14 for 128/192/256-bit keys
-  var w = new Array(Nb * (Nr + 1));
-  var temp = new Array(4);
+    var Nb = 4; // block size (in words): no of columns in state (fixed at 4 for AES)
+    var Nk = key.length / 4 // key length (in words): 4/6/8 for 128/192/256-bit keys
+    var Nr = Nk + 6; // no of rounds: 10/12/14 for 128/192/256-bit keys
+    var w = new Array(Nb * (Nr + 1));
+    var temp = new Array(4);
 
-  for (var i = 0; i < Nk; i++) {
-    var r = [key[4 * i], key[4 * i + 1], key[4 * i + 2], key[4 * i + 3]];
-    w[i] = r;
-  }
-
-  for (var i = Nk; i < (Nb * (Nr + 1)); i++) {
-    w[i] = new Array(4);
-    for (var t = 0; t < 4; t++) temp[t] = w[i - 1][t];
-    if (i % Nk == 0) {
-      temp = Aes.subWord(Aes.rotWord(temp));
-      for (var t = 0; t < 4; t++) temp[t] ^= Aes.rCon[i / Nk][t];
-    } else if (Nk > 6 && i % Nk == 4) {
-      temp = Aes.subWord(temp);
+    for (var i = 0; i < Nk; i++) {
+        var r = [key[4 * i], key[4 * i + 1], key[4 * i + 2], key[4 * i + 3]];
+        w[i] = r;
     }
-    for (var t = 0; t < 4; t++) w[i][t] = w[i - Nk][t] ^ temp[t];
-  }
 
-  return w;
+    for (var i = Nk; i < (Nb * (Nr + 1)); i++) {
+        w[i] = new Array(4);
+        for (var t = 0; t < 4; t++) temp[t] = w[i - 1][t];
+        if (i % Nk == 0) {
+            temp = Aes.subWord(Aes.rotWord(temp));
+            for (var t = 0; t < 4; t++) temp[t] ^= Aes.rCon[i / Nk][t];
+        } else if (Nk > 6 && i % Nk == 4) {
+            temp = Aes.subWord(temp);
+        }
+        for (var t = 0; t < 4; t++) w[i][t] = w[i - Nk][t] ^ temp[t];
+    }
+
+    return w;
 };
 
 /*
@@ -82,56 +82,56 @@ Aes.keyExpansion = function (key) { // generate Key Schedule (byte-array Nr+1 x 
  */
 
 Aes.subBytes = function (s, Nb) { // apply SBox to state S [§5.1.1]
-  for (var r = 0; r < 4; r++) {
-    for (var c = 0; c < Nb; c++) s[r][c] = Aes.sBox[s[r][c]];
-  }
-  return s;
+    for (var r = 0; r < 4; r++) {
+        for (var c = 0; c < Nb; c++) s[r][c] = Aes.sBox[s[r][c]];
+    }
+    return s;
 };
 
 Aes.shiftRows = function (s, Nb) { // shift row r of state S left by r bytes [§5.1.2]
-  var t = new Array(4);
-  for (var r = 1; r < 4; r++) {
-    for (var c = 0; c < 4; c++) t[c] = s[r][(c + r) % Nb]; // shift into temp copy
-    for (var c = 0; c < 4; c++) s[r][c] = t[c]; // and copy back
-  } // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
-  return s; // see asmaes.sourceforge.net/rijndael/rijndaelImplementation.pdf
+    var t = new Array(4);
+    for (var r = 1; r < 4; r++) {
+        for (var c = 0; c < 4; c++) t[c] = s[r][(c + r) % Nb]; // shift into temp copy
+        for (var c = 0; c < 4; c++) s[r][c] = t[c]; // and copy back
+    } // note that this will work for Nb=4,5,6, but not 7,8 (always 4 for AES):
+    return s; // see asmaes.sourceforge.net/rijndael/rijndaelImplementation.pdf
 };
 
 Aes.mixColumns = function (s, Nb) { // combine bytes of each col of state S [§5.1.3]
-  for (var c = 0; c < 4; c++) {
-    var a = new Array(4); // 'a' is a copy of the current column from 's'
-    var b = new Array(4); // 'b' is a•{02} in GF(2^8)
-    for (var i = 0; i < 4; i++) {
-      a[i] = s[i][c];
-      b[i] = s[i][c] & 0x80 ? s[i][c] << 1 ^ 0x011b : s[i][c] << 1;
+    for (var c = 0; c < 4; c++) {
+        var a = new Array(4); // 'a' is a copy of the current column from 's'
+        var b = new Array(4); // 'b' is a•{02} in GF(2^8)
+        for (var i = 0; i < 4; i++) {
+            a[i] = s[i][c];
+            b[i] = s[i][c] & 0x80 ? s[i][c] << 1 ^ 0x011b : s[i][c] << 1;
 
+        }
+        // a[n] ^ b[n] is a•{03} in GF(2^8)
+        s[0][c] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3]; // 2*a0 + 3*a1 + a2 + a3
+        s[1][c] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3]; // a0 * 2*a1 + 3*a2 + a3
+        s[2][c] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3]; // a0 + a1 + 2*a2 + 3*a3
+        s[3][c] = a[0] ^ b[0] ^ a[1] ^ a[2] ^ b[3]; // 3*a0 + a1 + a2 + 2*a3
     }
-    // a[n] ^ b[n] is a•{03} in GF(2^8)
-    s[0][c] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3]; // 2*a0 + 3*a1 + a2 + a3
-    s[1][c] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3]; // a0 * 2*a1 + 3*a2 + a3
-    s[2][c] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3]; // a0 + a1 + 2*a2 + 3*a3
-    s[3][c] = a[0] ^ b[0] ^ a[1] ^ a[2] ^ b[3]; // 3*a0 + a1 + a2 + 2*a3
-  }
-  return s;
+    return s;
 };
 
 Aes.addRoundKey = function (state, w, rnd, Nb) { // xor Round Key into state S [§5.1.4]
-  for (var r = 0; r < 4; r++) {
-    for (var c = 0; c < Nb; c++) state[r][c] ^= w[rnd * 4 + c][r];
-  }
-  return state;
+    for (var r = 0; r < 4; r++) {
+        for (var c = 0; c < Nb; c++) state[r][c] ^= w[rnd * 4 + c][r];
+    }
+    return state;
 };
 
 Aes.subWord = function (w) { // apply SBox to 4-byte word w
-  for (var i = 0; i < 4; i++) w[i] = Aes.sBox[w[i]];
-  return w;
+    for (var i = 0; i < 4; i++) w[i] = Aes.sBox[w[i]];
+    return w;
 };
 
 Aes.rotWord = function (w) { // rotate 4-byte word w left by one byte
-  var tmp = w[0];
-  for (var i = 0; i < 3; i++) w[i] = w[i + 1];
-  w[3] = tmp;
-  return w;
+    var tmp = w[0];
+    for (var i = 0; i < 3; i++) w[i] = w[i + 1];
+    w[3] = tmp;
+    return w;
 };
 
 // sBox is pre-computed multiplicative inverse in GF(2^8) used in subBytes and keyExpansion [§5.1.1]
@@ -170,65 +170,65 @@ Aes.Ctr = {}; // Aes.Ctr namespace: a subclass or extension of Aes
  * @returns {string}         Encrypted text
  */
 Aes.Ctr.encrypt = function (plaintext, password, nBits) {
-  var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-  if (!(nBits == 128 || nBits == 192 || nBits == 256)) return ''; // standard allows 128/192/256 bit keys
-  plaintext = Utf8.encode(plaintext);
-  password = Utf8.encode(password);
-  //var t = new Date();  // timer
-  // use AES itself to encrypt password to get cipher key (using plain password as source for key 
-  // expansion) - gives us well encrypted key
-  var nBytes = nBits / 8; // no bytes in key
-  var pwBytes = new Array(nBytes);
-  for (var i = 0; i < nBytes; i++) {
-    pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
-  }
-  var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes)); // gives us 16-byte key
-  key = key.concat(key.slice(0, nBytes - 16)); // expand key to 16/24/32 bytes long
-  // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A §B.2): [0-1] = millisec, 
-  // [2-3] = random, [4-7] = seconds, together giving full sub-millisec uniqueness up to Feb 2106
-  var counterBlock = new Array(blockSize);
-
-  var nonce = (new Date()).getTime(); // timestamp: milliseconds since 1-Jan-1970
-  var nonceMs = nonce % 1000;
-  var nonceSec = Math.floor(nonce / 1000);
-  var nonceRnd = Math.floor(Math.random() * 0xffff);
-
-  for (var i = 0; i < 2; i++) counterBlock[i] = (nonceMs >>> i * 8) & 0xff;
-  for (var i = 0; i < 2; i++) counterBlock[i + 2] = (nonceRnd >>> i * 8) & 0xff;
-  for (var i = 0; i < 4; i++) counterBlock[i + 4] = (nonceSec >>> i * 8) & 0xff;
-
-  // and convert it to a string to go on the front of the ciphertext
-  var ctrTxt = '';
-  for (var i = 0; i < 8; i++) ctrTxt += String.fromCharCode(counterBlock[i]);
-
-  // generate key schedule - an expansion of the key into distinct Key Rounds for each round
-  var keySchedule = Aes.keyExpansion(key);
-
-  var blockCount = Math.ceil(plaintext.length / blockSize);
-  var ciphertxt = new Array(blockCount); // ciphertext as array of strings
-  for (var b = 0; b < blockCount; b++) {
-    // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-    // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
-    for (var c = 0; c < 4; c++) counterBlock[15 - c] = (b >>> c * 8) & 0xff;
-    for (var c = 0; c < 4; c++) counterBlock[15 - c - 4] = (b / 0x100000000 >>> c * 8)
-
-    var cipherCntr = Aes.cipher(counterBlock, keySchedule); // -- encrypt counter block --
-    // block size is reduced on final block
-    var blockLength = b < blockCount - 1 ? blockSize : (plaintext.length - 1) % blockSize + 1;
-    var cipherChar = new Array(blockLength);
-
-    for (var i = 0; i < blockLength; i++) { // -- xor plaintext with ciphered counter char-by-char --
-      cipherChar[i] = cipherCntr[i] ^ plaintext.charCodeAt(b * blockSize + i);
-      cipherChar[i] = String.fromCharCode(cipherChar[i]);
+    var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+    if (!(nBits == 128 || nBits == 192 || nBits == 256)) return ''; // standard allows 128/192/256 bit keys
+    plaintext = Utf8.encode(plaintext);
+    password = Utf8.encode(password);
+    //var t = new Date();  // timer
+    // use AES itself to encrypt password to get cipher key (using plain password as source for key 
+    // expansion) - gives us well encrypted key
+    var nBytes = nBits / 8; // no bytes in key
+    var pwBytes = new Array(nBytes);
+    for (var i = 0; i < nBytes; i++) {
+        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
     }
-    ciphertxt[b] = cipherChar.join('');
-  }
+    var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes)); // gives us 16-byte key
+    key = key.concat(key.slice(0, nBytes - 16)); // expand key to 16/24/32 bytes long
+    // initialise 1st 8 bytes of counter block with nonce (NIST SP800-38A §B.2): [0-1] = millisec, 
+    // [2-3] = random, [4-7] = seconds, together giving full sub-millisec uniqueness up to Feb 2106
+    var counterBlock = new Array(blockSize);
 
-  // Array.join is more efficient than repeated string concatenation in IE
-  var ciphertext = ctrTxt + ciphertxt.join('');
-  ciphertext = Base64.encode(ciphertext); // encode in base64
-  //alert((new Date()) - t);
-  return ciphertext;
+    var nonce = (new Date()).getTime(); // timestamp: milliseconds since 1-Jan-1970
+    var nonceMs = nonce % 1000;
+    var nonceSec = Math.floor(nonce / 1000);
+    var nonceRnd = Math.floor(Math.random() * 0xffff);
+
+    for (var i = 0; i < 2; i++) counterBlock[i] = (nonceMs >>> i * 8) & 0xff;
+    for (var i = 0; i < 2; i++) counterBlock[i + 2] = (nonceRnd >>> i * 8) & 0xff;
+    for (var i = 0; i < 4; i++) counterBlock[i + 4] = (nonceSec >>> i * 8) & 0xff;
+
+    // and convert it to a string to go on the front of the ciphertext
+    var ctrTxt = '';
+    for (var i = 0; i < 8; i++) ctrTxt += String.fromCharCode(counterBlock[i]);
+
+    // generate key schedule - an expansion of the key into distinct Key Rounds for each round
+    var keySchedule = Aes.keyExpansion(key);
+
+    var blockCount = Math.ceil(plaintext.length / blockSize);
+    var ciphertxt = new Array(blockCount); // ciphertext as array of strings
+    for (var b = 0; b < blockCount; b++) {
+        // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+        // done in two stages for 32-bit ops: using two words allows us to go past 2^32 blocks (68GB)
+        for (var c = 0; c < 4; c++) counterBlock[15 - c] = (b >>> c * 8) & 0xff;
+        for (var c = 0; c < 4; c++) counterBlock[15 - c - 4] = (b / 0x100000000 >>> c * 8)
+
+        var cipherCntr = Aes.cipher(counterBlock, keySchedule); // -- encrypt counter block --
+        // block size is reduced on final block
+        var blockLength = b < blockCount - 1 ? blockSize : (plaintext.length - 1) % blockSize + 1;
+        var cipherChar = new Array(blockLength);
+
+        for (var i = 0; i < blockLength; i++) { // -- xor plaintext with ciphered counter char-by-char --
+            cipherChar[i] = cipherCntr[i] ^ plaintext.charCodeAt(b * blockSize + i);
+            cipherChar[i] = String.fromCharCode(cipherChar[i]);
+        }
+        ciphertxt[b] = cipherChar.join('');
+    }
+
+    // Array.join is more efficient than repeated string concatenation in IE
+    var ciphertext = ctrTxt + ciphertxt.join('');
+    ciphertext = Base64.encode(ciphertext); // encode in base64
+    //alert((new Date()) - t);
+    return ciphertext;
 };
 
 /** 
@@ -240,56 +240,56 @@ Aes.Ctr.encrypt = function (plaintext, password, nBits) {
  * @returns {String}          Decrypted text
  */
 Aes.Ctr.decrypt = function (ciphertext, password, nBits) {
-  var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
-  if (!(nBits == 128 || nBits == 192 || nBits == 256)) return ''; // standard allows 128/192/256 bit keys
-  ciphertext = Base64.decode(ciphertext);
-  password = Utf8.encode(password);
-  //var t = new Date();  // timer
-  // use AES to encrypt password (mirroring encrypt routine)
-  var nBytes = nBits / 8; // no bytes in key
-  var pwBytes = new Array(nBytes);
-  for (var i = 0; i < nBytes; i++) {
-    pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
-  }
-  var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));
-  key = key.concat(key.slice(0, nBytes - 16)); // expand key to 16/24/32 bytes long
-  // recover nonce from 1st 8 bytes of ciphertext
-  var counterBlock = new Array(8);
-  ctrTxt = ciphertext.slice(0, 8);
-  for (var i = 0; i < 8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
-
-  // generate key schedule
-  var keySchedule = Aes.keyExpansion(key);
-
-  // separate ciphertext into blocks (skipping past initial 8 bytes)
-  var nBlocks = Math.ceil((ciphertext.length - 8) / blockSize);
-  var ct = new Array(nBlocks);
-  for (var b = 0; b < nBlocks; b++) ct[b] = ciphertext.slice(8 + b * blockSize, 8 + b * blockSize + blockSize);
-  ciphertext = ct; // ciphertext is now array of block-length strings
-  // plaintext will get generated block-by-block into array of block-length strings
-  var plaintxt = new Array(ciphertext.length);
-
-  for (var b = 0; b < nBlocks; b++) {
-    // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
-    for (var c = 0; c < 4; c++) counterBlock[15 - c] = ((b) >>> c * 8) & 0xff;
-    for (var c = 0; c < 4; c++) counterBlock[15 - c - 4] = (((b + 1) / 0x100000000 - 1) >>> c * 8) & 0xff;
-
-    var cipherCntr = Aes.cipher(counterBlock, keySchedule); // encrypt counter block
-    var plaintxtByte = new Array(ciphertext[b].length);
-    for (var i = 0; i < ciphertext[b].length; i++) {
-      // -- xor plaintxt with ciphered counter byte-by-byte --
-      plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
-      plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
+    var blockSize = 16; // block size fixed at 16 bytes / 128 bits (Nb=4) for AES
+    if (!(nBits == 128 || nBits == 192 || nBits == 256)) return ''; // standard allows 128/192/256 bit keys
+    ciphertext = Base64.decode(ciphertext);
+    password = Utf8.encode(password);
+    //var t = new Date();  // timer
+    // use AES to encrypt password (mirroring encrypt routine)
+    var nBytes = nBits / 8; // no bytes in key
+    var pwBytes = new Array(nBytes);
+    for (var i = 0; i < nBytes; i++) {
+        pwBytes[i] = isNaN(password.charCodeAt(i)) ? 0 : password.charCodeAt(i);
     }
-    plaintxt[b] = plaintxtByte.join('');
-  }
+    var key = Aes.cipher(pwBytes, Aes.keyExpansion(pwBytes));
+    key = key.concat(key.slice(0, nBytes - 16)); // expand key to 16/24/32 bytes long
+    // recover nonce from 1st 8 bytes of ciphertext
+    var counterBlock = new Array(8);
+    ctrTxt = ciphertext.slice(0, 8);
+    for (var i = 0; i < 8; i++) counterBlock[i] = ctrTxt.charCodeAt(i);
 
-  // join array of blocks into single plaintext string
-  var plaintext = plaintxt.join('');
-  plaintext = Utf8.decode(plaintext); // decode from UTF8 back to Unicode multi-byte chars
-  //alert((new Date()) - t);
+    // generate key schedule
+    var keySchedule = Aes.keyExpansion(key);
 
-  return plaintext;
+    // separate ciphertext into blocks (skipping past initial 8 bytes)
+    var nBlocks = Math.ceil((ciphertext.length - 8) / blockSize);
+    var ct = new Array(nBlocks);
+    for (var b = 0; b < nBlocks; b++) ct[b] = ciphertext.slice(8 + b * blockSize, 8 + b * blockSize + blockSize);
+    ciphertext = ct; // ciphertext is now array of block-length strings
+    // plaintext will get generated block-by-block into array of block-length strings
+    var plaintxt = new Array(ciphertext.length);
+
+    for (var b = 0; b < nBlocks; b++) {
+        // set counter (block #) in last 8 bytes of counter block (leaving nonce in 1st 8 bytes)
+        for (var c = 0; c < 4; c++) counterBlock[15 - c] = ((b) >>> c * 8) & 0xff;
+        for (var c = 0; c < 4; c++) counterBlock[15 - c - 4] = (((b + 1) / 0x100000000 - 1) >>> c * 8) & 0xff;
+
+        var cipherCntr = Aes.cipher(counterBlock, keySchedule); // encrypt counter block
+        var plaintxtByte = new Array(ciphertext[b].length);
+        for (var i = 0; i < ciphertext[b].length; i++) {
+            // -- xor plaintxt with ciphered counter byte-by-byte --
+            plaintxtByte[i] = cipherCntr[i] ^ ciphertext[b].charCodeAt(i);
+            plaintxtByte[i] = String.fromCharCode(plaintxtByte[i]);
+        }
+        plaintxt[b] = plaintxtByte.join('');
+    }
+
+    // join array of blocks into single plaintext string
+    var plaintext = plaintxt.join('');
+    plaintext = Utf8.decode(plaintext); // decode from UTF8 back to Unicode multi-byte chars
+    //alert((new Date()) - t);
+
+    return plaintext;
 };
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
@@ -311,42 +311,42 @@ Base64.code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=
  * @returns {String} Base64-encoded string
  */
 Base64.encode = function (str, utf8encode) { // http://tools.ietf.org/html/rfc4648
-  utf8encode = (typeof utf8encode == 'undefined') ? false : utf8encode;
-  var o1, o2, o3, bits, h1, h2, h3, h4, e = [],
-    pad = '',
-    c, plain, coded;
-  var b64 = Base64.code;
+    utf8encode = (typeof utf8encode == 'undefined') ? false : utf8encode;
+    var o1, o2, o3, bits, h1, h2, h3, h4, e = [],
+        pad = '',
+        c, plain, coded;
+    var b64 = Base64.code;
 
-  plain = utf8encode ? str.encodeUTF8() : str;
+    plain = utf8encode ? str.encodeUTF8() : str;
 
-  c = plain.length % 3; // pad string to length of multiple of 3
-  if (c > 0) {
-    while (c++ < 3) {
-      pad += '=';
-      plain += '\0';
+    c = plain.length % 3; // pad string to length of multiple of 3
+    if (c > 0) {
+        while (c++ < 3) {
+            pad += '=';
+            plain += '\0';
+        }
     }
-  }
-  // note: doing padding here saves us doing special-case packing for trailing 1 or 2 chars
-  for (c = 0; c < plain.length; c += 3) { // pack three octets into four hexets
-    o1 = plain.charCodeAt(c);
-    o2 = plain.charCodeAt(c + 1);
-    o3 = plain.charCodeAt(c + 2);
+    // note: doing padding here saves us doing special-case packing for trailing 1 or 2 chars
+    for (c = 0; c < plain.length; c += 3) { // pack three octets into four hexets
+        o1 = plain.charCodeAt(c);
+        o2 = plain.charCodeAt(c + 1);
+        o3 = plain.charCodeAt(c + 2);
 
-    bits = o1 << 16 | o2 << 8 | o3;
+        bits = o1 << 16 | o2 << 8 | o3;
 
-    h1 = bits >> 18 & 0x3f;
-    h2 = bits >> 12 & 0x3f;
-    h3 = bits >> 6 & 0x3f;
-    h4 = bits & 0x3f;
+        h1 = bits >> 18 & 0x3f;
+        h2 = bits >> 12 & 0x3f;
+        h3 = bits >> 6 & 0x3f;
+        h4 = bits & 0x3f;
 
-    // use hextets to index into code string
-    e[c / 3] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
-  }
-  coded = e.join(''); // join() is far faster than repeated string concatenation in IE
-  // replace 'A's from padded nulls with '='s
-  coded = coded.slice(0, coded.length - pad.length) + pad;
+        // use hextets to index into code string
+        e[c / 3] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+    }
+    coded = e.join(''); // join() is far faster than repeated string concatenation in IE
+    // replace 'A's from padded nulls with '='s
+    coded = coded.slice(0, coded.length - pad.length) + pad;
 
-  return coded;
+    return coded;
 };
 
 /**
@@ -359,32 +359,32 @@ Base64.encode = function (str, utf8encode) { // http://tools.ietf.org/html/rfc46
  * @returns {String} decoded string
  */
 Base64.decode = function (str, utf8decode) {
-  utf8decode = (typeof utf8decode == 'undefined') ? false : utf8decode;
-  var o1, o2, o3, h1, h2, h3, h4, bits, d = [],
-    plain, coded;
-  var b64 = Base64.code;
+    utf8decode = (typeof utf8decode == 'undefined') ? false : utf8decode;
+    var o1, o2, o3, h1, h2, h3, h4, bits, d = [],
+        plain, coded;
+    var b64 = Base64.code;
 
-  coded = utf8decode ? str.decodeUTF8() : str;
+    coded = utf8decode ? str.decodeUTF8() : str;
 
-  for (var c = 0; c < coded.length; c += 4) { // unpack four hexets into three octets
-    h1 = b64.indexOf(coded.charAt(c));
-    h2 = b64.indexOf(coded.charAt(c + 1));
-    h3 = b64.indexOf(coded.charAt(c + 2));
-    h4 = b64.indexOf(coded.charAt(c + 3));
+    for (var c = 0; c < coded.length; c += 4) { // unpack four hexets into three octets
+        h1 = b64.indexOf(coded.charAt(c));
+        h2 = b64.indexOf(coded.charAt(c + 1));
+        h3 = b64.indexOf(coded.charAt(c + 2));
+        h4 = b64.indexOf(coded.charAt(c + 3));
 
-    bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+        bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
 
-    o1 = bits >>> 16 & 0xff;
-    o2 = bits >>> 8 & 0xff;
-    o3 = bits & 0xff;
+        o1 = bits >>> 16 & 0xff;
+        o2 = bits >>> 8 & 0xff;
+        o3 = bits & 0xff;
 
-    d[c / 4] = String.fromCharCode(o1, o2, o3);
-    // check for padding
-    if (h4 == 0x40) d[c / 4] = String.fromCharCode(o1, o2);
-    if (h3 == 0x40) d[c / 4] = String.fromCharCode(o1);
-  }
-  plain = d.join(''); // join() is far faster than repeated string concatenation in IE
-  return utf8decode ? plain.decodeUTF8() : plain;
+        d[c / 4] = String.fromCharCode(o1, o2, o3);
+        // check for padding
+        if (h4 == 0x40) d[c / 4] = String.fromCharCode(o1, o2);
+        if (h3 == 0x40) d[c / 4] = String.fromCharCode(o1);
+    }
+    plain = d.join(''); // join() is far faster than repeated string concatenation in IE
+    return utf8decode ? plain.decodeUTF8() : plain;
 };
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
@@ -404,22 +404,22 @@ var Utf8 = {}; // Utf8 namespace
  * @returns {String} encoded string
  */
 Utf8.encode = function (strUni) {
-  // use regular expressions & String.replace callback function for better efficiency 
-  // than procedural approaches
-  var strUtf = strUni.replace(/[\u0080-\u07ff]/g, // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
+    // use regular expressions & String.replace callback function for better efficiency 
+    // than procedural approaches
+    var strUtf = strUni.replace(/[\u0080-\u07ff]/g, // U+0080 - U+07FF => 2 bytes 110yyyyy, 10zzzzzz
 
-  function (c) {
-    var cc = c.charCodeAt(0);
-    return String.fromCharCode(0xc0 | cc >> 6, 0x80 | cc & 0x3f);
-  });
-  strUtf = strUtf.replace(/[\u0800-\uffff]/g, // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
+        function (c) {
+            var cc = c.charCodeAt(0);
+            return String.fromCharCode(0xc0 | cc >> 6, 0x80 | cc & 0x3f);
+        });
+    strUtf = strUtf.replace(/[\u0800-\uffff]/g, // U+0800 - U+FFFF => 3 bytes 1110xxxx, 10yyyyyy, 10zzzzzz
 
-  function (c) {
-    var cc = c.charCodeAt(0);
-    return String.fromCharCode(0xe0 | cc >> 12, 0x80 | cc >> 6 & 0x3F, 0x80 | cc & 0x3f);
-  });
+        function (c) {
+            var cc = c.charCodeAt(0);
+            return String.fromCharCode(0xe0 | cc >> 12, 0x80 | cc >> 6 & 0x3F, 0x80 | cc & 0x3f);
+        });
 
-  return strUtf;
+    return strUtf;
 };
 
 /**
@@ -429,24 +429,31 @@ Utf8.encode = function (strUni) {
  * @returns {String} decoded string
  */
 Utf8.decode = function (strUtf) {
-  // note: decode 3-byte chars first as decoded 2-byte strings could appear to be 3-byte char!
-  var strUni = strUtf.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g, // 3-byte chars
+    // note: decode 3-byte chars first as decoded 2-byte strings could appear to be 3-byte char!
+    var strUni = strUtf.replace(/[\u00e0-\u00ef][\u0080-\u00bf][\u0080-\u00bf]/g, // 3-byte chars
 
-  function (c) { // (note parentheses for precence)
-    var cc = ((c.charCodeAt(0) & 0x0f) << 12) | ((c.charCodeAt(1) & 0x3f) << 6) | (c.charCodeAt(2) & 0x3f);
-    return String.fromCharCode(cc);
-  });
+        function (c) { // (note parentheses for precence)
+            var cc = ((c.charCodeAt(0) & 0x0f) << 12) | ((c.charCodeAt(1) & 0x3f) << 6) | (c.charCodeAt(2) & 0x3f);
+            return String.fromCharCode(cc);
+        });
 
-  strUni = strUni.replace(/[\u00c0-\u00df][\u0080-\u00bf]/g, // 2-byte chars
+    strUni = strUni.replace(/[\u00c0-\u00df][\u0080-\u00bf]/g, // 2-byte chars
 
-  function (c) { // (note parentheses for precence)
-    var cc = (c.charCodeAt(0) & 0x1f) << 6 | c.charCodeAt(1) & 0x3f;
-    return String.fromCharCode(cc);
-  });
+        function (c) { // (note parentheses for precence)
+            var cc = (c.charCodeAt(0) & 0x1f) << 6 | c.charCodeAt(1) & 0x3f;
+            return String.fromCharCode(cc);
+        });
 
-  return strUni;
+    return strUni;
 };
 
+function encrypt(plaintext, password) {
+    return Aes.Ctr.encrypt(plaintext, password, 256)
+}
+
+function decrypt(ciphertext, password) {
+    return Aes.Ctr.decrypt(ciphertext, password, 256)
+}
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 // Usage: this implementation would be invoked as follows:
