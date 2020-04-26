@@ -25,7 +25,7 @@ function passwordMenu(){
     div.style.background="#232323"
     div.style.border="solid white 2px"
     div.style["z-index"]="20"
-    div.innerHTML="<h1>New Menu</h1>"
+    div.innerHTML=`<h1 align="center">New Menu</h1>`
     body.appendChild(div)
 }
 //Main----------
