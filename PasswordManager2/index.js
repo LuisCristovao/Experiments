@@ -30,7 +30,9 @@ async function getHtml(filename) {
 function getElement(id) {
     return document.getElementById(id)
 }
-
+function goToInitialMenu(){
+    window.location.search=""
+}
 function init() {
     const url = window.location.search
     const defaultPage = () => getHtml("home.html")

@@ -62,7 +62,7 @@ function liAnimation(){
     var font_size=parseFloat(li.style["font-size"])
     const font_size_max_increase = 0.005
 
-    font_size = font_size + font_size_max_increase * sin(time)
+    font_size = font_size + (font_size_max_increase*2) * sin(time)
     //console.log(font_size)
     li.style["font-size"] = `${font_size}em`
 //    list_elements.forEach(li=>{
