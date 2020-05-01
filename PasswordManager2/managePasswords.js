@@ -39,10 +39,14 @@ function getList() {
     })
     password_list.innerHTML = html
 }
+function CloseMenu(btn){
+  let parent=btn.parentElement
+  parent.parentElement.removeChild(parent)
+}
 function show_password_info(show_data){
     
-  
-    let html=`<div align="center">`
+   let html=`<button class="btn" style="font-size: 3em;" onclick="CloseMenu(this)" >&lt;</button>`
+    html+=`<div align="center">`
     html+=`<input style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" value="${show_data.site}"><br>`
     html+=`<textarea style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" >${show_data.description}</textarea><br>`
     html+=`<button onclick="Copy(this.innerText,this)">Username</button><br>`
@@ -68,6 +72,10 @@ function passwordMenu(id){
     div.style.position="absolute"
     div.style.top="100px"
     div.style.width="100%"
+    div.style.top="0px"
+    div.style.height="100%"
+    div.style.margin="0px"
+    div.style.padding="0px"
     div.style.background="#232323"
     div.style.border="solid white 2px"
     div.style["z-index"]="20"
