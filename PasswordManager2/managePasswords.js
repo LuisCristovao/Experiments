@@ -43,7 +43,30 @@ function CloseMenu(btn){
   let parent=btn.parentElement
   parent.parentElement.removeChild(parent)
 }
-function show_password_info(show_data){
+function showUserPass(btn,id){
+   
+   let username= document.getElementsByName("Username")[0]
+   let password = document.getElementsByName("Password")[0]
+   if(btn.innerHTML=="Edit"){
+    username.style.height="20px"
+    username.style.opacity="100"
+    username.style.border="solid 1px white"
+    password.style.height="20px"
+    password.style.opacity="100"
+    password.style.border="solid 1px white"
+    btn.innerHTML="Submit"
+    btn.setAttribute("onclick","showUserPass(this)")
+   }else{
+       if(btn.innerHTML=="Submit"){
+            
+            btn.innerHTML="Edit"
+            //updateDB(db_line,id_row)
+            btn.setAttribute("onclick","showUserPass(this)")
+       }
+   }
+   
+}
+function show_password_info(show_data,id){
     
    let html=`<button class="btn" style="font-size: 3em;" onclick="CloseMenu(this)" >&lt;</button>`
     html+=`<div align="center">`
@@ -53,7 +76,7 @@ function show_password_info(show_data){
     html+=`<input name="Username" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.user}"><br>`
     html+=`<button onclick="Copy(this.innerText,this)">Password</button><br>`
     html+=`<input name="Password" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.pass}"><br>`
-    html+=`<button>Edit</button>&nbsp;&nbsp;<button>Delete</button>`
+    html+=`<button onclick="showUserPass(this,${id})">Edit</button>&nbsp;&nbsp;<button>Delete</button>`
     html+="</div>"
     return html
     
@@ -79,7 +102,7 @@ function passwordMenu(id){
     div.style.background="#232323"
     div.style.border="solid white 2px"
     div.style["z-index"]="20"
-    div.innerHTML+=show_password_info(db_line)
+    div.innerHTML+=show_password_info(db_line,id)
     body.appendChild(div)
 }
 //Main----------
