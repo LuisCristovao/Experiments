@@ -77,7 +77,12 @@ function Edit(btn,id){
     //btn.setAttribute("onclick","showUserPass(this)")
    }else{
        if(btn.innerHTML=="Submit"){
-            
+        username.style.height="0px"
+        username.style.opacity="0"
+        username.style.border=""
+        password.style.height="0px"
+        password.style.opacity="0"
+        password.style.border=""
             btn.innerHTML="Edit"
             let db_line={"site":site.value,"description":description.value,"user":username.value,"pass":password.value}
             updateDB(db_line,id,manager_pass.value)
@@ -85,6 +90,11 @@ function Edit(btn,id){
        }
    }
    
+}
+function Delete(id){
+    if(confirm("Are you sure?")){
+        deleteDB(id,manager_pass.value)
+    }
 }
 function show_password_info(show_data,id){
     
@@ -96,7 +106,7 @@ function show_password_info(show_data,id){
     html+=`<input name="Username" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.user}"><br>`
     html+=`<button onclick="Copy(this.innerText,this)">Password</button><br>`
     html+=`<input name="Password" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.pass}"><br>`
-    html+=`<button onclick="Edit(this,${id})">Edit</button>&nbsp;&nbsp;<button>Delete</button>`
+    html+=`<button onclick="Edit(this,${id})">Edit</button>&nbsp;&nbsp;<button onclick="Delete(${id})">Delete</button>`
     html+="</div>"
     return html
     

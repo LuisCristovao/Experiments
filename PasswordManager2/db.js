@@ -23,7 +23,11 @@ function updateDB(data,row_number_id,pass_value){
     db[row_number_id]=data
     EncryptDB(db,pass_value)
 }
-
+function deleteDB(row_number_id,pass_value){
+    let db=getDB(pass_value)
+    delete db[row_number_id]
+    EncryptDB(db,pass_value)
+}
 
 function EncryptDB(db,pass_value){
     let db_string=""
