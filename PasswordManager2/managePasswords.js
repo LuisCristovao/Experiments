@@ -1,9 +1,24 @@
 const manager_pass = getElement("pass")
 let search = getElement("search password")
 const password_list = getElement("passwords_list")
-const columns = ["site", "user", "pass", "description"]
+//const columns = ["site", "user", "pass", "description"]
 
 
+
+
+
+// function EncryptDB(db){
+//     let db_string=""
+//     db.map(db_line=>{
+        
+//         for(key in db_line){
+//             db_line[key]=encrypt(db_line[key],manager_pass.value)
+//         }
+//         return encrypt(JSON.stringify(db_line),manager_pass.value)+'\n'
+//     })
+//     localStorage["PM"]=db.reduce((acc,n)=>{acc+'\n'+n})
+
+// }
 function getPasswordInfo(){
     db = localStorage["PM"]
     if(db==null){
@@ -27,13 +42,13 @@ function getPasswordInfo(){
 
 
 function getList() {
-    db = localStorage["PM"]
+    db = getDB(manager_pass.value)
     let html = ""
-    db.split("\n").forEach((row,id) => {
-        let row_json = JSON.parse(decrypt(row, manager_pass.value))
+    db.forEach((row,id) => {
+        //
         html += `<div id="${id}" class="pass_list">`
-        html += `<h3>${decrypt(row_json["site"],manager_pass.value)}</h3>`
-        html += `<p>${decrypt(row_json["description"],manager_pass.value)}</p>`
+        html += `<h3>${row.site}</h3>`
+        html += `<p>${row.description}</p>`
         html += `<button onclick="passwordMenu(${id})">Open</button>`
         html += `</div>`
     })
@@ -43,10 +58,14 @@ function CloseMenu(btn){
   let parent=btn.parentElement
   parent.parentElement.removeChild(parent)
 }
-function showUserPass(btn,id){
+
+
+function Edit(btn,id){
    
-   let username= document.getElementsByName("Username")[0]
-   let password = document.getElementsByName("Password")[0]
+    let username= document.getElementsByName("Username")[0]
+    let password = document.getElementsByName("Password")[0]
+    let site= document.getElementsByName("site")[0]
+    let description = document.getElementsByName("description")[0]
    if(btn.innerHTML=="Edit"){
     username.style.height="20px"
     username.style.opacity="100"
@@ -55,13 +74,14 @@ function showUserPass(btn,id){
     password.style.opacity="100"
     password.style.border="solid 1px white"
     btn.innerHTML="Submit"
-    btn.setAttribute("onclick","showUserPass(this)")
+    //btn.setAttribute("onclick","showUserPass(this)")
    }else{
        if(btn.innerHTML=="Submit"){
             
             btn.innerHTML="Edit"
-            //updateDB(db_line,id_row)
-            btn.setAttribute("onclick","showUserPass(this)")
+            let db_line={"site":site.value,"description":description.value,"user":username.value,"pass":password.value}
+            updateDB(db_line,id,manager_pass.value)
+           // btn.setAttribute("onclick","showUserPass(this)")
        }
    }
    
@@ -70,13 +90,13 @@ function show_password_info(show_data,id){
     
    let html=`<button class="btn" style="font-size: 3em;" onclick="CloseMenu(this)" >&lt;</button>`
     html+=`<div align="center">`
-    html+=`<input style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" value="${show_data.site}"><br>`
-    html+=`<textarea style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" >${show_data.description}</textarea><br>`
+    html+=`<input name="site" style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" value="${show_data.site}"><br>`
+    html+=`<textarea name="description" style="background:transparent;border:none;color:white;font-size:3em;width:50%" text-align="right" >${show_data.description}</textarea><br>`
     html+=`<button onclick="Copy(this.innerText,this)">Username</button><br>`
     html+=`<input name="Username" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.user}"><br>`
     html+=`<button onclick="Copy(this.innerText,this)">Password</button><br>`
     html+=`<input name="Password" style="height:0px;color:white;background:transparent;border:none;opacity:0" value="${show_data.pass}"><br>`
-    html+=`<button onclick="showUserPass(this,${id})">Edit</button>&nbsp;&nbsp;<button>Delete</button>`
+    html+=`<button onclick="Edit(this,${id})">Edit</button>&nbsp;&nbsp;<button>Delete</button>`
     html+="</div>"
     return html
     
@@ -89,7 +109,7 @@ function Copy(user_pass,btn){
     setTimeout(()=>{btn.innerHTML=user_pass},1000)
 }
 function passwordMenu(id){
-    let decrypt_db=getPasswordInfo()
+    let decrypt_db=getDB(manager_pass.value)
     let db_line=decrypt_db[id]
     let div=document.createElement("div")
     div.style.position="absolute"
