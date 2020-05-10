@@ -2,19 +2,24 @@ let columns = ["site", "user", "pass", "description"]
 function getDB(pass_value){
     db = localStorage["PM"]
     if(db==null){
-        return null
+        return []
     }
     else{
         decrypt_db=[]
-        db.split("\n").forEach(row=>{
-            let decrypt_line={}
-            let row_json = JSON.parse(decrypt(row, pass_value))
-            for(key in row_json){
-                decrypt_line[key]=decrypt(row_json[key],pass_value)
-            }
-            decrypt_db.push(decrypt_line)
-        })
-        return decrypt_db
+        try{
+            db.split("\n").forEach(row=>{
+                let decrypt_line={}
+                let row_json = JSON.parse(decrypt(row, pass_value))
+                for(key in row_json){
+                    decrypt_line[key]=decrypt(row_json[key],pass_value)
+                }
+                decrypt_db.push(decrypt_line)
+            })
+            return decrypt_db
+        }catch{
+            return []
+        }
+        
     }
 
 }
@@ -53,4 +58,12 @@ function csvToDB(data,pass_value){
         db.push(encrypt(JSON.stringify(db_line), pass_value))
     })
     localStorage["PM"] = db.reduce((acc, n) => acc + '\n' + n)
+}
+function emptyDbLine(){
+    line={}
+    columns.forEach(col=>{
+        
+        line[col]=""
+    })
+    return line
 }

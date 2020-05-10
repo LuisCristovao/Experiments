@@ -448,11 +448,21 @@ Utf8.decode = function (strUtf) {
 };
 
 function encrypt(plaintext, password) {
-    return Aes.Ctr.encrypt(plaintext, password, 256)
+    try{
+        return Aes.Ctr.encrypt(plaintext, password, 256)
+    }catch{
+        return null
+    }
+    
 }
 
 function decrypt(ciphertext, password) {
-    return Aes.Ctr.decrypt(ciphertext, password, 256)
+    try{
+        return Aes.Ctr.decrypt(ciphertext, password, 256)
+    }catch{
+        return null
+    }
+    
 }
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
