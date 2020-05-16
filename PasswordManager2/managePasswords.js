@@ -2,7 +2,7 @@ const manager_pass = getElement("pass")
 let search = getElement("search password")
 const password_list = getElement("passwords_list")
 
-manager_pass.setAttribute("oninput","getList()")
+//manager_pass.setAttribute("oninput","getList()")
 
 
 function getList() {

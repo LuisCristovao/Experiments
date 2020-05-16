@@ -1,4 +1,8 @@
 let columns = ["site", "user", "pass", "description"]
+
+function writeDB(data){
+    localStorage["PM"]=data
+}
 function getDB(pass_value){
     db = localStorage["PM"]
     if(db==null){
