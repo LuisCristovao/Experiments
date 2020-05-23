@@ -106,3 +106,6 @@ function dbToCsv(pass_value){
     })
     return db
 }
+function exportDB(){
+    return localStorage["PM"]
+}
