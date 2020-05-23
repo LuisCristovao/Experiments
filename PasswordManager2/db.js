@@ -12,12 +12,17 @@ function getDB(pass_value){
         decrypt_db=[]
         try{
             db.split("\n").forEach(row=>{
-                let decrypt_line={}
-                let row_json = JSON.parse(decrypt(row, pass_value))
-                for(key in row_json){
-                    decrypt_line[key]=decrypt(row_json[key],pass_value)
+                if(row==""){
+                    
+                }else{
+
+                    let decrypt_line={}
+                    let row_json = JSON.parse(decrypt(row, pass_value))
+                    for(key in row_json){
+                        decrypt_line[key]=decrypt(row_json[key],pass_value)
+                    }
+                    decrypt_db.push(decrypt_line)
                 }
-                decrypt_db.push(decrypt_line)
             })
             return decrypt_db
         }catch{
@@ -50,16 +55,19 @@ function EncryptDB(db,pass_value){
     localStorage["PM"]=new_db.reduce((acc, n) => acc + '\n' + n)
 
 }
-function csvToDB(data,pass_value){
+function csvToDB(data,pass_value,split_data_character){
     let db = []
     let db_line = {}
-    data.value.split('\n').forEach((row,id) => {
-        
-        let columns_data = (split_data.value == '\\t')?row.split('\t'):row.split(split_data.value)
-        columns_data.forEach((data, index) => {
-            db_line[columns[index]] = encrypt(data, pass_value)
-        })
-        db.push(encrypt(JSON.stringify(db_line), pass_value))
+    data.split('\n').forEach((row,id) => {
+        if(row==""){
+
+        }else{
+            let columns_data = (split_data_character == '\\t')?row.split('\t'):row.split(split_data_character)
+            columns_data.forEach((data, index) => {
+                db_line[columns[index]] = encrypt(data, pass_value)
+            })
+            db.push(encrypt(JSON.stringify(db_line), pass_value))
+        }
     })
     localStorage["PM"] = db.reduce((acc, n) => acc + '\n' + n)
 }
@@ -70,4 +78,31 @@ function emptyDbLine(){
         line[col]=""
     })
     return line
+}
+
+function dbToCsv(pass_value){
+    let data = localStorage["PM"]
+    let line = ""
+    let db = ""
+    data.split("\n").forEach(row => {
+        let d = decrypt(row, pass_value)
+        if(row==""){
+
+        }else{
+
+            let d_json = JSON.parse(d)
+            line = ""
+            columns.forEach((col, index) => {
+                if (index < columns.length-1) {
+    
+                    line += decrypt(d_json[columns[index]], pass_value) + '\t'
+                } else {
+                    line += decrypt(d_json[columns[index]], pass_value)
+                }
+            })
+            line += '\n'
+            db += line
+        }
+    })
+    return db
 }

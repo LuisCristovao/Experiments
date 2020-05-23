@@ -1,6 +1,4 @@
-let password_import = getElement("password_import")
-let data = getElement("data")
-let split_data = getElement("spliting character")
+
 //import {csvToDB} from db.js
 function ImportEncryptedDB(){
     let html=getElement("importPasswords").innerHTML
@@ -21,8 +19,10 @@ function ImportDecryptedCSV(){
 }
 function Import() {
 
-    
-    csvToDB(data,password_import.value)
+    let password_import = getElement("password_import")
+let data = getElement("data")
+let split_data_character = getElement("spliting character")
+    csvToDB(data.value,password_import.value,split_data_character.value)
     data.value = "Imported passwords and encrypted them!"
 }
 function ImportEncrypted(){
