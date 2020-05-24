@@ -3,26 +3,57 @@ let search = getElement("search password");
 const password_list = getElement("passwords_list");
 
 //manager_pass.setAttribute("oninput","getList()")
-
-function getList() {
-  if (manager_pass.value == "") {
-    password_list.innerHTML = "No password inserted!";
+function listDB(db){
+  if (db.length == 0) {
+    password_list.innerHTML = "Empty or Wrong password";
   } else {
-    db = getDB(manager_pass.value);
-    if (db.length == 0) {
-      password_list.innerHTML = "Empty or Wrong password";
-    } else {
-      let html = "";
-      db.forEach((row, id) => {
-        //
+    let html = "";
+    db.forEach((row, id) => {
+      //
+      html += `<div id="${id}" class="pass_list">`;
+      html += `<h3>${row.site}</h3>`;
+      html += `<p>${row.description}</p>`;
+      html += `<button onclick="passwordMenu(${id})">Open</button>`;
+      html += `</div>`;
+    });
+    password_list.innerHTML = html;
+  }
+}
+
+function listDBFiltered(db,filtered_ids){
+  if (db.length == 0) {
+    password_list.innerHTML = "Empty or Wrong password";
+  } else {
+    let html = "";
+    filtered_ids.forEach(id => {
+      //
+      
+        let row=db[id]
         html += `<div id="${id}" class="pass_list">`;
         html += `<h3>${row.site}</h3>`;
         html += `<p>${row.description}</p>`;
         html += `<button onclick="passwordMenu(${id})">Open</button>`;
         html += `</div>`;
-      });
-      password_list.innerHTML = html;
-    }
+      
+    });
+    password_list.innerHTML = html;
+  }
+}
+function list_DB_With_Search(input){
+  let db=getDB(manager_pass.value)
+  let search_word=input.value
+  let newdb_ids=findBestMatchs(db,search_word)
+  //z.filter((el,i)=>x.some(j => i === j))
+  //filter db by newly found matches id
+  //db.filter((el,i)=>newdb_ids.some(j => i === j))
+  listDBFiltered(db,newdb_ids)
+}
+function getList() {
+  if (manager_pass.value == "") {
+    password_list.innerHTML = "No password inserted!";
+  } else {
+    let db = getDB(manager_pass.value);
+    listDB(db)
   }
 }
 function CloseMenu(btn) {
