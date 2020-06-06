@@ -40,8 +40,7 @@ async function Send(){
     if (method.value in options.get){
         try{
 
-            var response=await fetch(url)
-            output.value=await response.text()
+            fetch(url.value).then(response=>response.text()).then(data=>output.value)
         }catch(err){
             alert(`request fail with error ${err}`)
         }
@@ -50,7 +49,7 @@ async function Send(){
         if(method.value in options.post){
             try{
 
-                var response=await fetch(url,{
+                var response=await fetch(url.value,{
                     method: 'POST',
                     "Content-Type":"text/html",
                     body: msg_body.value
