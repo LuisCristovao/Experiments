@@ -58,6 +58,7 @@
      <Compile Include="Assets\Game\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Game\Scripts\EnemyMovement.cs" />
      <Compile Include="Assets\Game\Scripts\EyeMovement.cs" />
+     <Compile Include="Assets\Game\Scripts\GenerateWorld.cs" />
      <Compile Include="Assets\Game\Scripts\Player.cs" />
      <Compile Include="Assets\Game\Scripts\Powers.cs" />
      <Compile Include="Assets\GenerateMap\Scripts\GM_CameraMovement.cs" />
