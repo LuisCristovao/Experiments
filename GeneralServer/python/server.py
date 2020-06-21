@@ -18,17 +18,29 @@ map = {
 def index_route():
     return fl.render_template('index.html')
 
+@app.route('/getKey/<key>')
+def getKey(key):
+	
+	resp = fl.Response(map[key])
+	resp.headers['Access-Control-Allow-Origin'] = '*'
+	return resp
 
+@app.route('/setKey/<key>/<data>')
+def setKey(key,data):
+	map[key]=data
+	resp = fl.Response("Key {0}:{1} inserted!".format(key,data))
+	resp.headers['Access-Control-Allow-Origin'] = '*'
+	return resp
 
 @app.route('/getKey',methods=["POST"])
-def getKey():
+def getKeyPost():
 	received_values=fl.request.data.decode("ascii")
 	resp = fl.Response(map[received_values])
 	resp.headers['Access-Control-Allow-Origin'] = '*'
 	return resp
     
 @app.route('/setKey/<key>',methods=["POST"])
-def setKey(key):
+def setKeyPost(key):
 	received_values=fl.request.data.decode("ascii")
 	map[key]=received_values
 	resp = fl.Response("Key {0}:{1} inserted!".format(key,received_values))
