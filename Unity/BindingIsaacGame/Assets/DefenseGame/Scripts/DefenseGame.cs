@@ -8,6 +8,8 @@ using UnityEngine;
 public class DefenseGame : MonoBehaviour
 {
     public GameObject square;
+    public float force = 100;
+
     private Boolean pressed = false;
     private Boolean idle = true;
     private double time = 0;
@@ -50,7 +52,17 @@ public class DefenseGame : MonoBehaviour
                 GameObject s = Instantiate(square, player.transform.position, Quaternion.identity);
                 Rigidbody2D rb = s.GetComponent<Rigidbody2D>();
                 Vector2 delta_direction = (this.transform.position - player.transform.position);
-                rb.AddForce(delta_direction*(Math.Abs(circle_size)*100));
+                /*if (Math.Abs(delta_direction.x) > 1f )
+                {
+                    delta_direction.x = delta_direction.x / Math.Abs(delta_direction.x);
+                }
+                if (Math.Abs(delta_direction.x) > 1f)
+                {
+                    delta_direction.y = delta_direction.y / Math.Abs(delta_direction.y);
+                }*/
+                //delta_direction = new Vector2(delta_direction.x / Math.Abs(delta_direction.x), delta_direction.y / Math.Abs(delta_direction.y));
+                
+                rb.AddForce(delta_direction*(Math.Abs(circle_size)*force));
                 rb.AddTorque(-100);
                 idle = true;
             }

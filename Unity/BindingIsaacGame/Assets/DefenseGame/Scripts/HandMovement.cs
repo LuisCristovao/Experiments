@@ -20,13 +20,13 @@ public class HandMovement : MonoBehaviour
     {
        
         Vector3 delta_direction_mouse = (transform.position - mouse.transform.position);
-        print(delta_direction_mouse);
+       
         transform.position = transform.position - (delta_direction_mouse * Time.deltaTime);
         Vector3 delta_direction_player = (transform.position - player.transform.position);
         if(delta_direction_player.x>1f || delta_direction_player.y >1f ||  delta_direction_player.x < -1f || delta_direction_player.y < -1f )
         {
             transform.position = transform.position - (delta_direction_player * 5 *Time.deltaTime);
         }
-
+     
     }
 }
