@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DefenseGame\Scripts\DefenseGame.cs" />
      <Compile Include="Assets\Game\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Game\Scripts\EnemyMovement.cs" />
      <Compile Include="Assets\Game\Scripts\EyeMovement.cs" />
