@@ -97,7 +97,7 @@
     
     canvas.width=window.innerWidth;
     canvas.height=window.innerHeight;
-    canvas.addEventListener("touchmove",TouchMove,false);
+    canvas.addEventListener("click",FullScreen,false);
 
     var GoodAttacks=[];
     var GoodDefense=[];
@@ -119,6 +119,7 @@
     var oneplayer;
     //integer with only two values 0,1 that decides who is the player selecting menus
     var goodTurn;
+    
     
     
     class Menu{
@@ -237,7 +238,7 @@
             menu.choose_good_side=value
         }
         OnePlayer(){
-            
+            document.documentElement.requestFullscreen()
             /*HideButtons();
             time=0
             actualAnimationRunning=Idle[0];
@@ -247,6 +248,7 @@
             
         }
         TwoPlayers(){
+            document.documentElement.requestFullscreen()
             //Afterwars change to work with two players
             /*HideButtons();
             time=0
@@ -1897,10 +1899,13 @@
         return rawFile.responseText;
     }    
 
-
+    function FullScreen(){
+        document.documentElement.requestFullscreen()
+    }
     function TouchMove(e){
         mouse[0]=e.touches[0].clientX;
         mouse[1]=e.touches[0].clientY;
+
     }    
 
     function MousePos(e){
