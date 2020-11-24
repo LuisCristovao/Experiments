@@ -39,8 +39,7 @@ const options={
 async function Send(){
     if (method.value in options.get){
         try{
-
-            fetch(url.value).then(response=>response.text()).then(data=>output.value)
+            fetch(url.value).then(response=>response.text()).then(data=>output.value=data)
         }catch(err){
             alert(`request fail with error ${err}`)
         }
@@ -48,7 +47,7 @@ async function Send(){
         alert
         if(method.value in options.post){
             try{
-
+				console.log(url.value)
                 var response=await fetch(url.value,{
                     method: 'POST',
                     "Content-Type":"text/html",

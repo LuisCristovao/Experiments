@@ -11,7 +11,7 @@ import flask as fl
 app = fl.Flask(__name__, static_url_path='')
 
 map = {
-    "d": "333"
+    "my_key": "333"
 }
 
 @app.route('/')
