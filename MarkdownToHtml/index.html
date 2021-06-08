@@ -1,0 +1,71 @@
+<html>
+    <body>
+
+    </body>
+    <script>
+       async function  get(url){
+        let response = await fetch(url);
+        let val = await response.text();
+        return val
+       } 
+       function createJsonFromWhereToCreatePage(){
+           
+       }
+       async function detectTitlesAndSubTitles(){
+           
+        let text=await get("page.txt")
+        let code_regex=text.split("\n").map(line=>line.split(" ")[0])
+        let html_line_map=code_regex.map(code=>{
+            if(code[0]=="#"){
+                let title_sub_length=code.split("#").length-1
+                return `h${title_sub_length}`
+            }else if(code.trim().length==0){
+                // do nothing on purpose
+                return ""
+            }
+            else{
+                return "p"
+            }    
+        })
+        return html_line_map
+
+       }
+       async function createPage(){
+         let html_structure= await detectTitlesAndSubTitles()
+         let text=await get("page.txt")
+         let text_lines=text.split("\n")
+         let code_regex=text.split("\n").map(line=>line.split(" ")[0])
+         let html=""
+         let lines_data=[]
+         text_lines.forEach((line,index)=>{
+             if(line.trim().split("").length!=0){
+                if(line==code_regex[index]){
+                    lines_data.push(line)    
+                }else{
+                    lines_data.push(line.split(code_regex[index])[1])
+                } 
+             }else{
+                lines_data.push("")
+             }
+         })
+
+         console.log(html_structure)
+         console.log(text_lines)
+         console.log(lines_data)
+         html_structure.forEach((el,index)=>{
+             let data=lines_data[index]
+             if(data.trim().split("").length!=0){
+                html+=`<${el}>${data}</${el}>`
+             }
+         })
+         document.body.innerHTML=html
+        //  let html=html_structure.reduce((acc,n)=>{
+        //      acc+=`<${n}>`
+        //  })
+       }
+       async function main(){
+        createPage()
+       }
+       window.onload=main()
+    </script>
+</html>
