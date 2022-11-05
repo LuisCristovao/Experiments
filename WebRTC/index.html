@@ -12,6 +12,9 @@
       <button type="submit">submit</button>
     </form>
     <pre id="outgoing"></pre>
+    <div id="chat">
+
+    </div>
     <script src="simplepeer.min.js"></script>
     <script>
       const p = new SimplePeer({
@@ -38,6 +41,7 @@
 
       p.on('data', data => {
         console.log('data: ' + data)
+        document.getElementById("chat").innerHTML+=data
       })
     </script>
   </body>
