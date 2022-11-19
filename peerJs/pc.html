@@ -9,7 +9,11 @@
   <body>
     <textarea></textarea>
     <button onclick="connect()">connect</button><br>
-    <img >
+    <img ><br>
+    <textarea>
+
+    </textarea><br>
+    <button onclick="send()">Send</button>
   </body>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <!-- <script src="mywrtc.js"></script> -->
@@ -27,7 +31,8 @@
       conn = _conn;
       setTimeout(()=>{conn.send("Hello22")},200);
       conn.on("data", (data) => {
-        console.log("Received: ", data);
+        console.log("Received3: ", data);
+        document.getElementsByTagName("textarea")[0].value+=data+'\n'
       });
     });
 
@@ -39,7 +44,8 @@
       conn.on("open", function () {
         // Receive messages
         conn.on("data", function (data) {
-          console.log("Received", data);
+          console.log("Received1", data);
+          document.getElementsByTagName("textarea")[0].value+=data+'\n'
         });
 
         // Send messages
@@ -54,15 +60,18 @@
       conn.on("open", function () {
         // Receive messages
         conn.on("data", function (data) {
-          console.log("Received", data);
+          console.log("Received0", data);
+          document.getElementsByTagName("textarea")[0].value+=data+'\n'
         });
-
         // Send messages
         conn.send("Hello!");
       });
     }
+    function send(){
+        conn.send(document.getElementsByTagName("textarea")[1].value)
+    }
     if(window.location.search.split("?")[1]!=undefined){
-        setTimeout(()=>{connect2()},300)
+        setTimeout(()=>{connect2()},500)
     }
   </script>
 </html>
