@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <textarea></textarea>
+    <button onclick="connect()">connect</button>
+  </body>
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <!-- <script src="mywrtc.js"></script> -->
+  <script>
+    var peer = new Peer();
+    var conn = null;
+    peer.on("open", function (id) {
+      console.log("My peer ID is: " + id);
+    });
+    //on connection
+    peer.on("connection", function (_conn) {
+      console.log("connected with " + _conn.peer);
+      // Send messages
+      conn = _conn;
+      setTimeout(()=>{conn.send("Hello22")},200);
+      conn.on("data", (data) => {
+        console.log("Received: ", data);
+      });
+    });
+
+    function connect() {
+      conn = peer.connect(document.getElementsByTagName("textarea")[0].value);
+      conn.on("connection",(_conn)=>{
+        console.log("connected with " + _conn.peer);
+      })
+      conn.on("open", function () {
+        // Receive messages
+        conn.on("data", function (data) {
+          console.log("Received", data);
+        });
+
+        // Send messages
+        conn.send("Hello!");
+      });
+    }
+  </script>
+</html>
