@@ -8,7 +8,8 @@
   </head>
   <body>
     <textarea></textarea>
-    <button onclick="connect()">connect</button>
+    <button onclick="connect()">connect</button><br>
+    <img >
   </body>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <!-- <script src="mywrtc.js"></script> -->
@@ -17,10 +18,11 @@
     var conn = null;
     peer.on("open", function (id) {
       console.log("My peer ID is: " + id);
+      document.getElementsByTagName("img")[0].setAttribute("src","https://api.qrserver.com/v1/create-qr-code/?data=http://192.168.1.88:5500/peerJs/pc.html?"+id+"&amp;size=100x100")
     });
     //on connection
     peer.on("connection", function (_conn) {
-      console.log("connected with " + _conn.peer);
+      console.log("1connected with " + _conn.peer);
       // Send messages
       conn = _conn;
       setTimeout(()=>{conn.send("Hello22")},200);
@@ -43,6 +45,24 @@
         // Send messages
         conn.send("Hello!");
       });
+    }
+    function connect2() {
+      conn = peer.connect(window.location.search.split("?")[1]);
+      conn.on("connection",(_conn)=>{
+        console.log("connected with " + _conn.peer);
+      })
+      conn.on("open", function () {
+        // Receive messages
+        conn.on("data", function (data) {
+          console.log("Received", data);
+        });
+
+        // Send messages
+        conn.send("Hello!");
+      });
+    }
+    if(window.location.search.split("?")[1]!=undefined){
+        setTimeout(()=>{connect2()},300)
     }
   </script>
 </html>
