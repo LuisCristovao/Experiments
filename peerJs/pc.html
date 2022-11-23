@@ -8,70 +8,73 @@
   </head>
   <body>
     <textarea></textarea>
-    <button onclick="connect()">connect</button><br>
-    <img ><br>
-    <textarea>
-
-    </textarea><br>
+    <br />
+    <img /><br />
+    <textarea> </textarea><br />
     <button onclick="send()">Send</button>
   </body>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <!-- <script src="mywrtc.js"></script> -->
   <script>
-    var peer = new Peer();
-    var conn = null;
-    peer.on("open", function (id) {
-      console.log("My peer ID is: " + id);
-      document.getElementsByTagName("img")[0].setAttribute("src","https://api.qrserver.com/v1/create-qr-code/?data=http://192.168.1.88:5500/peerJs/pc.html?"+id+"&amp;size=100x100")
-    });
-    //on connection
-    peer.on("connection", function (_conn) {
-      console.log("1connected with " + _conn.peer);
-      // Send messages
-      conn = _conn;
-      setTimeout(()=>{conn.send("Hello22")},200);
-      conn.on("data", (data) => {
-        console.log("Received3: ", data);
-        document.getElementsByTagName("textarea")[0].value+=data+'\n'
-      });
-    });
-
-    function connect() {
-      conn = peer.connect(document.getElementsByTagName("textarea")[0].value);
-      conn.on("connection",(_conn)=>{
-        console.log("connected with " + _conn.peer);
-      })
-      conn.on("open", function () {
-        // Receive messages
-        conn.on("data", function (data) {
-          console.log("Received1", data);
-          document.getElementsByTagName("textarea")[0].value+=data+'\n'
-        });
-
-        // Send messages
-        conn.send("Hello!");
-      });
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     }
-    function connect2() {
+    function connect() {
+      //host that initiates invitation for connection
       conn = peer.connect(window.location.search.split("?")[1]);
-      conn.on("connection",(_conn)=>{
-        console.log("connected with " + _conn.peer);
-      })
+
       conn.on("open", function () {
         // Receive messages
         conn.on("data", function (data) {
           console.log("Received0", data);
-          document.getElementsByTagName("textarea")[0].value+=data+'\n'
+          document.getElementsByTagName("textarea")[0].value += data + "\n";
         });
         // Send messages
         conn.send("Hello!");
       });
+      
     }
-    function send(){
-        conn.send(document.getElementsByTagName("textarea")[1].value)
+
+    function send() {
+      conn.send(document.getElementsByTagName("textarea")[1].value);
     }
-    if(window.location.search.split("?")[1]!=undefined){
-        setTimeout(()=>{connect2()},500)
+
+    //main------
+    var peer = new Peer();
+    //connection variable
+    var conn = null;
+    var connection_established = false;
+    // first host to receive connection
+    peer.on("open", function (id) {
+      console.log("My peer ID is: " + id);
+      document
+        .getElementsByTagName("img")[0]
+        .setAttribute(
+          "src",
+          "https://api.qrserver.com/v1/create-qr-code/?data=http://192.168.1.88:5500/peerJs/pc.html?" +
+            id +
+            "&amp;size=100x100"
+        );
+    });
+    //on connection
+    peer.on("connection", function (_conn) {
+      console.log("connected with " + _conn.peer);
+      connection_established = true;
+      // Send messages
+      conn = _conn;
+      
+      setTimeout(()=>{conn.send("Hello22")},200);
+
+      conn.on("data", (data) => {
+        console.log("Received3: ", data);
+        document.getElementsByTagName("textarea")[0].value += data + "\n";
+      });
+    });
+
+    if (window.location.search.split("?")[1] != undefined) {
+      //wait to load page until try first connect
+      setTimeout(()=>{connect()},500);
+      
     }
   </script>
 </html>
