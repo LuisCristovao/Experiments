@@ -33,6 +33,16 @@
           video.load();
           video.play();
         }
+        if(file.type.includes("html")){
+            let text=document.createElement("div")
+            text.innerHTML=reader.result
+            document.body.appendChild(text)
+        }
+        if(file.type.includes("text")){
+            let text=document.createElement("pre")
+            text.innerHTML=reader.result
+            document.body.appendChild(text)
+        }
         alert(reader.result);
       };
       reader.readAsBinaryString(file);
