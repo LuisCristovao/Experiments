@@ -9,6 +9,7 @@
   <body>
     <input type="file" id="fileInput" name="fileInput" />
   </body>
+  <script src="https://cdn.rawgit.com/mozilla/localForage/master/dist/localforage.js"></script>
   <script>
     function b64EncodeUnicode(str) {
       return btoa(encodeURIComponent(str));
@@ -19,8 +20,9 @@
     }
     function getFile(e) {
       file = fileInput.files[0];
-      readFile(0);
+      
       final_result = [];
+      readFile(0);
     }
     function readFile(start) {
       // let img = document.createElement("video");
@@ -51,6 +53,7 @@
           readFile(next_slice);
         } else {
           //localStorage["batata"]=JSON.stringify(final_result)
+          localforage.setItem("file_manager",final_result.reduce((acc,n)=>{return acc.concat(n)},""),()=>{})
           let final_result2=final_result.reduce((acc,n)=>{return acc.concat(n)},"")
           if (file.type.includes("image")) {
             let img = document.createElement("img");
@@ -91,6 +94,8 @@
     window.onload = () => {
       fileInput = document.getElementById("fileInput");
       fileInput.addEventListener("change", getFile);
+      
     };
   </script>
+  
 </html>
