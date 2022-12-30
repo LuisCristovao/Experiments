@@ -53,7 +53,7 @@
           readFile(next_slice);
         } else {
           //localStorage["batata"]=JSON.stringify(final_result)
-          localforage.setItem("file_manager",final_result.reduce((acc,n)=>{return acc.concat(n)},""),()=>{})
+          localforage.setItem("file_manager",final_result,()=>{})
           let final_result2=final_result.reduce((acc,n)=>{return acc.concat(n)},"")
           if (file.type.includes("image")) {
             let img = document.createElement("img");
