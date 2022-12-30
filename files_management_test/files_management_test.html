@@ -17,41 +17,80 @@
     function UnicodeDecodeB64(str) {
       return decodeURIComponent(atob(str));
     }
-    function readFile(e) {
-      var file = fileInput.files[0];
+    function getFile(e) {
+      file = fileInput.files[0];
+      readFile(0);
+      final_result = [];
+    }
+    function readFile(start) {
+      // let img = document.createElement("video");
+      // img.src = URL.createObjectURL(file);
+      // document.body.appendChild(img);
       var reader = new FileReader();
-      reader.onload = function (e) {
-        if (file.type.includes("image")) {
-          let img = document.createElement("img");
-          img.src = "data:image/png;base64," + btoa(reader.result);
-          document.body.appendChild(img);
-        }
-        if (file.type.includes("video")) {
-          let video = document.createElement("video");
-          video.src = "data:video/webm;base64," + btoa(reader.result);
-          document.body.appendChild(video);
-          video.load();
-          video.play();
-        }
-        if(file.type.includes("html")){
-            let text=document.createElement("div")
-            text.innerHTML=reader.result
-            document.body.appendChild(text)
-        }
-        if(file.type.includes("text")){
-            let text=document.createElement("pre")
-            text.innerHTML=reader.result
-            document.body.appendChild(text)
-        }
-        alert(reader.result);
+      var next_slice = start + slice_size + 1;
+      var blob = file.slice(start, next_slice);
+
+      /* reader.onloadstart = (e) => {
+        console.log(e);
       };
-      reader.readAsBinaryString(file);
+      reader.onloadend = (e) => {
+        console.log(e);
+      };
+      reader.onprogress = (e) => {
+        console.log(e);
+      }; */
+      reader.onloadend = function (e) {
+        //console.log(e.target.result);
+        if ( e.target.readyState !== FileReader.DONE ) {
+            return;
+        }
+        final_result.push(e.target.result);
+        if (next_slice < file.size) {
+          // More to upload, call function recursively
+          console.log((next_slice/file.size)*100)
+          readFile(next_slice);
+        } else {
+          //localStorage["batata"]=JSON.stringify(final_result)
+          let final_result2=final_result.reduce((acc,n)=>{return acc.concat(n)},"")
+          if (file.type.includes("image")) {
+            let img = document.createElement("img");
+            img.src = "data:image/png;base64," + btoa(final_result2);
+            document.body.appendChild(img);
+          }
+          if (file.type.includes("video")) {
+            let video = document.createElement("video");
+            video.src = "data:video/webm;base64," + btoa(final_result2);
+            document.body.appendChild(video);
+            video.load();
+            video.play();
+          }
+          if (file.type.includes("html")) {
+            let text = document.createElement("div");
+            text.innerHTML = final_result2;
+            document.body.appendChild(text);
+          }
+          if (file.type.includes("text")) {
+            let text = document.createElement("pre");
+            text.innerHTML = final_result2;
+            document.body.appendChild(text);
+          }
+        }
+      };
+
+      reader.onerror = () => {
+        console.log(reader.error);
+      };
+
+      reader.readAsBinaryString(blob);
     }
     //main
     var fileInput;
+    var file;
+    var final_result = [];
+    var slice_size = 1000 * 1024;
     window.onload = () => {
       fileInput = document.getElementById("fileInput");
-      fileInput.addEventListener("change", readFile);
+      fileInput.addEventListener("change", getFile);
     };
   </script>
 </html>
