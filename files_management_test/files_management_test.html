@@ -57,6 +57,14 @@
           let final_result2 = final_result.reduce((acc, n) => {
             return acc.concat(n);
           }, "");
+          if (file.type.includes("audio")) {
+            let audio = document.createElement("audio");
+            audio.src = "data:audio/mp4;base64," + btoa(final_result2);
+            audio.setAttribute("controls","true")
+            document.body.appendChild(audio);
+            audio.load();
+            audio.play();
+          }
           if (file.type.includes("image")) {
             let img = document.createElement("img");
             img.src = "data:image/png;base64," + btoa(final_result2);
