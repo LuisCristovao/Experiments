@@ -24,6 +24,13 @@
       final_result = [];
       readFile(0);
     }
+
+    function downloadFileURL(data, data_type) {
+      return URL.createObjectURL(
+        new Blob([data], { type: "text/plain;charset=utf-8" })
+      );
+    }
+
     function readFile(start) {
       // let img = document.createElement("video");
       // img.src = URL.createObjectURL(file);
@@ -53,14 +60,18 @@
           readFile(next_slice);
         } else {
           //localStorage["batata"]=JSON.stringify(final_result)
-          localforage.setItem("file_manager_"+file.name, final_result, () => {});
+          localforage.setItem(
+            "file_manager_" + file.name,
+            final_result,
+            () => {}
+          );
           let final_result2 = final_result.reduce((acc, n) => {
             return acc.concat(n);
           }, "");
           if (file.type.includes("audio")) {
             let audio = document.createElement("audio");
             audio.src = "data:audio/mp4;base64," + btoa(final_result2);
-            audio.setAttribute("controls","true")
+            audio.setAttribute("controls", "true");
             document.body.appendChild(audio);
             audio.load();
             audio.play();
@@ -96,7 +107,7 @@
 
       reader.readAsBinaryString(blob);
     }
-    //main
+    //main--------
     var fileInput;
     var file;
     var final_result = [];
@@ -112,7 +123,7 @@
       // video.src = "data:video/webm;base64," + btoa(final_result2);
       // document.body.appendChild(video);
       // video.load();
-      // video.setAttribute("controls","controls")   
+      // video.setAttribute("controls","controls")
       // video.play();
     };
   </script>
