@@ -27,7 +27,7 @@
 
     function downloadFileURL(data, data_type) {
       return URL.createObjectURL(
-        new Blob([data], { type: "text/plain;charset=utf-8" })
+        new Blob([data], { type: data_type })
       );
     }
 
@@ -75,6 +75,12 @@
             document.body.appendChild(audio);
             audio.load();
             audio.play();
+            let download_link=document.createElement("a")
+            download_link.setAttribute("href",downloadFileURL(final_result2,"audio"))
+            download_link.setAttribute("target","_blank")
+            download_link.setAttribute("download","data.m4a")
+            download_link.innerText="download"
+            document.body.appendChild(download_link);
           }
           if (file.type.includes("image")) {
             let img = document.createElement("img");
@@ -87,6 +93,7 @@
             document.body.appendChild(video);
             video.load();
             video.play();
+            
           }
           if (file.type.includes("html")) {
             let text = document.createElement("div");
@@ -97,6 +104,12 @@
             let text = document.createElement("pre");
             text.innerHTML = final_result2;
             document.body.appendChild(text);
+            let download_link=document.createElement("a")
+            download_link.setAttribute("href",downloadFileURL(final_result2,"text"))
+            download_link.setAttribute("target","_blank")
+            download_link.setAttribute("download","data.txt")
+            download_link.innerText="download"
+            document.body.appendChild(download_link);
           }
         }
       };
