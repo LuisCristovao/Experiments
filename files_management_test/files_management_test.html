@@ -26,9 +26,7 @@
     }
 
     function downloadFileURL(data, data_type) {
-      return URL.createObjectURL(
-        new Blob([data], { type: data_type })
-      );
+      return URL.createObjectURL(new Blob([data], { type: data_type }));
     }
 
     function readFile(start) {
@@ -87,7 +85,6 @@
             document.body.appendChild(video);
             video.load();
             video.play();
-            
           }
           if (file.type.includes("html")) {
             let text = document.createElement("div");
@@ -98,11 +95,14 @@
             let text = document.createElement("pre");
             text.innerHTML = final_result2;
             document.body.appendChild(text);
-            let download_link=document.createElement("a")
-            download_link.setAttribute("href",downloadFileURL(final_result2,"text"))
-            download_link.setAttribute("target","_blank")
-            download_link.setAttribute("download","data.txt")
-            download_link.innerText="download"
+            let download_link = document.createElement("a");
+            download_link.setAttribute(
+              "href",
+              downloadFileURL(final_result2, "text")
+            );
+            download_link.setAttribute("target", "_blank");
+            download_link.setAttribute("download", "data.txt");
+            download_link.innerText = "download";
             document.body.appendChild(download_link);
           }
         }
@@ -114,7 +114,36 @@
 
       reader.readAsBinaryString(blob);
     }
+    function DownloadBigFile(start_index, end_index, _file) {
+      let new_start_index = end_index;
+      let new_end_index = new_start_index + 30;
+      if (start_index < _file.length) {
+        let final_result2 = _file
+          .slice(start_index, end_index)
+          .reduce((acc, n) => {
+            return acc.concat(n);
+          }, "");
+        // let text = document.createElement("pre");
+        // text.innerHTML = final_result2;
+        // document.body.appendChild(text);
+        let download_link = document.createElement("a");
+        download_link.setAttribute(
+          "href",
+          downloadFileURL(final_result2, "binary")
+        );
+        download_link.setAttribute("target", "_blank");
+        download_link.setAttribute("download", `data_${start_index}`);
+        download_link.innerText = `download_${start_index}`;
+        document.body.appendChild(download_link);
+        document.body.innerHTML+='<br>'
+
+        setTimeout(() => {
+          DownloadBigFile(new_start_index, new_end_index, _file);
+        }, 100);
+      }
+    }
     //main--------
+    var system;
     var fileInput;
     var file;
     var final_result = [];
@@ -122,11 +151,14 @@
     window.onload = async () => {
       fileInput = document.getElementById("fileInput");
       fileInput.addEventListener("change", getFile);
-      // let final_result = await localforage.getItem("file_manager");
+      let final_result = await localforage.getItem(
+        "file_manager_crazy_animations_edit_music.mp4"
+      );
+      DownloadBigFile(0, 30, final_result)
       // let final_result2 = final_result.reduce((acc, n) => {
       //   return acc.concat(n);
       // }, "");
-      // let video = document.createElement("video");
+      // let data = document.createElement("video");
       // video.src = "data:video/webm;base64," + btoa(final_result2);
       // document.body.appendChild(video);
       // video.load();
