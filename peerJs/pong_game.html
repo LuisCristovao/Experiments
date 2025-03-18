@@ -16,6 +16,10 @@
             width: 100%;
             height: 100%;
             background: black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
         #status {
             position: absolute;
@@ -47,21 +51,62 @@
         #player2Score {
             color: #FF0000;
         }
+        #introMenu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: opacity 0.5s; /* Add transition for smooth hiding */
+        }
+        #startButton {
+            font-size: 24px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #startButton:hover {
+            background-color: #45a049;
+        }
+        .hidden {
+            display: none !important; /* Ensure the hidden class takes precedence */
+            opacity: 0; /* Optional: Add fade-out effect */
+        }
     </style>
 </head>
 <body>
+    <div id="introMenu">
+        <h2>Welcome to Pong!</h2>
+        <button id="startButton">Start Game</button>
+    </div>
     <div id="status">
         Player 1 (W/S or Left Touch): <span id="player1Score">0</span> / 
         Player 2 (Up/Down or Right Touch): <span id="player2Score">0</span>
     </div>
     <canvas id="gameCanvas"></canvas>
-
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const player1ScoreDisplay = document.getElementById('player1Score');
         const player2ScoreDisplay = document.getElementById('player2Score');
         const statusDiv = document.getElementById('status');
+        const introMenu = document.getElementById('introMenu');
+        const startButton = document.getElementById('startButton');
+
+        console.log('introMenu:', introMenu); // Debug: Check if introMenu is found
 
         // Set canvas to full page size
         canvas.width = window.innerWidth;
@@ -70,14 +115,14 @@
         // Game variables with scaling
         const scaleX = canvas.width / 800;
         const scaleY = canvas.height / 400;
-        const baseSpeed = 0.01; // Updated base speed for proportional movement
-        const maxSpeed = 0.01 * canvas.width; // Updated maximum speed limit as a fraction of canvas width
+        const baseSpeed = 0.005; // Updated base speed for proportional movement
+        const maxSpeed = 0.005 * canvas.width; // Updated maximum speed limit as a fraction of canvas width
         let lastScorer = null; // Track the last player to score (1 for Player 1, 2 for Player 2)
         const ball = { 
             x: canvas.width / 2, 
             y: canvas.height / 2, 
-            dx: baseSpeed * canvas.width * 0.5, // Initial slow speed to the right
-            dy: 0, // No initial vertical movement
+            dx: 0, // Initial speed set in startGame
+            dy: 0, // Initial speed set in startGame
             radius: 10 * Math.min(scaleX, scaleY),
             color: 'yellow' // Initial color
         };
@@ -104,25 +149,45 @@
         let touchRightY = null; // Y position of right touch
         const midX = canvas.width / 2; // Middle of the screen
 
-        // Remove tutorial text after 15 seconds
+        // Remove tutorial text after 7 seconds
         setTimeout(() => {
             const originalContent = statusDiv.innerHTML;
             const scoreOnlyContent = `<span id="player1Score">${player1Score}</span> / <span id="player2Score">${player2Score}</span>`;
             statusDiv.innerHTML = scoreOnlyContent;
-        }, 7000); // 15 seconds in milliseconds
+        }, 7000); // 7 seconds in milliseconds
 
+        // Start game function
+        function startGame() {
+            console.log('Start button clicked'); // Debug log
+            if (introMenu) {
+                introMenu.classList.add('hidden'); // Hide the intro menu
+                console.log('Menu hidden, classList:', introMenu.classList); // Debug: Check class application
+            } else {
+                console.error('introMenu element not found');
+            }
+            // Initialize ball movement
+            const initialSpeed = baseSpeed * canvas.width * 0.5; // Half speed for slow start
+            ball.dx = initialSpeed; // Start moving right toward Player 2
+            ball.dy = 0; // No initial vertical movement
+            gameLoop(); // Start the game loop
+        }
+
+        startButton.addEventListener('click', startGame);
+
+        // Allow starting with keyboard or touch if menu is visible
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'w') wPressed = true;
-            if (e.key === 's') sPressed = true;
-            if (e.key === 'ArrowUp') upPressed = true;
-            if (e.key === 'ArrowDown') downPressed = true;
+            if (['w', 'ArrowUp'].includes(e.key) && !introMenu.classList.contains('hidden')) startGame();
+            if (e.key === 'w') wPressed = true; // Player 1 up
+            if (e.key === 's') sPressed = true; // Player 1 down
+            if (e.key === 'ArrowUp') upPressed = true; // Player 2 up
+            if (e.key === 'ArrowDown') downPressed = true; // Player 2 down
         });
 
         document.addEventListener('keyup', (e) => {
-            if (e.key === 'w') wPressed = false;
-            if (e.key === 's') sPressed = false;
-            if (e.key === 'ArrowUp') upPressed = false;
-            if (e.key === 'ArrowDown') downPressed = false;
+            if (e.key === 'w') wPressed = false; // Player 1 up
+            if (e.key === 's') sPressed = false; // Player 1 down
+            if (e.key === 'ArrowUp') upPressed = false; // Player 2 up
+            if (e.key === 'ArrowDown') downPressed = false; // Player 2 down
         });
 
         // Touch event handlers
@@ -131,6 +196,10 @@
             for (let touch of e.changedTouches) {
                 const touchX = touch.clientX;
                 const touchY = touch.clientY;
+                if (!introMenu.classList.contains('hidden')) {
+                    startGame(); // Start on any touch if menu is visible
+                    break; // Exit loop after starting
+                }
                 if (touchX < midX && touchLeftY === null) {
                     touchLeftY = touchY; // Left side touch controls left paddle
                 } else if (touchX >= midX && touchRightY === null) {
@@ -367,15 +436,15 @@
                     let r, g, b;
                     if (ball.color === 'cyan') {
                         r = 0;
-                        g = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint cyan to full cyan)
-                        b = Math.floor(255 - (alpha * 255)); // 255 to 0 (blue to cyan)
+                        g = Math.floor(255 - ((1 - alpha) * 255)); // 255 to 0 (cyan to blue)
+                        b = 255; // Stays 255
                     } else if (ball.color === '#FF0000') {
-                        r = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint red to full red)
-                        g = Math.floor(alpha * 255); // 0 to 255 (red to purple)
-                        b = Math.floor(alpha * 255); // 0 to 255
+                        r = 255; // Stays 255
+                        g = 0; // Starts at 0
+                        b = Math.floor(alpha * 255); // 0 to 255 (red to purple)
                     } else { // yellow
-                        r = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint yellow to full yellow)
-                        g = Math.floor(153 + (alpha * 102)); // 153 to 255
+                        r = Math.floor(255 - ((1 - alpha) * 51)); // 255 to 204 (yellow to orange)
+                        g = Math.floor(255 - ((1 - alpha) * 102)); // 255 to 153
                         b = 0;
                     }
                     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`;
