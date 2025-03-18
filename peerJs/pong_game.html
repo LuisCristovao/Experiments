@@ -57,7 +57,8 @@
             y: canvas.height / 2, 
             dx: 5 * scaleX, 
             dy: 5 * scaleY, 
-            radius: 10 * Math.min(scaleX, scaleY) 
+            radius: 10 * Math.min(scaleX, scaleY),
+            color: 'yellow' // Initial color
         };
         const paddleWidth = 10 * scaleX;
         const paddleHeight = 60 * scaleY;
@@ -70,7 +71,7 @@
 
         // Trail for ball
         const trail = [];
-        const trailLength = 15; // Increased for smoother effect
+        const trailLength = 15;
 
         // Particles for collisions
         const particles = [];
@@ -126,7 +127,7 @@
 
         function spawnPaddleParticles(x, y, baseColor) {
             const baseRGB = baseColor === 'cyan' ? [0, 255, 255] : [255, 0, 0];
-            const endRGB = baseColor === 'cyan' ? [0, 0, 255] : [255, 0, 255]; // Cyan to blue, red to purple
+            const endRGB = baseColor === 'cyan' ? [0, 0, 255] : [255, 0, 255];
             for (let i = 0; i < 25; i++) {
                 const angle = Math.random() * Math.PI * 2;
                 const speed = Math.random() * 5 + 3;
@@ -145,8 +146,8 @@
         }
 
         function spawnWallParticles(x, y) {
-            const startRGB = [255, 255, 255]; // White
-            const endRGB = [255, 255, 0];     // Yellow
+            const startRGB = [255, 255, 255];
+            const endRGB = [255, 255, 0];
             for (let i = 0; i < 25; i++) {
                 const angle = Math.random() * Math.PI;
                 const speed = Math.random() * 5 + 3;
@@ -188,6 +189,7 @@
                 ball.y - ball.radius < leftPaddle.y + paddleHeight) {
                 ball.dx = -ball.dx;
                 ball.x = leftPaddle.x + paddleWidth + ball.radius;
+                ball.color = 'cyan';
                 spawnPaddleParticles(ball.x, ball.y, 'cyan');
             }
             if (ball.dx > 0 && 
@@ -197,6 +199,7 @@
                 ball.y - ball.radius < rightPaddle.y + paddleHeight) {
                 ball.dx = -ball.dx;
                 ball.x = rightPaddle.x - ball.radius;
+                ball.color = '#FF0000';
                 spawnPaddleParticles(ball.x, ball.y, '#FF0000');
             }
 
@@ -236,6 +239,7 @@
             ball.y = canvas.height / 2;
             ball.dx = 5 * scaleX * (Math.random() > 0.5 ? 1 : -1);
             ball.dy = 5 * scaleY * (Math.random() > 0.5 ? 1 : -1);
+            ball.color = 'yellow';
             trail.length = 0;
         }
 
@@ -243,27 +247,50 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw paddles
-            ctx.fillStyle = 'cyan'; // Player 1 (left paddle)
+            ctx.fillStyle = 'cyan';
             ctx.fillRect(leftPaddle.x, leftPaddle.y, paddleWidth, paddleHeight);
-            ctx.fillStyle = '#FF0000'; // Player 2 (right paddle)
+            ctx.fillStyle = '#FF0000';
             ctx.fillRect(rightPaddle.x, rightPaddle.y, paddleWidth, paddleHeight);
 
-            // Draw trail with corrected direction
-            if (trail.length >= 2) {  // Only draw trail if we have at least 2 points
-                ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+            // Draw trail with gradient from ball color to darker tone
+            if (trail.length >= 2) {
                 for (let i = 0; i < trail.length; i++) {
                     const alpha = i / (trail.length - 1); // 0 at oldest, 1 at newest
-                    ctx.globalAlpha = alpha * 0.8; // Fade from 0 to 0.8
-                    const size = ball.radius * (0.5 + alpha * 0.5); // Grow from 50% to 100%
+                    let r, g, b;
+                    if (ball.color === 'cyan') {
+                        r = 0;
+                        g = Math.floor(255 - (alpha * 100)); // 255 to 155
+                        b = Math.floor(255 - (alpha * 100)); // 255 to 155
+                    } else if (ball.color === '#FF0000') {
+                        r = Math.floor(255 - (alpha * 100)); // 255 to 155
+                        g = 0;
+                        b = 0;
+                    } else { // yellow
+                        r = Math.floor(255 - (alpha * 50));  // 255 to 205
+                        g = Math.floor(255 - (alpha * 100)); // 255 to 155
+                        b = 0;
+                    }
+                    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`;
+                    const size = ball.radius * (0.5 + alpha * 0.5);
                     ctx.beginPath();
                     ctx.arc(trail[i].x, trail[i].y, size, 0, Math.PI * 2);
                     ctx.fill();
                 }
-                ctx.globalAlpha = 1.0; // Reset alpha
             }
 
-            // Draw ball
-            ctx.fillStyle = 'yellow';
+            // Draw ball with gradient
+            const gradient = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, ball.radius);
+            if (ball.color === 'cyan') {
+                gradient.addColorStop(0, 'white');
+                gradient.addColorStop(1, 'cyan');
+            } else if (ball.color === '#FF0000') {
+                gradient.addColorStop(0, 'white');
+                gradient.addColorStop(1, '#FF0000');
+            } else { // yellow
+                gradient.addColorStop(0, 'white');
+                gradient.addColorStop(1, 'yellow');
+            }
+            ctx.fillStyle = gradient;
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.fill();
