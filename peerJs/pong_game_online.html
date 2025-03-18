@@ -171,13 +171,17 @@
         peer.on('connection', function(connection) {
             conn = connection;
             console.log('Connected to peer: ' + conn.peer);
+            // Send the host's screen size
+            const gameWidth = window.innerWidth;
+            const gameHeight = window.innerHeight;
+            
             
             connectionStatus.innerText = 'Connected! Starting game...';
             conn.on('data', receiveData);
             setTimeout(() => {
                 introMenu.classList.add('hidden');
                 startGame();
-            }, 1000);
+            }, 100);
         });
 
         // Host game
@@ -202,12 +206,14 @@
                 conn = peer.connect(hostId);
                 conn.on('open', function() {
                     console.log('Connected to host: ' + hostId);
+
+
                     connectionStatus.innerText = 'Connected! Starting game...';
                     conn.on('data', receiveData);
                     setTimeout(() => {
                         introMenu.classList.add('hidden');
                         startGame();
-                    }, 1000);
+                    }, 100);
                 });
             }, { once: true });
         });
@@ -221,6 +227,16 @@
 
         // Receive data from peer
         function receiveData(data) {
+            
+
+            if (data.type === 'score') {
+                // 📌 Non-host receives the updated score
+                player1Score = data.player1;
+                player2Score = data.player2;
+                document.getElementById('player1Score').textContent = player1Score;
+                document.getElementById('player2Score').textContent = player2Score;
+            }
+
             if (data.type === 'paddle') {
                 if (isHost) {
                     rightPaddle.y = data.y;
@@ -471,11 +487,13 @@
                     player2ScoreDisplay.textContent = player2Score;
                     lastScorer = 2;
                     resetBall();
+                    conn.send({ type: 'score', player1: player1Score, player2: player2Score })
                 } else if (ball.x > canvas.width) {
                     player1Score++;
                     player1ScoreDisplay.textContent = player1Score;
                     lastScorer = 1;
                     resetBall();
+                    conn.send({ type: 'score', player1: player1Score, player2: player2Score })
                 }
             }
 
@@ -564,8 +582,8 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            const newScaleX = canvas.width / 800;
-            const newScaleY = canvas.height / 400;
+            let newScaleX = canvas.width / 800;
+            let newScaleY = canvas.height / 400;
             ball.x *= newScaleX / scaleX;
             ball.y *= newScaleY / scaleY;
             ball.dx = baseSpeed * canvas.width * (ball.dx > 0 ? 1 : -1);
