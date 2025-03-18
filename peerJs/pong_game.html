@@ -8,6 +8,7 @@
             padding: 0;
             height: 100%;
             overflow: hidden;
+            touch-action: none; /* Prevents default touch behaviors */
         }
         canvas {
             display: block;
@@ -34,8 +35,8 @@
 </head>
 <body>
     <div id="status">
-        Player 1 (W/S): <span id="player1Score">0</span> / 
-        Player 2 (Up/Down): <span id="player2Score">0</span>
+        Player 1 (W/S or Left Touch): <span id="player1Score">0</span> / 
+        Player 2 (Up/Down or Right Touch): <span id="player2Score">0</span>
     </div>
     <canvas id="gameCanvas"></canvas>
 
@@ -52,11 +53,14 @@
         // Game variables with scaling
         const scaleX = canvas.width / 800;
         const scaleY = canvas.height / 400;
+        const baseSpeed = 0.005; // Updated base speed for proportional movement
+        const maxSpeed = 0.01 * canvas.width; // Updated maximum speed limit as a fraction of canvas width
+        let lastScorer = null; // Track the last player to score (1 for Player 1, 2 for Player 2)
         const ball = { 
             x: canvas.width / 2, 
             y: canvas.height / 2, 
-            dx: 5 * scaleX, 
-            dy: 5 * scaleY, 
+            dx: baseSpeed * canvas.width * 0.5, // Initial slow speed to the right
+            dy: 0, // No initial vertical movement
             radius: 10 * Math.min(scaleX, scaleY),
             color: 'yellow' // Initial color
         };
@@ -73,12 +77,15 @@
         const trail = [];
         const trailLength = 15;
 
-// Particles for collisions
+        // Particles for collisions
         const particles = [];
 
-        // Player controls
+        // Player controls (keyboard and touch)
         let wPressed = false, sPressed = false; // Player 1 (left)
         let upPressed = false, downPressed = false; // Player 2 (right)
+        let touchLeftY = null; // Y position of left touch
+        let touchRightY = null; // Y position of right touch
+        const midX = canvas.width / 2; // Middle of the screen
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'w') wPressed = true;
@@ -92,6 +99,51 @@
             if (e.key === 's') sPressed = false;
             if (e.key === 'ArrowUp') upPressed = false;
             if (e.key === 'ArrowDown') downPressed = false;
+        });
+
+        // Touch event handlers
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent default touch behaviors
+            for (let touch of e.changedTouches) {
+                const touchX = touch.clientX;
+                const touchY = touch.clientY;
+                if (touchX < midX && touchLeftY === null) {
+                    touchLeftY = touchY; // Left side touch controls left paddle
+                } else if (touchX >= midX && touchRightY === null) {
+                    touchRightY = touchY; // Right side touch controls right paddle
+                }
+            }
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault(); // Prevent default touch behaviors
+            for (let touch of e.changedTouches) {
+                const touchX = touch.clientX;
+                const touchY = touch.clientY;
+                if (touchX < midX && touchLeftY !== null) {
+                    const dy = touchY - touchLeftY;
+                    leftPaddle.y += dy;
+                    leftPaddle.y = Math.max(0, Math.min(leftPaddle.y, canvas.height - paddleHeight));
+                    touchLeftY = touchY;
+                } else if (touchX >= midX && touchRightY !== null) {
+                    const dy = touchY - touchRightY;
+                    rightPaddle.y += dy;
+                    rightPaddle.y = Math.max(0, Math.min(rightPaddle.y, canvas.height - paddleHeight));
+                    touchRightY = touchY;
+                }
+            }
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault(); // Prevent default touch behaviors
+            for (let touch of e.changedTouches) {
+                const touchX = touch.clientX;
+                if (touchX < midX && touchLeftY !== null) {
+                    touchLeftY = null; // Release left paddle control
+                } else if (touchX >= midX && touchRightY !== null) {
+                    touchRightY = null; // Release right paddle control
+                }
+            }
         });
 
         // Particle class with noticeable gradient
@@ -165,11 +217,11 @@
 
         // Game logic
         function update() {
-            // Player 1 (left paddle)
+            // Player 1 (left paddle) - Keyboard or Touch
             if (wPressed && leftPaddle.y > 0) leftPaddle.y -= leftPaddle.dy;
             if (sPressed && leftPaddle.y < canvas.height - paddleHeight) leftPaddle.y += leftPaddle.dy;
 
-            // Player 2 (right paddle)
+            // Player 2 (right paddle) - Keyboard or Touch
             if (upPressed && rightPaddle.y > 0) rightPaddle.y -= rightPaddle.dy;
             if (downPressed && rightPaddle.y < canvas.height - paddleHeight) rightPaddle.y += rightPaddle.dy;
 
@@ -181,13 +233,24 @@
             trail.push({ x: ball.x, y: ball.y });
             if (trail.length > trailLength) trail.shift();
 
-            // Ball collision with paddles
+            // Ball collision with paddles with vertical deflection
             if (ball.dx < 0 && 
                 ball.x - ball.radius <= leftPaddle.x + paddleWidth && 
                 ball.x - ball.radius >= leftPaddle.x && 
                 ball.y + ball.radius > leftPaddle.y && 
                 ball.y - ball.radius < leftPaddle.y + paddleHeight) {
-                ball.dx = -ball.dx;
+                const hitPosition = (ball.y - (leftPaddle.y + paddleHeight / 2)) / (paddleHeight / 2); // -1 at top, 1 at bottom
+                const newDx = -ball.dx * 1.1; // Slight speed increase
+                const newDy = ball.dy * 1.1 + hitPosition * (baseSpeed * canvas.height * 0.5); // Add vertical deflection
+                const speed = Math.sqrt(newDx * newDx + newDy * newDy);
+                if (speed > maxSpeed) {
+                    const scale = maxSpeed / speed;
+                    ball.dx = newDx * scale;
+                    ball.dy = newDy * scale;
+                } else {
+                    ball.dx = newDx;
+                    ball.dy = newDy;
+                }
                 ball.x = leftPaddle.x + paddleWidth + ball.radius;
                 ball.color = 'cyan';
                 spawnPaddleParticles(ball.x, ball.y, 'cyan');
@@ -197,7 +260,18 @@
                 ball.x + ball.radius <= rightPaddle.x + paddleWidth && 
                 ball.y + ball.radius > rightPaddle.y && 
                 ball.y - ball.radius < rightPaddle.y + paddleHeight) {
-                ball.dx = -ball.dx;
+                const hitPosition = (ball.y - (rightPaddle.y + paddleHeight / 2)) / (paddleHeight / 2); // -1 at top, 1 at bottom
+                const newDx = -ball.dx * 1.1; // Slight speed increase
+                const newDy = ball.dy * 1.1 + hitPosition * (baseSpeed * canvas.height * 0.5); // Add vertical deflection
+                const speed = Math.sqrt(newDx * newDx + newDy * newDy);
+                if (speed > maxSpeed) {
+                    const scale = maxSpeed / speed;
+                    ball.dx = newDx * scale;
+                    ball.dy = newDy * scale;
+                } else {
+                    ball.dx = newDx;
+                    ball.dy = newDy;
+                }
                 ball.x = rightPaddle.x - ball.radius;
                 ball.color = '#FF0000';
                 spawnPaddleParticles(ball.x, ball.y, '#FF0000');
@@ -218,10 +292,12 @@
             if (ball.x < 0) {
                 player2Score++;
                 player2ScoreDisplay.textContent = player2Score;
+                lastScorer = 2; // Player 2 scored
                 resetBall();
             } else if (ball.x > canvas.width) {
                 player1Score++;
                 player1ScoreDisplay.textContent = player1Score;
+                lastScorer = 1; // Player 1 scored
                 resetBall();
             }
 
@@ -237,8 +313,16 @@
         function resetBall() {
             ball.x = canvas.width / 2;
             ball.y = canvas.height / 2;
-            ball.dx = 5 * scaleX * (Math.random() > 0.5 ? 1 : -1);
-            ball.dy = 5 * scaleY * (Math.random() > 0.5 ? 1 : -1);
+            // Set slow initial speed toward the last scorer's opponent
+            const initialSpeed = baseSpeed * canvas.width * 0.5; // Half speed for slow start
+            if (lastScorer === 1 || lastScorer === null) {
+                // Player 1 scored or first serve, ball goes right (toward Player 2)
+                ball.dx = initialSpeed;
+            } else if (lastScorer === 2) {
+                // Player 2 scored, ball goes left (toward Player 1)
+                ball.dx = -initialSpeed;
+            }
+            ball.dy = 0; // No initial vertical movement
             ball.color = 'yellow';
             trail.length = 0;
         }
@@ -252,22 +336,22 @@
             ctx.fillStyle = '#FF0000';
             ctx.fillRect(rightPaddle.x, rightPaddle.y, paddleWidth, paddleHeight);
 
-            // Draw trail with gradient to specific darker tones
+            // Draw trail with gradient starting faint and moving to ball color
             if (trail.length >= 2) {
                 for (let i = 0; i < trail.length; i++) {
                     const alpha = i / (trail.length - 1); // 0 at oldest, 1 at newest
                     let r, g, b;
                     if (ball.color === 'cyan') {
                         r = 0;
-                        g = Math.floor((alpha*0.6 * 255)); // 255 to 0 (cyan to blue)
-                        b = 255; // Stays 255
+                        g = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint cyan to full cyan)
+                        b = Math.floor(255 - (alpha * 255)); // 255 to 0 (blue to cyan)
                     } else if (ball.color === '#FF0000') {
-                        r = 255; // Stays 255
-                        g = 0 // 0 to 255 (red to purple)
-                        b = Math.floor(255-(alpha*0.6 * 255)); // 0 to 255
+                        r = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint red to full red)
+                        g = Math.floor(alpha * 255); // 0 to 255 (red to purple)
+                        b = Math.floor(alpha * 255); // 0 to 255
                     } else { // yellow
-                        r = Math.floor(255 - (alpha * 51)); // 255 to 204 (yellow to orange)
-                        g = Math.floor(255 - (alpha * 102)); // 255 to 153
+                        r = Math.floor(153 + (alpha * 102)); // 153 to 255 (faint yellow to full yellow)
+                        g = Math.floor(153 + (alpha * 102)); // 153 to 255
                         b = 0;
                     }
                     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`;
@@ -313,8 +397,8 @@
             const newScaleY = canvas.height / 400;
             ball.x *= newScaleX / scaleX;
             ball.y *= newScaleY / scaleY;
-            ball.dx *= newScaleX / scaleX;
-            ball.dy *= newScaleY / scaleY;
+            ball.dx = baseSpeed * canvas.width * (ball.dx > 0 ? 1 : -1); // Preserve direction
+            ball.dy = baseSpeed * canvas.height * (ball.dy > 0 ? 1 : -1); // Preserve direction
             ball.radius = 10 * Math.min(newScaleX, newScaleY);
             leftPaddle.x = 50 * newScaleX;
             leftPaddle.y *= newScaleY / scaleY;
@@ -324,6 +408,8 @@
             rightPaddle.dy = 5 * newScaleY;
             scaleX = newScaleX;
             scaleY = newScaleY;
+            midX = canvas.width / 2; // Update midX on resize
+            maxSpeed = 0.01 * canvas.width; // Update max speed on resize
             trail.length = 0;
         });
 
