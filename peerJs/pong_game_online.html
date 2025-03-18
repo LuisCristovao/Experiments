@@ -122,12 +122,12 @@
         canvas.height = window.innerHeight;
 
         // Game variables with scaling
-        const scaleX = canvas.width / 800;
-        const scaleY = canvas.height / 400;
-        const baseSpeed = 0.01;
-        const maxSpeed = 0.01 * canvas.width;
+        let scaleX = canvas.width / 800;
+        let scaleY = canvas.height / 400;
+        let baseSpeed = 0.01;
+        let maxSpeed = 0.01 * canvas.width;
         let lastScorer = null;
-        const ball = { 
+        let ball = { 
             x: canvas.width / 2, 
             y: canvas.height / 2, 
             dx: 0, 
@@ -135,10 +135,10 @@
             radius: 10 * Math.min(scaleX, scaleY),
             color: 'yellow'
         };
-        const paddleWidth = 10 * scaleX;
-        const paddleHeight = 60 * scaleY;
-        const leftPaddle = { x: 50 * scaleX, y: canvas.height / 2 - paddleHeight / 2, dy: 5 * scaleY };
-        const rightPaddle = { x: canvas.width - 50 * scaleX - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, dy: 5 * scaleY };
+        let paddleWidth = 10 * scaleX;
+        let paddleHeight = 60 * scaleY;
+        let leftPaddle = { x: 50 * scaleX, y: canvas.height / 2 - paddleHeight / 2, dy: 5 * scaleY };
+        let rightPaddle = { x: canvas.width - 50 * scaleX - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, dy: 5 * scaleY };
         
         // Scores
         let player1Score = 0;
@@ -154,7 +154,7 @@
         let upPressed = false, downPressed = false;
         let touchLeftY = null;
         let touchRightY = null;
-        const midX = canvas.width / 2;
+        let midX = canvas.width / 2;
 
         // PeerJS setup
         const peer = new Peer();
@@ -227,7 +227,51 @@
 
         // Receive data from peer
         function receiveData(data) {
-            
+            if (data.type === 'canvasSize') {
+                // Compare received size with current canvas size and use the smallest
+                const newWidth = Math.min(canvas.width, data.width);
+                const newHeight = Math.min(canvas.height, data.height);
+
+                if (canvas.width !== newWidth || canvas.height !== newHeight) {
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+                    console.log(`Canvas adjusted to: ${newWidth}x${newHeight}`);
+
+
+                    // 🔄 Recalculate all canvas-dependent variables
+                    scaleX = canvas.width / 800;
+                    scaleY = canvas.height / 400;
+                    maxSpeed = 0.01 * canvas.width;
+                    midX = canvas.width / 2;
+
+                    ball = { 
+                        x: canvas.width / 2, 
+                        y: canvas.height / 2, 
+                        dx: ball.dx, 
+                        dy: ball.dy, 
+                        radius: 10 * Math.min(scaleX, scaleY),
+                        color: ball.color
+                    };
+
+                    paddleWidth = 10 * scaleX;
+                    paddleHeight = 60 * scaleY;
+                    
+                    leftPaddle = { 
+                        x: 50 * scaleX, 
+                        y: canvas.height / 2 - paddleHeight / 2, 
+                        dy: 5 * scaleY 
+                    };
+
+                    rightPaddle = { 
+                        x: canvas.width - 50 * scaleX - paddleWidth, 
+                        y: canvas.height / 2 - paddleHeight / 2, 
+                        dy: 5 * scaleY 
+                    };
+
+                    // Clear the trail effect so it resizes correctly
+                    trail.length = 0;
+                }
+            }
 
             if (data.type === 'score') {
                 // 📌 Non-host receives the updated score
@@ -290,6 +334,12 @@
                     }
                 }, 1); // Sync ball every 500ms
             }
+            // Send canvas size updates every 200ms
+            setInterval(() => {
+                if (conn && conn.open) {
+                    conn.send({ type: 'canvasSize', width: canvas.width, height: canvas.height });
+                }
+            }, 200);
             gameLoop();
         }
 
