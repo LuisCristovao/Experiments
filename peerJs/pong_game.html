@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Offline Two-Player Pong with Score</title>
+    <title>Offline Two-Player Pong with Enhanced Effects</title>
     <style>
         body, html {
             margin: 0;
@@ -68,6 +68,13 @@
         let player1Score = 0; // Left paddle (cyan)
         let player2Score = 0; // Right paddle (red)
 
+        // Trail for ball
+        const trail = [];
+        const trailLength = 15; // Increased for smoother effect
+
+        // Particles for collisions
+        const particles = [];
+
         // Player controls
         let wPressed = false, sPressed = false; // Player 1 (left)
         let upPressed = false, downPressed = false; // Player 2 (right)
@@ -86,6 +93,75 @@
             if (e.key === 'ArrowDown') downPressed = false;
         });
 
+        // Particle class with noticeable gradient
+        function Particle(x, y, dx, dy, startColorRGB, endColorRGB, size, life) {
+            this.x = x;
+            this.y = y;
+            this.dx = dx;
+            this.dy = dy;
+            this.startColorRGB = startColorRGB;
+            this.endColorRGB = endColorRGB;
+            this.size = size;
+            this.life = life;
+            this.initialLife = life;
+        }
+
+        Particle.prototype.update = function() {
+            this.x += this.dx;
+            this.y += this.dy;
+            this.life -= 1;
+            this.size *= 0.97;
+        };
+
+        Particle.prototype.draw = function() {
+            const lifeRatio = this.life / this.initialLife;
+            const r = Math.floor(this.startColorRGB[0] + (this.endColorRGB[0] - this.startColorRGB[0]) * (1 - lifeRatio));
+            const g = Math.floor(this.startColorRGB[1] + (this.endColorRGB[1] - this.startColorRGB[1]) * (1 - lifeRatio));
+            const b = Math.floor(this.startColorRGB[2] + (this.endColorRGB[2] - this.startColorRGB[2]) * (1 - lifeRatio));
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        function spawnPaddleParticles(x, y, baseColor) {
+            const baseRGB = baseColor === 'cyan' ? [0, 255, 255] : [255, 0, 0];
+            const endRGB = baseColor === 'cyan' ? [0, 0, 255] : [255, 0, 255]; // Cyan to blue, red to purple
+            for (let i = 0; i < 25; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 3;
+                const colorVariation = Math.floor(Math.random() * 50 - 25);
+                const startRGB = baseRGB.map(v => Math.min(255, Math.max(0, v + colorVariation)));
+                particles.push(new Particle(
+                    x, y,
+                    Math.cos(angle) * speed,
+                    Math.sin(angle) * speed,
+                    startRGB,
+                    endRGB,
+                    Math.random() * 6 + 4,
+                    30
+                ));
+            }
+        }
+
+        function spawnWallParticles(x, y) {
+            const startRGB = [255, 255, 255]; // White
+            const endRGB = [255, 255, 0];     // Yellow
+            for (let i = 0; i < 25; i++) {
+                const angle = Math.random() * Math.PI;
+                const speed = Math.random() * 5 + 3;
+                particles.push(new Particle(
+                    x, y,
+                    Math.cos(angle) * speed * (y < canvas.height / 2 ? 1 : -1),
+                    Math.sin(angle) * speed * (y < canvas.height / 2 ? 1 : -1),
+                    startRGB,
+                    endRGB,
+                    Math.random() * 6 + 4,
+                    30
+                ));
+            }
+        }
+
         // Game logic
         function update() {
             // Player 1 (left paddle)
@@ -100,52 +176,100 @@
             ball.x += ball.dx;
             ball.y += ball.dy;
 
+            // Add to trail
+            trail.push({ x: ball.x, y: ball.y });
+            if (trail.length > trailLength) trail.shift();
+
             // Ball collision with paddles
-            if (ball.x - ball.radius < leftPaddle.x + paddleWidth && 
-                ball.y > leftPaddle.y && 
-                ball.y < leftPaddle.y + paddleHeight) {
+            if (ball.dx < 0 && 
+                ball.x - ball.radius <= leftPaddle.x + paddleWidth && 
+                ball.x - ball.radius >= leftPaddle.x && 
+                ball.y + ball.radius > leftPaddle.y && 
+                ball.y - ball.radius < leftPaddle.y + paddleHeight) {
                 ball.dx = -ball.dx;
+                ball.x = leftPaddle.x + paddleWidth + ball.radius;
+                spawnPaddleParticles(ball.x, ball.y, 'cyan');
             }
-            if (ball.x + ball.radius > rightPaddle.x && 
-                ball.y > rightPaddle.y && 
-                ball.y < rightPaddle.y + paddleHeight) {
+            if (ball.dx > 0 && 
+                ball.x + ball.radius >= rightPaddle.x && 
+                ball.x + ball.radius <= rightPaddle.x + paddleWidth && 
+                ball.y + ball.radius > rightPaddle.y && 
+                ball.y - ball.radius < rightPaddle.y + paddleHeight) {
                 ball.dx = -ball.dx;
+                ball.x = rightPaddle.x - ball.radius;
+                spawnPaddleParticles(ball.x, ball.y, '#FF0000');
             }
 
             // Ball collision with top/bottom walls
-            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+            if (ball.y - ball.radius < 0) {
                 ball.dy = -ball.dy;
+                ball.y = ball.radius;
+                spawnWallParticles(ball.x, ball.y);
+            } else if (ball.y + ball.radius > canvas.height) {
+                ball.dy = -ball.dy;
+                ball.y = canvas.height - ball.radius;
+                spawnWallParticles(ball.x, ball.y);
             }
 
             // Ball out of bounds (score and reset)
             if (ball.x < 0) {
-                player2Score++; // Player 2 scores when ball goes left
+                player2Score++;
                 player2ScoreDisplay.textContent = player2Score;
                 resetBall();
             } else if (ball.x > canvas.width) {
-                player1Score++; // Player 1 scores when ball goes right
+                player1Score++;
                 player1ScoreDisplay.textContent = player1Score;
                 resetBall();
+            }
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                if (particles[i].life <= 0 || particles[i].size < 0.1) {
+                    particles.splice(i, 1);
+                }
             }
         }
 
         function resetBall() {
             ball.x = canvas.width / 2;
             ball.y = canvas.height / 2;
-            ball.dx = 5 * scaleX * (Math.random() > 0.5 ? 1 : -1); // Random direction
-            ball.dy = 5 * scaleY * (Math.random() > 0.5 ? 1 : -1); // Random direction
+            ball.dx = 5 * scaleX * (Math.random() > 0.5 ? 1 : -1);
+            ball.dy = 5 * scaleY * (Math.random() > 0.5 ? 1 : -1);
+            trail.length = 0;
         }
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw paddles
             ctx.fillStyle = 'cyan'; // Player 1 (left paddle)
             ctx.fillRect(leftPaddle.x, leftPaddle.y, paddleWidth, paddleHeight);
             ctx.fillStyle = '#FF0000'; // Player 2 (right paddle)
             ctx.fillRect(rightPaddle.x, rightPaddle.y, paddleWidth, paddleHeight);
-            ctx.fillStyle = 'yellow'; // Ball
+
+            // Draw trail with corrected direction
+            if (trail.length >= 2) {  // Only draw trail if we have at least 2 points
+                ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+                for (let i = 0; i < trail.length; i++) {
+                    const alpha = i / (trail.length - 1); // 0 at oldest, 1 at newest
+                    ctx.globalAlpha = alpha * 0.8; // Fade from 0 to 0.8
+                    const size = ball.radius * (0.5 + alpha * 0.5); // Grow from 50% to 100%
+                    ctx.beginPath();
+                    ctx.arc(trail[i].x, trail[i].y, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1.0; // Reset alpha
+            }
+
+            // Draw ball
+            ctx.fillStyle = 'yellow';
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.fill();
+
+            // Draw particles
+            particles.forEach(particle => particle.draw());
         }
 
         function gameLoop() {
@@ -173,6 +297,7 @@
             rightPaddle.dy = 5 * newScaleY;
             scaleX = newScaleX;
             scaleY = newScaleY;
+            trail.length = 0;
         });
 
         // Start the game
