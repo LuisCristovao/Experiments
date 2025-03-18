@@ -9,6 +9,7 @@
             height: 100%;
             overflow: hidden;
             touch-action: none; /* Prevents default touch behaviors */
+            color: white;
         }
         canvas {
             display: block;
@@ -18,12 +19,27 @@
         }
         #status {
             position: absolute;
-            top: 20px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1;
             font-size: 20px;
             font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* Space between elements */
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 5px 15px;
+            border-radius: 10px;
+            transition: opacity 0.5s; /* Smooth transition for any future opacity changes */
+        }
+        #status span {
+            display: inline-block;
+            min-width: 30px; /* Ensures consistent score width */
+            text-align: center;
+            font-weight: bold;
         }
         #player1Score {
             color: cyan;
@@ -45,6 +61,7 @@
         const ctx = canvas.getContext('2d');
         const player1ScoreDisplay = document.getElementById('player1Score');
         const player2ScoreDisplay = document.getElementById('player2Score');
+        const statusDiv = document.getElementById('status');
 
         // Set canvas to full page size
         canvas.width = window.innerWidth;
@@ -53,7 +70,7 @@
         // Game variables with scaling
         const scaleX = canvas.width / 800;
         const scaleY = canvas.height / 400;
-        const baseSpeed = 0.005; // Updated base speed for proportional movement
+        const baseSpeed = 0.01; // Updated base speed for proportional movement
         const maxSpeed = 0.01 * canvas.width; // Updated maximum speed limit as a fraction of canvas width
         let lastScorer = null; // Track the last player to score (1 for Player 1, 2 for Player 2)
         const ball = { 
@@ -86,6 +103,13 @@
         let touchLeftY = null; // Y position of left touch
         let touchRightY = null; // Y position of right touch
         const midX = canvas.width / 2; // Middle of the screen
+
+        // Remove tutorial text after 15 seconds
+        setTimeout(() => {
+            const originalContent = statusDiv.innerHTML;
+            const scoreOnlyContent = `<span id="player1Score">${player1Score}</span> / <span id="player2Score">${player2Score}</span>`;
+            statusDiv.innerHTML = scoreOnlyContent;
+        }, 7000); // 15 seconds in milliseconds
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'w') wPressed = true;
