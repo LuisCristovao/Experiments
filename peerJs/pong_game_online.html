@@ -146,7 +146,7 @@
 
         // Trail and particles
         const trail = [];
-        const trailLength = 15;
+        const trailLength = 30;
         const particles = [];
 
         // Player controls
@@ -228,11 +228,33 @@
                     leftPaddle.y = data.y;
                 }
             } else if (data.type === 'ball' && !isHost) {
+                // Detect if ball changes direction to trigger effects
+                let prevDx = ball.dx;
+                let prevDy = ball.dy;
+
                 ball.x = data.x;
                 ball.y = data.y;
                 ball.dx = data.dx;
                 ball.dy = data.dy;
                 ball.color = data.color;
+
+                // Generate trail for non-host
+                trail.push({ x: ball.x, y: ball.y });
+                if (trail.length > trailLength*2) trail.shift();
+
+                // Detect paddle collision for particles
+                if (prevDx !== ball.dx) {
+                    if (ball.color === 'cyan') {
+                        spawnPaddleParticles(ball.x, ball.y, 'cyan');
+                    } else if (ball.color === '#FF0000') {
+                        spawnPaddleParticles(ball.x, ball.y, '#FF0000');
+                    }
+                }
+
+                // Detect wall bounce for particles
+                if (prevDy !== ball.dy) {
+                    spawnWallParticles(ball.x, ball.y);
+                }
             }
         }
 
