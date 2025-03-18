@@ -160,14 +160,12 @@
         const peer = new Peer();
         let conn = null;
         let isHost = false;
+        let connection_id=null
 
         // PeerJS event handlers
         peer.on('open', function(id) {
             console.log('My peer ID is: ' + id);
-            if (isHost) {
-                connectionStatus.innerText = `Your Peer ID: ${id} Waiting for player to connect...`;
-                connectionStatus.style.display = 'block';
-            }
+            connection_id=id
         });
 
         peer.on('connection', function(connection) {
@@ -189,6 +187,10 @@
             connectButton.style.display = 'none';
             startButton.style.display = 'none';
             connectionStatus.style.display = 'block';
+            
+            connectionStatus.innerText = `Your Peer ID: ${connection_id} Waiting for player to connect...`;
+            
+            
         });
 
         // Join game
@@ -242,13 +244,13 @@
                 ball.dx = initialSpeed;
                 ball.dy = 0;
             }
-            setInterval(sendPaddlePosition, 100); // Sync paddle every 100ms
+            setInterval(sendPaddlePosition, 1); // Sync paddle every 100ms
             if (isHost) {
                 setInterval(() => {
                     if (conn && conn.open) {
                         conn.send({ type: 'ball', x: ball.x, y: ball.y, dx: ball.dx, dy: ball.dy, color: ball.color });
                     }
-                }, 50); // Sync ball every 500ms
+                }, 1); // Sync ball every 500ms
             }
             gameLoop();
         }
