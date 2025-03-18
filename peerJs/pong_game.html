@@ -73,7 +73,7 @@
         const trail = [];
         const trailLength = 15;
 
-        // Particles for collisions
+// Particles for collisions
         const particles = [];
 
         // Player controls
@@ -252,22 +252,22 @@
             ctx.fillStyle = '#FF0000';
             ctx.fillRect(rightPaddle.x, rightPaddle.y, paddleWidth, paddleHeight);
 
-            // Draw trail with gradient from ball color to darker tone
+            // Draw trail with gradient to specific darker tones
             if (trail.length >= 2) {
                 for (let i = 0; i < trail.length; i++) {
                     const alpha = i / (trail.length - 1); // 0 at oldest, 1 at newest
                     let r, g, b;
                     if (ball.color === 'cyan') {
                         r = 0;
-                        g = Math.floor(255 - (alpha * 100)); // 255 to 155
-                        b = Math.floor(255 - (alpha * 100)); // 255 to 155
+                        g = Math.floor((alpha*0.6 * 255)); // 255 to 0 (cyan to blue)
+                        b = 255; // Stays 255
                     } else if (ball.color === '#FF0000') {
-                        r = Math.floor(255 - (alpha * 100)); // 255 to 155
-                        g = 0;
-                        b = 0;
+                        r = 255; // Stays 255
+                        g = 0 // 0 to 255 (red to purple)
+                        b = Math.floor(255-(alpha*0.6 * 255)); // 0 to 255
                     } else { // yellow
-                        r = Math.floor(255 - (alpha * 50));  // 255 to 205
-                        g = Math.floor(255 - (alpha * 100)); // 255 to 155
+                        r = Math.floor(255 - (alpha * 51)); // 255 to 204 (yellow to orange)
+                        g = Math.floor(255 - (alpha * 102)); // 255 to 153
                         b = 0;
                     }
                     ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`;
