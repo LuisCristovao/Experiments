@@ -10,41 +10,52 @@
     <textarea></textarea>
     <br />
     <img /><br />
-    <textarea> </textarea><br />
+    <textarea></textarea><br />
     <button onclick="send()">Send</button>
   </body>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-  <!-- <script src="mywrtc.js"></script> -->
   <script>
     function sleep(ms) {
       return new Promise((resolve) => setTimeout(resolve, ms));
     }
+
     function connect() {
-      //host that initiates invitation for connection
-      conn = peer.connect(window.location.search.split("?")[1]);
+      // Host that initiates invitation for connection
+      const peerId = window.location.search.split("?")[1];
+      const conn = peer.connect(peerId);
+      connections.push(conn);
 
       conn.on("open", function () {
         // Receive messages
         conn.on("data", function (data) {
-          console.log("Received0", data);
+          console.log("Received from", conn.peer, ":", data);
           document.getElementsByTagName("textarea")[0].value += data + "\n";
         });
-        // Send messages
-        conn.send("Hello!");
+        // Send initial message
+        conn.send("Hello from " + peer.id);
       });
-      
     }
 
     function send() {
-      conn.send(document.getElementsByTagName("textarea")[1].value);
+      const message = document.getElementsByTagName("textarea")[1].value;
+      // Broadcast to all connections
+      connections.forEach((conn) => {
+        if (conn && conn.open) {
+          conn.send(message);
+        }
+      });
+      // Also show the message in our own textarea
+      document.getElementsByTagName("textarea")[0].value += message + "\n";
+      // Clear the input
+      document.getElementsByTagName("textarea")[1].value = "";
     }
 
-    //main------
+    // Main------
     var peer = new Peer();
-    //connection variable
-    var conn = null;
-    var connection_established = false;
-    // first host to receive connection
+    // Array to store all connections
+    var connections = [];
+
+    // First host to receive connection
     peer.on("open", function (id) {
       console.log("My peer ID is: " + id);
       document
@@ -53,28 +64,53 @@
           "src",
           "https://api.qrserver.com/v1/create-qr-code/?data=http://192.168.1.88:5500/peerJs/pc.html?" +
             id +
-            "&amp;size=100x100"
+            "&size=100x100"
         );
     });
-    //on connection
-    peer.on("connection", function (_conn) {
-      console.log("connected with " + _conn.peer);
-      connection_established = true;
-      // Send messages
-      conn = _conn;
-      
-      setTimeout(()=>{conn.send("Hello22")},200);
 
-      conn.on("data", (data) => {
-        console.log("Received3: ", data);
+    // On incoming connection
+    peer.on("connection", function (conn) {
+      console.log("Connected with " + conn.peer);
+      connections.push(conn);
+
+      conn.on("open", function () {
+        // Send welcome message to new connection
+        conn.send("Welcome from " + peer.id);
+      });
+
+      conn.on("data", function (data) {
+        console.log("Received from", conn.peer, ":", data);
         document.getElementsByTagName("textarea")[0].value += data + "\n";
+        // Broadcast received message to all other connections
+        connections.forEach((otherConn) => {
+          if (otherConn !== conn && otherConn.open) {
+            otherConn.send(data);
+          }
+        });
+      });
+
+      // Handle connection close
+      conn.on("close", function () {
+        connections = connections.filter((c) => c !== conn);
+        console.log("Disconnected from " + conn.peer);
       });
     });
 
+    // Handle peer disconnection
+    peer.on("disconnected", function () {
+      console.log("Peer disconnected");
+    });
+
+    // Handle errors
+    peer.on("error", function (err) {
+      console.log("Peer error:", err);
+    });
+
     if (window.location.search.split("?")[1] != undefined) {
-      //wait to load page until try first connect
-      setTimeout(()=>{connect()},500);
-      
+      // Wait to load page until trying first connect
+      setTimeout(() => {
+        connect();
+      }, 500);
     }
   </script>
 </html>
